@@ -1,4 +1,3 @@
-<?php include 'includes/header.php'; ?>
 <?php include 'includes/db.php'; ?>
 
 <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
@@ -16,4 +15,3 @@
     ?>
 </div>
 
-<?php include 'includes/footer.php'; ?>

@@ -13,65 +13,60 @@
 
 </head>
 <body class="bg-gray-100">
-<header class="sticky top-0 z-50 ">
-    <div class="bg-white px-10 py-3 flex justify-between items-center">
-        <div class="flex items-center gap-2">
-             <img src="https://mitbasmath.com/wp-content/uploads/2025/12/cropped-cropped-Mit-Logo.png" alt="college-logo" class="h-12 inline-block mr-2">
-             <div class="inline-block align-middle mb-1">
-                <p class="text-2xl font-bold">Yuvak Pratishthan's</p>
-                <div class="text-sm font-normal text-gray-600">MIT COLLEGE OF COMPUTER SCI. & I.T.</div>
+<header class="sticky top-0 z-50 w-full ">
+    <div class="bg-white px-10 py-4 flex justify-center flex-col items-center">
+     <div class="text-center">
+          <p class="text-lg font-semibold text-cyan-900">Yuvak Pratishthan's</p>
+          <h1 class="text-3xl font-bold text-amber-500">  MIT COLLEGE OF COMPUTER SCI. & I.T.</h1>
+          <p class="text-base">Socity Market, Basmath Tq. Basmath Dist. Hingoli PIN : 431512</p>
+          <span class="text-sm">(Affiliated to SRTMU, Nanded & Approved by Govt. of Maharashtra & AICTE)</span>
+            <p class="text-sm">DTE Code: 2748 College Code : 264/AISHE Code : C-7542</p>
+            <div class="flex gap-4 border-t border-slate-200 mt-2 pt-2 justify-between">
+              <a href="" class="text-sm flex items-center gap-1 text-slate-600"><i class='bx bx-envelope'></i> mitcollege.basmath@gmail.com</a>
+              <a href="" class="text-sm flex items-center gap-1 text-slate-600"><i class='bx bx-phone'></i> +919309147752</a>
             </div>
         </div>
-        
     </div>
-    <nav class="bg-white shadow-md flex  py-4 px-10 py-2 gap-7 border-t border-slate-100">
-            <a href="index.php" class="text-[16px] text-slate-700 font-semibold hover:text-amber-400 transition ease-in duration-300">Home</a>
-            <div class="relative group">
-    <button class="flex items-center text-[16px] text-slate-700 font-semibold hover:text-amber-400 transition ease-in duration-300">
+    <nav class="bg-white shadow-md flex  py-4 px-10 py-2 gap-7 border-t border-slate-100 flex items-center justify-center ">
+       <a href="index.php" class="text-[16px] text-slate-600 font-semibold hover:text-amber-400 transition ease-in duration-300">Home</a>
+       <div class="relative group">
+       <button class="flex items-center text-[16px] text-slate-600 font-semibold hover:text-amber-400 transition ease-in duration-300">
         Courses
-         <i class='bx bx-chevron-down text-[20px] flex items-center mt-0.5 transition-transform duration-300 ease-in-out group-hover:rotate-180'></i>
-    </button>
-   <div class="absolute left-0 p-1 mt-2 w-52 bg-white shadow-2xl overflow-hidden rounded-xl border border-slate-100
+       </button>
+       <div class="absolute left-0 p-1 mt-2 w-52 bg-white shadow-2xl overflow-hidden rounded-xl border border-slate-100
               transform scale-0 opacity-0 origin-top-left transition-all duration-200 ease-out group-hover:scale-100 group-hover:opacity-100">
-    <a href="courses.php" class="block px-4 rounded-xl py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300">Offered Courses</a>
-    <a href="courses.php" class="block px-4 rounded-xl py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300">Fees Structure</a>
-    <a href="courses.php" class="block px-4 rounded-xl py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300">Our Courses</a>
+          <a href="courses.php" class="block px-4 rounded-xl py-1.5 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300">Offered Courses</a>
+          <a href="courses.php" class="block px-4 rounded-xl py-1.5 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300">Fees Structure</a>
+          <a href="courses.php" class="block px-4 rounded-xl py-1.5 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300">Our Courses</a>
+       </div>
+       </div>
+            <a href="about.php" class="text-[16px] text-slate-600 font-semibold hover:text-amber-400 transition ease-in duration-300">About</a>
+      <div class="relative group">
+          <button class="flex items-center text-[16px] text-slate-600 font-semibold hover:text-amber-400 transition ease-in duration-300">
+           Facilities
+         </button>
+         <div class="absolute left-0 p-1 mt-2 w-52 bg-white shadow-2xl overflow-hidden rounded-xl border border-slate-100
+              transform scale-0 opacity-0 origin-top-left transition-all duration-200 ease-out group-hover:scale-100 group-hover:opacity-100">
+            <a href="courses.php" class="block px-4 rounded-xl py-1.5 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300">Library</a>
+            <a href="courses.php" class="block px-4 rounded-xl py-1.5 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300">Seminar Hall</a>
+            <a href="courses.php" class="block px-4 rounded-xl py-1.5 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300">Computer Labs</a>
+
+        </div>
+        </div>
+         <div class="relative group">
+          <button class="flex items-center text-[16px] text-slate-600 font-semibold hover:text-amber-400 transition ease-in duration-300">
+            Student Corner
+          </button>
+          <div class="absolute left-0 p-1 mt-2 w-52 bg-white shadow-2xl overflow-hidden rounded-xl border border-slate-100
+              transform scale-0 opacity-0 origin-top-left transition-all duration-200 ease-out group-hover:scale-100 group-hover:opacity-100">
+           <a href="courses.php" class="block px-4 rounded-xl py-1.5 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300"> Subject Notes</a>
+           <a href="courses.php" class="block px-4 rounded-xl py-1.5 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300">Subject Syllabus</a>
+           <a href="courses.php" class="block px-4 rounded-xl py-1.5 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300">Photo Gallery</a>
+           <a href="courses.php" class="block px-4 rounded-xl py-1.5 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300">Help</a>
   </div>
 </div>
-
-            <a href="about.php" class="text-[16px] text-slate-700 font-semibold hover:text-amber-400 transition ease-in duration-300">About</a>
-            <div class="relative group">
-    <button class="flex items-center text-[16px] text-slate-700 font-semibold hover:text-amber-400 transition ease-in duration-300">
-        Facilities
-         <i class='bx bx-chevron-down text-[20px] flex items-center mt-0.5 transition-transform duration-300 ease-in-out group-hover:rotate-180'></i>
-    </button>
-   <div class="absolute left-0 p-1 mt-2 w-52 bg-white shadow-2xl overflow-hidden rounded-xl border border-slate-100
-              transform scale-0 opacity-0 origin-top-left transition-all duration-200 ease-out group-hover:scale-100 group-hover:opacity-100">
-    <a href="courses.php" class="block px-4 rounded-xl py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300">Library</a>
-    <a href="courses.php" class="block px-4 rounded-xl py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300">Seminar Hall</a>
-    <a href="courses.php" class="block px-4 rounded-xl py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300">Computer Labs</a>
-
-  </div>
-</div>
-
-            <div class="relative group">
-    <button class="flex items-center text-[16px] text-slate-700 font-semibold hover:text-amber-400 transition ease-in duration-300">
-        Student Corner
-         <i class='bx bx-chevron-down text-[20px] flex items-center mt-0.5 transition-transform duration-300 ease-in-out group-hover:rotate-180'></i>
-    </button>
-   <div class="absolute left-0 p-1 mt-2 w-52 bg-white shadow-2xl overflow-hidden rounded-xl border border-slate-100
-              transform scale-0 opacity-0 origin-top-left transition-all duration-200 ease-out group-hover:scale-100 group-hover:opacity-100">
-    <a href="courses.php" class="block px-4 rounded-xl py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300">Notes</a>
-    <a href="courses.php" class="block px-4 rounded-xl py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300">Syllabus</a>
-    <a href="courses.php" class="block px-4 rounded-xl py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300">Gallery</a>
-    <a href="courses.php" class="block px-4 rounded-xl py-2 text-gray-700 hover:bg-amber-50 hover:text-amber-400 transition ease-in duration-300">Help</a>
-
-
-
-  </div>
-</div>
-            <a href="admissions.php" class="text-[16px] text-slate-700 font-semibold hover:text-amber-400 transition ease-in duration-300">Admissions</a>
-            <a href="contact.php" class="text-[16px] text-slate-700 font-semibold hover:text-amber-400 transition ease-in duration-300">Contact</a>
+            <a href="admissions.php" class="text-[16px] text-slate-600 font-semibold hover:text-amber-400 transition ease-in duration-300">Admissions</a>
+            <a href="contact.php" class="text-[16px] text-slate-600 font-semibold hover:text-amber-400 transition ease-in duration-300">Contact</a>
         </nav>
 </header>
 <main class="">

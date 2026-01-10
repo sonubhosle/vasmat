@@ -1,67 +1,125 @@
 <?php
-include 'includes/db.php';
 session_start();
-
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+if(!isset($_SESSION['admin_id'])){
+    header("Location: login.php");
+    exit();
 }
 
-if(isset($_POST['login'])){
-    if(!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])){
-        die("Invalid CSRF token");
-    }
-
-    $email = trim($_POST['email']);
-    $password = $_POST['password'];
-
-    $stmt = $conn->prepare("SELECT * FROM admins WHERE email=?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $admin = $result->fetch_assoc();
-
-    if($admin && password_verify($password, $admin['password'])){
-        session_regenerate_id(true);
-        $_SESSION['admin_id'] = $admin['id'];
-        $_SESSION['admin_name'] = $admin['name'];
-        header("Location: dashboard.php");
-        exit();
-    } else {
-        $_SESSION['error'] = "Invalid email or password!";
-        header("Location: login.php");
-        exit();
-    }
-}
+$admin_name = $_SESSION['admin_name'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Admin Login</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <title>MIT College Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-<div class="bg-white p-8 rounded shadow-md w-96">
-    <h1 class="text-2xl font-bold mb-6 text-center">Admin Login</h1>
 
-    <form method="post">
-        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-        <input type="email" name="email" placeholder="Email" required class="w-full p-2 mb-4 border rounded">
-        <input type="password" name="password" placeholder="Password" required class="w-full p-2 mb-4 border rounded">
+<body class="bg-gray-100 flex">
 
-        <p class="mt-2 text-center">
-            <a href="forgot-password.php" class="text-blue-600">Forgot Password?</a>
-        </p>
+<!-- Sidebar -->
+<aside class="fixed top-0 w-64 bg-gradient-to-b from-slate-800 to-slate-900 text-white min-h-screen p-5 relative">
+  <div class="flex items-center gap-3 mb-8 border-b border-white/20 pb-5">
+    <div class="w-12 h-12 rounded-full border-2 border-white/20 bg-white/10 flex items-center justify-center text-2xl">
+      <i class="fa-slab-press fa-regular fa-user"></i>
+    </div>
+    <div>
+      <h3 class="font-bold text-lg"><?= htmlspecialchars($admin_name) ?></h3>
+      <p class="text-sm text-gray-200">Administrator</p>
+    </div>
+  </div>
 
-        <button type="submit" name="login" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Login</button>
-    </form>
+  <nav class="space-y-2">
+    <a href="?page=dashboard" data-page="dashboard" class="menu-item flex items-center gap-3 p-3  transition ease-in duration-200">
+      <i class="fas fa-chart-line"></i> Dashboard
+    </a>
 
-    <p class="mt-4 text-center text-gray-600">Don't have account? <a href="register.php" class="text-blue-600">Register</a></p>
+    <a href="?page=courses" data-page="courses" class="menu-item flex items-center gap-3 p-3  transition ease-in duration-200">
+      <i class="fas fa-book"></i> Courses
+    </a>
+
+    <a href="?page=faculty" data-page="faculty" class="menu-item flex items-center gap-3 p-3  transition ease-in duration-200">
+      <i class="fas fa-chalkboard-teacher"></i> Faculty
+    </a>
+
+    <a href="?page=notices" data-page="notices" class="menu-item flex items-center gap-3 p-3  transition ease-in duration-200">
+       <i class="fa-solid fa-clipboard-list"></i> Notices
+    </a>
+ <a href="?page=gallery" data-page="gallery" class="menu-item flex items-center gap-3 p-3  transition ease-in duration-200">
+      <i class="fas fa-images"></i> Gallery
+    </a>
+     <a href="?page=announcements" data-page="announcements" class="menu-item flex items-center gap-3 p-3  transition ease-in duration-200">
+      <i class="fas fa-bullhorn"></i> Announcements
+    </a>
+    <a href="?page=news" data-page="news" class="menu-item flex items-center gap-3 p-3  transition ease-in duration-200">
+      <i class="fa-slab-press fa-regular fa-newspaper"></i> News
+    </a>
+  <div class="w-full p-5 absolute left-0 bottom-0 flex items-center gap-3 mb-8 border-t border-white/20 pb-5">
+      <a href="logout.php" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-rose-500 hover:text-white text-rose-500 transition ease-in duration-200 justify-center border border-rose-500">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+</div>
+  
+  </nav>
+</aside>
+
+<!-- Main -->
+<div class="flex-1">
+
+
+
+<div id="loader" class="hidden fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+  <div class="bg-white p-5 rounded-lg shadow flex items-center gap-3">
+    <i class="fas fa-spinner fa-spin text-blue-600"></i> Loading...
+  </div>
 </div>
 
-<script src="assets/js/alert.js"></script>
-<?php if(isset($_SESSION['error'])): ?>
-<script>showAlert("error", "<?php echo $_SESSION['error']; ?>");</script>
-<?php unset($_SESSION['error']); endif; ?>
+<main id="content" class="p-6"></main>
+
+</div>
+
+<script>
+const content = document.getElementById("content");
+const loader = document.getElementById("loader");
+
+function loadPage(page, push = true) {
+  loader.classList.remove("hidden");
+
+  fetch(`load.php?page=${page}`)
+    .then(res => res.text())
+    .then(data => {
+      content.innerHTML = data;
+      loader.classList.add("hidden");
+
+      document.querySelectorAll('.menu-item').forEach(item => {
+        item.classList.remove('text-amber-500');
+        if(item.dataset.page === page){
+          item.classList.add('text-amber-500');
+        }
+      });
+
+      if(push) history.pushState({page}, "", `?page=${page}`);
+    });
+}
+
+document.querySelectorAll('.menu-item').forEach(item => {
+  item.addEventListener("click", function(e){
+    e.preventDefault();
+    loadPage(this.dataset.page);
+  });
+});
+
+window.onpopstate = function(e){
+  if(e.state?.page){
+    loadPage(e.state.page, false);
+  }
+};
+
+const urlParams = new URLSearchParams(window.location.search);
+const startPage = urlParams.get('page') || 'dashboard';
+loadPage(startPage, false);
+</script>
+
 </body>
 </html>
