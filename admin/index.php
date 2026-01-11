@@ -56,7 +56,7 @@ $admin_name = $_SESSION['admin_name'];
       <i class="fa-slab-press fa-regular fa-newspaper"></i> News
     </a>
   <div class="w-full p-5 absolute left-0 bottom-0 flex items-center gap-3 mb-8 border-t border-white/20 pb-5">
-      <a href="logout.php" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-rose-500 hover:text-white text-rose-500 transition ease-in duration-200 justify-center border border-rose-500">
+      <a href="logout.php" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-amber-500 hover:text-white text-amber-500 transition ease-in duration-200 justify-center border border-amber-500">
       <i class="fas fa-sign-out-alt"></i> Logout
     </a>
 </div>

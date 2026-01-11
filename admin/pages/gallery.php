@@ -14,7 +14,7 @@ while($row = $res->fetch_assoc()){
             <img src='../assets/uploads/{$row['image']}' class='w-full h-48 object-cover mb-2 rounded'>
             <p class='text-gray-700'>{$row['caption']}</p>
             <a href='edit_gallery.php?id={$row['id']}' class='text-blue-600 mr-2'>Edit</a>
-            <a href='delete_gallery.php?id={$row['id']}' class='text-red-600'>Delete</a>
+            <a href='delete_gallery.php?id={$row['id']}' class='text-amber-600'>Delete</a>
           </div>";
 }
 ?>

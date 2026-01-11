@@ -41,7 +41,7 @@ if(isset($_POST['register'])){
 <h1 class="text-2xl font-bold mb-6 text-center">Register</h1>
 
 <?php if(isset($error)): ?>
-<p class="text-red-600 mb-3"><?= $error ?></p>
+<p class="text-amber-600 mb-3"><?= $error ?></p>
 <?php endif; ?>
 
 <form method="POST">

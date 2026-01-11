@@ -23,7 +23,7 @@
                     <td class='border px-4 py-2'>{$row['description']}</td>
                     <td class='border px-4 py-2'>
                         <a href='edit_course.php?id={$row['id']}' class='text-blue-600 mr-2'>Edit</a>
-                        <a href='delete_course.php?id={$row['id']}' class='text-red-600'>Delete</a>
+                        <a href='delete_course.php?id={$row['id']}' class='text-amber-600'>Delete</a>
                     </td>
                   </tr>";
         }

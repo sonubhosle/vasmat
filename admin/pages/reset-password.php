@@ -104,7 +104,7 @@ function validateMatch(){
 
   if(p !== c){
     m.innerText = "Passwords do not match!";
-    m.className = "text-red-500";
+    m.className = "text-amber-500";
     return false;
   }
 

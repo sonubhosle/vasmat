@@ -43,7 +43,7 @@ while($row = $res->fetch_assoc()):
     <a href="edit-news.php?id=<?= $row['id'] ?>" class="text-green-600 mr-3">Edit</a>
     <a href="delete-news.php?id=<?= $row['id'] ?>" 
        onclick="return confirm('Delete this news?')" 
-       class="text-red-600">Delete</a>
+       class="text-amber-600">Delete</a>
   </td>
 </tr>
 <?php endwhile; ?>

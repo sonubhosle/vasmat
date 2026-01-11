@@ -1,52 +1,74 @@
-  @keyframes marquee {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
-      }
-      .animate-marquee {
-        display: flex;
-        width: max-content;
-        animation: marquee 40s linear infinite;
-      }
-      .animate-marquee:hover {
-        animation-play-state: paused;
-      }
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 
-        /* Custom scrollbar for webkit */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8;
-      }
+* {
+  font-family: "Plus Jakarta Sans", sans-serif;
 
-
-      @keyframes fadeDown {
-  0% { opacity: 0; transform: translateY(-20px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fade-down {
-  animation: fadeDown 0.5s ease forwards;
 }
 
 
+
+/* Custom scrollbar for webkit */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #fbbf24;
+
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #f8b91b;
+}
+
+
+/* ====== MARQUEE ANIMATION ====== */
 @keyframes scrollUp {
-  0% { transform: translateY(100%); }    /* start below container */
-  100% { transform: translateY(-100%); } /* move to above container */
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
 }
 
-.animate-scroll {
+.marquee-container {
+  height: 280px;
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+
+.marquee-content {
+  animation: scrollUp 30s linear infinite;
   display: flex;
   flex-direction: column;
-  animation: scrollUp 15s linear infinite;
+  gap: 0.8rem;
+  padding: 0.5rem 0;
 }
-.animate-scroll:hover {
+
+.marquee-content:hover {
   animation-play-state: paused;
 }
+
+.badge-glow {
+    animation: glowBlink 1.5s infinite alternate;
+}
+
+@keyframes glowBlink {
+    0% {
+        opacity: 0.6;
+        text-shadow: 0 0 4px currentColor;
+    }
+    100% {
+        opacity: 1;
+        text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+    }
+}
+
+
+

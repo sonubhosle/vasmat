@@ -1,9 +1,0 @@
-<div class="flex w-full items-center gap-2 text-center">
-              <div class="">
-                <img src="https://mitbasmath.com/wp-content/uploads/2025/12/cropped-cropped-Mit-Logo.png" alt="college-logo" class="h-12 inline-block mr-2">
-             <div class="inline-block align-middle mb-1">
-                
-                <div class="text-sm font-normal text-gray-600">MIT COLLEGE OF COMPUTER SCI. & I.T.</div>
-            </div>
-              </div>
-        </div>
