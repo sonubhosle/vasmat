@@ -85,7 +85,7 @@ $admin_name = $_SESSION['admin_name'];
 </aside>
 
 <!-- Main -->
-<div class="flex-1">
+<div class="flex-1 overflow-y-auto h-screen relative">
 
 
 
