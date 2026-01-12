@@ -13,14 +13,36 @@ $admin_name = $_SESSION['admin_name'];
   <meta charset="UTF-8">
   <title>MIT College Admin</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+ <style>
+  /* Custom scrollbar for webkit */
+::-webkit-scrollbar {
+  width: 8px;
+}
 
-<body class="bg-gray-100 flex">
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #fbbf24;
+  border-radius: 20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #f8b91b;
+}
+ </style>
+<body class="bg-gray-50 flex">
 
 <!-- Sidebar -->
-<aside class="fixed top-0 w-64 bg-gradient-to-b from-slate-800 to-slate-900 text-white min-h-screen p-5 relative">
-  <div class="flex items-center gap-3 mb-8 border-b border-white/20 pb-5">
+<aside class="sticky top-0 w-64 bg-gradient-to-b from-slate-800 to-slate-900 text-white min-h-screen  relative">
+  <div class="flex items-center gap-3 mb-2 border-b border-white/20 p-5">
     <div class="w-12 h-12 rounded-full border-2 border-white/20 bg-white/10 flex items-center justify-center text-2xl">
       <i class="fa-slab-press fa-regular fa-user"></i>
     </div>
@@ -30,38 +52,36 @@ $admin_name = $_SESSION['admin_name'];
     </div>
   </div>
 
-  <nav class="space-y-2">
-    <a href="?page=dashboard" data-page="dashboard" class="menu-item flex items-center gap-3 p-3  transition ease-in duration-200">
+  <nav class="space-y-2 overflow-y-auto h-[calc(90vh-150px)]  ">
+    <a href="?page=dashboard" data-page="dashboard" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400  transition ease-in duration-200">
       <i class="fas fa-chart-line"></i> Dashboard
     </a>
-
-    <a href="?page=courses" data-page="courses" class="menu-item flex items-center gap-3 p-3  transition ease-in duration-200">
+    <a href="?page=courses" data-page="courses" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
       <i class="fas fa-book"></i> Courses
     </a>
-
-    <a href="?page=faculty" data-page="faculty" class="menu-item flex items-center gap-3 p-3  transition ease-in duration-200">
+    <a href="?page=faculty" data-page="faculty" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
       <i class="fas fa-chalkboard-teacher"></i> Faculty
     </a>
-
-    <a href="?page=notices" data-page="notices" class="menu-item flex items-center gap-3 p-3  transition ease-in duration-200">
+    <a href="?page=notices" data-page="notices" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
        <i class="fa-solid fa-clipboard-list"></i> Notices
     </a>
- <a href="?page=gallery" data-page="gallery" class="menu-item flex items-center gap-3 p-3  transition ease-in duration-200">
+    <a href="?page=gallery" data-page="gallery" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
       <i class="fas fa-images"></i> Gallery
     </a>
-     <a href="?page=announcements" data-page="announcements" class="menu-item flex items-center gap-3 p-3  transition ease-in duration-200">
+     <a href="?page=announcements" data-page="announcements" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
       <i class="fas fa-bullhorn"></i> Announcements
     </a>
-    <a href="?page=news" data-page="news" class="menu-item flex items-center gap-3 p-3  transition ease-in duration-200">
+    <a href="?page=news" data-page="news" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
       <i class="fa-slab-press fa-regular fa-newspaper"></i> News
     </a>
-  <div class="w-full p-5 absolute left-0 bottom-0 flex items-center gap-3 mb-8 border-t border-white/20 pb-5">
-      <a href="logout.php" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-amber-500 hover:text-white text-amber-500 transition ease-in duration-200 justify-center border border-amber-500">
-      <i class="fas fa-sign-out-alt"></i> Logout
-    </a>
-</div>
+  
   
   </nav>
+    <div class="w-full p-5 absolute left-0 bottom-0 flex items-center gap-3  border-t border-white/20 pb-5">
+      <a href="logout.php" class="w-full flex items-center gap-3 p-3 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600  text-white  justify-center hover:from-amber-600 hover:to-amber-400 transition ease-in duration-200">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+     </div>
 </aside>
 
 <!-- Main -->

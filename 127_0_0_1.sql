@@ -17,11 +17,11 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+
+-- Database: `u581045368_mitvasmat`
 --
--- Database: `college_db`
---
-CREATE DATABASE IF NOT EXISTS `college_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `college_db`;
+CREATE DATABASE IF NOT EXISTS `u581045368_mitvasmat` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `u581045368_mitvasmat`;
 
 -- --------------------------------------------------------
 
