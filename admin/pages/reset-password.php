@@ -1,6 +1,7 @@
 <?php
-include 'includes/db.php';
 session_start();
+
+require ('../includes/db.php');
 
 if (!isset($_GET['token'])) {
     die("Invalid request");
@@ -47,12 +48,19 @@ if(isset($_POST['reset'])){
 
     $update = $conn->prepare("UPDATE admins SET password=?, reset_token=NULL, reset_expires=NULL WHERE id=?");
     $update->bind_param("si", $hashed, $user['id']);
-    $update->execute();
-
-    $_SESSION['success'] = "Password reset successfully!";
-    header("Location: login.php");
-    exit();
+    
+    if($update->execute()){
+        $_SESSION['success'] = "Password reset successfully!";
+       header("Location: ../login.php");
+        exit();
+    } else {
+        $_SESSION['error'] = "Failed to reset password. Please try again.";
+    }
+    
+    $update->close();
 }
+
+$stmt->close();
 
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
@@ -70,7 +78,7 @@ if (empty($_SESSION['csrf_token'])) {
   <h1 class="text-2xl font-bold mb-6 text-center">Reset Password</h1>
 
   <form method="POST" onsubmit="return validateMatch()">
-    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
 
     <div class="relative mb-3">
       <input id="password" type="password" name="password" placeholder="New password" required class="w-full p-2 border rounded">
@@ -90,12 +98,38 @@ if (empty($_SESSION['csrf_token'])) {
   </form>
 </div>
 
-<script src="assets/js/password.js"></script>
-<script src="assets/js/toggle.js"></script>
-<script src="assets/js/alert.js"></script>
-
 <script>
-initPasswordStrength("password", "strength");
+// Simple toggle password function
+function togglePassword(id){
+  const input = document.getElementById(id);
+  input.type = input.type === "password" ? "text" : "password";
+}
+
+// Password strength function
+function initPasswordStrength(inputId, strengthId){
+  const input = document.getElementById(inputId);
+  const strength = document.getElementById(strengthId);
+
+  input.addEventListener("input", function(){
+    const val = input.value;
+    let score = 0;
+    if(val.length >= 6) score++;
+    if(/[A-Z]/.test(val)) score++;
+    if(/[0-9]/.test(val)) score++;
+    if(/[\W]/.test(val)) score++;
+
+    let text="", color="";
+    switch(score){
+      case 0: text=""; break;
+      case 1: text="Weak"; color="red"; break;
+      case 2: text="Fair"; color="orange"; break;
+      case 3: text="Good"; color="blue"; break;
+      case 4: text="Strong"; color="green"; break;
+    }
+    strength.innerText = text;
+    strength.style.color = color;
+  });
+}
 
 function validateMatch(){
   const p = document.getElementById("password").value;
@@ -104,20 +138,27 @@ function validateMatch(){
 
   if(p !== c){
     m.innerText = "Passwords do not match!";
-    m.className = "text-amber-500";
+    m.className = "text-red-500";
     return false;
   }
 
   return true;
 }
+
+// Initialize
+initPasswordStrength("password", "strength");
 </script>
 
 <?php if(isset($_SESSION['error'])): ?>
-<script>showAlert("error", "<?php echo $_SESSION['error']; ?>");</script>
+<script>
+alert("<?php echo htmlspecialchars($_SESSION['error']); ?>");
+</script>
 <?php unset($_SESSION['error']); endif; ?>
 
 <?php if(isset($_SESSION['success'])): ?>
-<script>showAlert("success", "<?php echo $_SESSION['success']; ?>");</script>
+<script>
+alert("<?php echo htmlspecialchars($_SESSION['success']); ?>");
+</script>
 <?php unset($_SESSION['success']); endif; ?>
 
 </body>
