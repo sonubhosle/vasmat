@@ -183,16 +183,14 @@ if (isset($news_result)) $news_result->free();
 
 
 <section class="relative  py-10 px-6 overflow-hidden">
-    <div
-        class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full -z-10 overflow-hidden pointer-events-none">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full -z-10 overflow-hidden pointer-events-none">
         <div class="absolute top-[-15%] right-[-10%] w-[600px] h-[600px] bg-amber-100/50 rounded-full blur-[120px]"></div>
         <div class="absolute bottom-[10%] left-[-15%] w-[500px] h-[500px] bg-blue-100/30 rounded-full blur-[100px]">
-        </div>
+     </div>
     </div>
 
-    <div class="max-w-6xl mx-auto flex flex-col items-center text-center">
-        <div
-            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-slate-100 premium-shadow text-slate-500 text-xs font-bold mb-8 animate-in fade-in slide-in-from-bottom-2">
+    <div class=" flex flex-col items-center text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-slate-100 premium-shadow text-slate-500 text-xs font-bold mb-8 animate-in fade-in slide-in-from-bottom-2">
             <ShieldCheck size={16} class="text-amber-500" />
             <span class="uppercase tracking-widest text-[10px]">Campus Integrity Protocol 2024</span>
         </div>
@@ -209,16 +207,14 @@ if (isset($news_result)) $news_result->free();
             </span>
         </h1>
 
-        <p
-            class="text-lg  text-slate-500 max-w-2xl mx-auto mb-12 leading-relaxed font-medium animate-in fade-in slide-in-from-bottom-6 duration-1000">
+        <p class="text-lg  text-slate-500 max-w-2xl mx-auto mb-12 leading-relaxed font-medium animate-in fade-in slide-in-from-bottom-6 duration-1000">
             A zero-tolerance ecosystem designed to empower students. Confidential reporting, instant tracking, and
             unwavering support.
         </p>
 
         <div
             class="flex flex-col sm:flex-row gap-5 justify-center items-center w-full max-w-lg mb-20 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-            <button
-                class="w-full sm:w-auto px-10 py-3 bg-gradient-to-br from-amber-400 to-amber-600  text-white font-semibold rounded-xl btn-hover-effect shadow-2xl  flex items-center justify-center gap-3 text-[13px]">
+            <button class="w-full sm:w-auto px-10 py-3 bg-gradient-to-br from-amber-400 to-amber-600  text-white font-semibold rounded-xl btn-hover-effect shadow-2xl  flex items-center justify-center gap-3 text-[13px]">
                  Report Incident
             </button>
         </div>

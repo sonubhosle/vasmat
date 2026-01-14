@@ -22,28 +22,28 @@
         <div id="bigHeader"
             class="bg-white transition-all duration-700 ease-in-out origin-top overflow-hidden  max-h-96 pt-6 pb-3 opacity-100">
             <div class="max-w-7xl mx-auto px-6 text-center">
-                <div class="inline-block text-lg tracking-widest   text-slate-600 font-semibold  uppercase  ">
+                <div class="inline-block text-[16px] tracking-widest   text-slate-600 font-semibold  uppercase  ">
                     Yuvak Pratishthan's
                 </div>
 
                 <h1
-                    class="text-xl text-amber-500 md:text-3xl lg:text-4xl font-extrabold  tracking-tighter mb-2 uppercase leading-[0.85]">
+                    class="text-2xl text-yellow-500 md:text-3xl lg:text-4xl font-extrabold  tracking-tighter mb-1 uppercase leading-[0.85]">
                     MIT COLLEGE OF <br class="hidden md:block lg:hidden" />
                     <span>COMPUTER SCI. & I.T.</span>
                 </h1>
 
-                <p class="text-[11px] md:text-[12px] font-bold text-slate-600  tracking-widest  mb-3">
+                <p class="text-[11px] md:text-[14px] font-bold text-slate-600  tracking-widest  mb-1">
                     Socity Market, Basmath Tq. Basmath Dist. Hingoli PIN : 431512
                 </p>
 
                 <div
-                    class="flex flex-wrap justify-center items-center gap-x-6 gap-y-1 mb-3 text-[10px] md:text-[9px] font-black text-slate-500 uppercase tracking-widest">
+                    class="flex flex-wrap justify-center items-center gap-x-6 gap-y-1 mb-1 text-[10px]  font-black text-slate-600 uppercase tracking-widest">
                     <span class="flex items-center gap-1.5">
                         Affiliated to SRTMU, Nanded & Approved by Govt. of Maharashtra & AICTE
                     </span>
                 </div>
                 <div
-                    class="flex flex-wrap justify-center items-center gap-x-6 gap-y-1 mb-3 text-[10px] md:text-[9px] font-black text-slate-600 uppercase tracking-widest">
+                    class="flex flex-wrap justify-center items-center gap-x-6  text-[10px]  font-black text-slate-600 uppercase tracking-widest">
                     <div class=" items-center gap-4 ">
                         <span class=" px-2 py-0.5 rounded">DTE Code: 2748</span>
                         <span class=" px-2 py-0.5 rounded">College Code: 264</span>
@@ -177,6 +177,9 @@
 
                         <a href="admissions.php"
                             class="text-[11px] font-black text-slate-600 hover:text-amber-400 uppercase tracking-widest">Admissions</a>
+                              <a href="get_events.php"
+                            class="text-[11px] font-black text-slate-600 hover:text-amber-400 uppercase tracking-widest">Events</a>
+
                         <a href="about.php"
                             class="text-[11px] font-black text-slate-600 hover:text-amber-400 uppercase tracking-widest">About</a>
  
