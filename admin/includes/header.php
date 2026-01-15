@@ -81,7 +81,7 @@ $admin_name = $_SESSION['admin_name'];
   
   </nav>
     <div class="w-full p-5 absolute left-0 bottom-0 flex items-center gap-3  border-t border-white/20 pb-5">
-      <a href="logout.php" class="w-full flex items-center gap-3 p-3 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600  text-white  justify-center hover:from-amber-600 hover:to-amber-400 transition ease-in duration-200">
+      <a href="/mit-college/admin/logout.php" class="w-full flex items-center gap-3 p-3 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600  text-white  justify-center hover:from-amber-600 hover:to-amber-400 transition ease-in duration-200">
       <i class="fas fa-sign-out-alt"></i> Logout
     </a>
      </div>

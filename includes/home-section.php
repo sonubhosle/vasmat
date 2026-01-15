@@ -4,8 +4,8 @@ include 'admin/includes/db.php';
 // Fetch Announcements
 $announcements_result = $conn->query("SELECT * FROM announcements ORDER BY created_at DESC");
 
-// Fetch News
-$news_result = $conn->query("SELECT * FROM news ORDER BY event_date DESC");
+
+
 ?>
 
 
@@ -100,19 +100,19 @@ $news_result = $conn->query("SELECT * FROM news ORDER BY event_date DESC");
 
                                   foreach($announcement_items as $item): ?>
                         <div class="flex items-center gap-3 py-1 px-2 transition-colors cursor-pointer  ">
-                            <span style="color: <?= $item['color'] ?>;"
-                                class="badge-glow text-[10px] font-bold uppercase tracking-wider">
+                            <p style="color: <?= $item['color'] ?>;"
+                                class="badge-glow text-[8px] font-bold uppercase tracking-wider">
                                 <?= $item['badge'] ?>
-                            </span>
+                                  </p>
 
                             <div class="flex-1 min-w-0">
                                 <?php if(!empty($item['pdf'])): ?>
-                                <a href="uploads/<?= $item['pdf'] ?>" target="_blank"
-                                    class="text-slate-800 text-[8px] font-semibold hover:text-amber-600 transition-colors truncate block">
+                                <a href="upload/<?= $item['pdf'] ?>" target="_blank"
+                                    class="text-slate-800 text-[17px] font-semibold hover:text-amber-600 transition-colors truncate block">
                                     <?= $item['title'] ?>
                                 </a>
                                 <?php else: ?>
-                                <div class="text-slate-800 text-[12px] font-semibold truncate">
+                                <div class="text-slate-800 text-lg font-semibold truncate">
                                     <?= $item['title'] ?>
                                 </div>
                                 <?php endif; ?>
@@ -177,7 +177,7 @@ $news_result = $conn->query("SELECT * FROM news ORDER BY event_date DESC");
 
 <?php
 if (isset($announcements_result)) $announcements_result->free();
-if (isset($news_result)) $news_result->free();
+
 ?>
 
 

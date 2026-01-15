@@ -182,7 +182,7 @@ if(isset($_POST['login'])){
                                         <input type="checkbox" id="remember" class="w-4 h-4 text-amber-600 border-slate-300 rounded focus:ring-amber-500">
                                         <label for="remember" class="ml-2 text-sm text-slate-600">Remember me</label>
                                     </div>
-                                    <a href="./pages/forgot-password.php"
+                                    <a href="../admin/pages/forgot-password.php"
                                         class="text-sm font-semibold text-amber-600 hover:text-amber-700 transition-colors underline-offset-4 hover:underline">
                                         Forgot Password?
                                     </a>
