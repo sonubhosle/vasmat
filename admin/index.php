@@ -7,6 +7,7 @@ include __DIR__ . '/includes/db.php';
 $totalNotes = $conn->query("SELECT COUNT(*) as count FROM notes")->fetch_assoc()['count'];
 $totalEvents = $conn->query("SELECT COUNT(*) as count FROM events")->fetch_assoc()['count'];
 $totalAnnouncements = $conn->query("SELECT COUNT(*) as count FROM announcements")->fetch_assoc()['count'];
+$totalFaculty = $conn->query("SELECT COUNT(*) as count FROM faculty")->fetch_assoc()['count'];
 
 ?>
 
@@ -24,11 +25,11 @@ $totalAnnouncements = $conn->query("SELECT COUNT(*) as count FROM announcements"
             <div class="flex gap-4">
                 <div
                     class="w-12 h-12 rounded-xl flex items-center justify-center text-white bg-blue-600 shadow-lg shadow-blue-500/20">
-                    <i class='bx bx-book-open text-[25px]'></i>
+                    <i class='bx bx-users text-[25px]'></i>
                 </div>
                 <h3 class="text-[18px] font-bold text-slate-800  gap-2">
-                    My Courses
-                    <p class="text-xs mt-1 font-medium  text-slate-500">Total</p>
+                    Faculty
+                    <p class="text-xs mt-1 font-medium  text-slate-500">Total <?= $totalFaculty ?></p>
                 </h3>
             </div>
             <div class="mt-auto pt-7 flex items-center text-sm font-semibold text-blue-600 group-hover:text-blue-700">
