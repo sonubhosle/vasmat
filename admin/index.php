@@ -1,4 +1,15 @@
-<?php include 'includes/header.php'; ?>
+<?php 
+
+include 'includes/header.php'; 
+
+include __DIR__ . '/includes/db.php';
+
+$totalNotes = $conn->query("SELECT COUNT(*) as count FROM notes")->fetch_assoc()['count'];
+$totalEvents = $conn->query("SELECT COUNT(*) as count FROM events")->fetch_assoc()['count'];
+$totalAnnouncements = $conn->query("SELECT COUNT(*) as count FROM announcements")->fetch_assoc()['count'];
+
+?>
+
 
 
 
@@ -28,31 +39,27 @@
 
     </div>
 
-    <div class="group relative overflow-hidden rounded-2xl bg-white p-6  border border-slate-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
-        <div
-            class="absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 rounded-full opacity-10 transition-transform duration-500 group-hover:scale-110 bg-amber-500">
-        </div>
-        <div class="flex flex-col h-full ">
-            <div class="flex gap-4">
-
-                <div
-                    class="w-12 h-12 rounded-xl flex items-center justify-center text-white bg-amber-500 shadow-lg shadow-amber-500/20">
-                    <i class='bx bx-notepad text-[25px]'></i>
+    <div class="group relative overflow-hidden rounded-2xl bg-white p-6 border border-slate-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+            <div class="absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 rounded-full opacity-10 transition-transform duration-500 group-hover:scale-110 bg-violet-500"></div>
+            
+            <div class="flex flex-col h-full">
+                <div class="flex gap-4">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center text-white bg-gradient-to-br from-violet-500 to-purple-600 shadow-lg shadow-violet-500/20">
+                        <i class='bx bx-notepad text-[25px]'></i>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-[18px] font-bold text-slate-800">Notes</h3>
+                        <p class="text-xs mt-1 font-medium text-slate-500">Total <?= $totalNotes ?></p>
+                    </div>
                 </div>
-
-                <h3 class="text-[18px] font-bold text-slate-800  gap-2">
-                    Notice Board
-                    <p class="text-xs mt-1 font-medium  text-slate-500">Total 6</p>
-                </h3>
-
-            </div>
-            <div class="mt-auto pt-7 flex items-center text-sm font-semibold text-blue-600 group-hover:text-blue-700">
-                View All
-
+                
+                <div class="mt-auto pt-7 flex items-center text-sm font-semibold text-violet-600 group-hover:text-violet-700">
+                    <span>View Details</span>
+                    <i class='bx bx-chevron-right ml-1 text-lg transition-transform duration-300 group-hover:translate-x-1'></i>
+                </div>
             </div>
         </div>
-    </div>
-
     <div
         class="group relative overflow-hidden rounded-2xl bg-white p-6  border border-slate-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
         <div
@@ -64,10 +71,8 @@
                     class="w-12 h-12 rounded-xl flex items-center justify-center text-white bg-purple-600 shadow-lg shadow-purple-500/20">
                     <i class='bx bx-image text-[25px]'></i>
                 </div>
-                <h3 class="text-[18px] font-bold text-slate-800 ">Gallery
-                    <p class="text-xs mt-1 font-medium  text-slate-500">Functions
-
-                    </p>
+                <h3 class="text-[18px] font-bold text-slate-800 ">Events
+                    <p class="text-xs mt-1 font-medium  text-slate-500">Total <?= $totalEvents ?> </p>
 
                 </h3>
 
@@ -92,7 +97,7 @@
                 </div>
                 <h3 class="text-[18px] font-bold text-slate-800 ">
                     Announcements
-                    <p class="text-xs mt-1 font-medium  text-slate-500">Live 6</p>
+                    <p class="text-xs mt-1 font-medium  text-slate-500">Live <?= $totalAnnouncements ?></p>
                 </h3>
             </div>
 
