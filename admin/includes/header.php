@@ -15,7 +15,7 @@ $admin_name = $_SESSION['admin_name'];
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="assets/css/styles.css">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
+<link rel="stylesheet" href="/mit-college/assets/css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
  <style>
@@ -59,17 +59,12 @@ $admin_name = $_SESSION['admin_name'];
     <a href="/mit-college/admin/index.php" data-page="dashboard" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400  transition ease-in duration-200">
       <i class="fas fa-chart-line"></i> Dashboard
     </a>
-    <a href="/mit-college/admin/pages/courses.php" data-page="courses" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
-      <i class="fas fa-book"></i> Courses
-    </a>
+ 
     <a href="/mit-college/admin/pages/faculty.php" data-page="faculty" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
       <i class="fas fa-chalkboard-teacher"></i> Faculty
     </a>
-    <a href="/mit-college/admin/pages/notices.php" data-page="notices" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
-       <i class="fa-solid fa-clipboard-list"></i> Notices
-    </a>
-    <a href="/mit-college/admin/pages/gallery.php" data-page="gallery" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
-      <i class="fas fa-images"></i> Gallery
+    <a href="/mit-college/admin/pages/notes.php" data-page="notices" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
+       <i class="fa-solid fa-clipboard-list"></i> Notes
     </a>
      <a href="/mit-college/admin/pages/announcements.php" data-page="announcements" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
       <i class="fas fa-bullhorn"></i> Announcements
@@ -87,7 +82,7 @@ $admin_name = $_SESSION['admin_name'];
      </div>
 </aside>
 
-<div class="main px-7 py-5 overflow-y-auto w-full">
+<div class="main px-7 py-5 overflow-y-auto w-full h-screen">
 
 
 
