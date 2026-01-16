@@ -27,7 +27,7 @@
                 </div>
 
                 <h1
-                    class="text-2xl text-yellow-500 md:text-3xl lg:text-4xl font-extrabold  tracking-tighter mb-1 uppercase leading-[0.85]">
+                    class="text-4xl bg-gradient-to-r from-amber-500 to-orange-600 bg-clip-text text-transparent font-black  tracking-tighter mb-1 uppercase leading-[0.85]">
                     MIT COLLEGE OF <br class="hidden md:block lg:hidden" />
                     <span>COMPUTER SCI. & I.T.</span>
                 </h1>

@@ -12,7 +12,7 @@ if (isset($_POST['add_note'])) {
     $semester = $conn->real_escape_string($_POST['semester']);
     $created_by = $conn->real_escape_string($_POST['created_by']);
 
-    $uploadDir = __DIR__ . '/../../uploads/notes/';
+    $uploadDir = __DIR__ . '/../../upload/notes/';
     if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
     $fileName = time() . "_" . $_FILES['file']['name'];
@@ -37,7 +37,7 @@ if (isset($_GET['delete'])) {
 
     $res = $conn->query("SELECT file_path FROM notes WHERE id=$id");
     if($row = $res->fetch_assoc()){
-        @unlink(__DIR__ . '/../../uploads/notes/' . $row['file_path']);
+        @unlink(__DIR__ . '/../../upload/notes/' . $row['file_path']);
     }
 
     if ($conn->query("DELETE FROM notes WHERE id=$id")) {
@@ -61,10 +61,10 @@ if (isset($_POST['update_note'])) {
     if (!empty($_FILES['file']['name'])) {
         $res = $conn->query("SELECT file_path FROM notes WHERE id=$id");
         if($row = $res->fetch_assoc()){
-            @unlink(__DIR__ . '/../../uploads/notes/' . $row['file_path']);
+            @unlink(__DIR__ . '/../../upload/notes/' . $row['file_path']);
         }
 
-        $uploadDir = __DIR__ . '/../../uploads/notes/';
+        $uploadDir = __DIR__ . '/../../upload/notes/';
         $fileName = time() . "_" . $_FILES['file']['name'];
         $tmp = $_FILES['file']['tmp_name'];
         move_uploaded_file($tmp, $uploadDir . $fileName);
@@ -398,7 +398,7 @@ $totalNotes = $conn->query("SELECT COUNT(*) as count FROM notes")->fetch_assoc()
 
                             <!-- Actions -->
                             <div class="pt-4 border-t border-slate-100 flex gap-2">
-                                <a href="../../uploads/notes/<?= htmlspecialchars($row['file_path']) ?>" 
+                                <a href="../../upload/notes/<?= htmlspecialchars($row['file_path']) ?>" 
                                    target="_blank"
                                    class="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 rounded-xl font-medium hover:from-blue-100 hover:to-indigo-100 transition-all duration-200 border border-blue-100 hover:border-blue-200 flex items-center justify-center gap-2 group">
                                     <i class="fas fa-eye"></i>
@@ -902,7 +902,7 @@ $totalNotes = $conn->query("SELECT COUNT(*) as count FROM notes")->fetch_assoc()
             
             if (data.file_path) {
                 currentFileName.textContent = data.file_path;
-                currentFileLink.href = `../../uploads/notes/${data.file_path}`;
+                currentFileLink.href = `../../upload/notes/${data.file_path}`;
                 document.getElementById('currentFileContainer').classList.remove('hidden');
             } else {
                 document.getElementById('currentFileContainer').classList.add('hidden');
