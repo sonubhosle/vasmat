@@ -174,18 +174,18 @@
                                 </div>
                             </div>
                         </div>
+                        
 
-                        <a href="admissions.php"
-                            class="text-[11px] font-black text-slate-600 hover:text-amber-400 uppercase tracking-widest">Admissions</a>
-                              <a href="get_events.php"
-                            class="text-[11px] font-black text-slate-600 hover:text-amber-400 uppercase tracking-widest">Events</a>
+                        <a href="admissions.php" class="text-[11px] font-black text-slate-600 hover:text-amber-400 uppercase tracking-widest">Admissions</a>
+                        <a href="get_events.php" class="text-[11px] font-black text-slate-600 hover:text-amber-400 uppercase tracking-widest">Events</a>
 
-                        <a href="about.php"
-                            class="text-[11px] font-black text-slate-600 hover:text-amber-400 uppercase tracking-widest">About</a>
+                        <a href="get_faculty.php" class="text-[11px] font-black text-slate-600 hover:text-amber-400 uppercase tracking-widest">Faculty</a>
  
-                            <a href="contact.php"
-                            class="text-[11px] font-black text-white  uppercase tracking-widest bg-gradient-to-br from-amber-400 to-amber-600 px-4 py-2.5 rounded-2xl shadow-sm shadow-amber-500/40">
-                            Contact Us</a>
+                        <a href="about.php" class="text-[11px] font-black text-slate-600 hover:text-amber-400 uppercase tracking-widest">About</a>
+ 
+                            <a href="contact.php" class="text-[11px] font-black text-white  uppercase tracking-widest bg-gradient-to-br from-amber-400 to-amber-600 px-4 py-2.5 rounded-2xl shadow-sm shadow-amber-500/40">
+                            Contact Us
+                        </a>
 
                     </div>
                 </div>

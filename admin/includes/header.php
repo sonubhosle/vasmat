@@ -63,8 +63,11 @@ $admin_name = $_SESSION['admin_name'];
     <a href="/mit-college/admin/pages/faculty.php" data-page="faculty" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
       <i class="fas fa-chalkboard-teacher"></i> Faculty
     </a>
-    <a href="/mit-college/admin/pages/notes.php" data-page="notices" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
+    <a href="/mit-college/admin/pages/notes.php" data-page="notes" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
        <i class="fa-solid fa-clipboard-list"></i> Notes
+    </a>
+     <a href="/mit-college/admin/pages/syllabus.php" data-page="syllabus" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
+       <i class='bx bx-book-content'></i> Syllabus
     </a>
      <a href="/mit-college/admin/pages/announcements.php" data-page="announcements" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
       <i class="fas fa-bullhorn"></i> Announcements

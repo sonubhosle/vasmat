@@ -49,22 +49,20 @@
     ?>
 
     <!-- Hero Section -->
-    <section class="pt-20 pb-12 px-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
-        <div class="max-w-6xl mx-auto">
-            <h1 class="text-5xl md:text-6xl font-black mb-6 uppercase tracking-tighter">MIT COLLEGE Events</h1>
-            <p class="text-xl text-slate-300 mb-8 max-w-2xl">Discover our latest events, celebrations, and campus activities captured through the lens.</p>
+    <section class="pt-20 pb-12 px-6 bg-gradient-to-br  text-white">
+        <div class="w-full flex justify-between">
+                <div class="">
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="text-[10px] font-black uppercase tracking-[0.3em] text-amber-400">Activity</span>
+                        </div>
+                        <h2 class="text-4xl  font-black text-slate-900 mb-6 ">
+                           College <span class="italic font-serif">Events</span>
+                        </h2>
+
+                </div>
             <div class="flex flex-wrap gap-4 items-center">
                 <div class="px-6 py-3 bg-amber-400 text-slate-900 font-bold rounded-2xl uppercase tracking-widest text-sm">
                     <?php echo count($events) ?> Events
-                </div>
-                <div class="px-6 py-3 border-2 border-amber-400 text-amber-400 font-bold rounded-2xl uppercase tracking-widest text-sm">
-                    <?php 
-                        $total_images = 0;
-                        foreach($events as $event) {
-                            $total_images += count($event['all_images']);
-                        }
-                        echo $total_images . ' Total Images';
-                    ?>
                 </div>
             </div>
         </div>
@@ -80,9 +78,6 @@
                 </div>
                 <h3 class="text-2xl font-black text-slate-800 mb-4">No Events Yet</h3>
                 <p class="text-slate-600 mb-8">Check back later for upcoming events and activities at MIT College.</p>
-                <a href="../admin/pages/admin_events.php" class="inline-flex items-center gap-3 px-8 py-4 bg-amber-400 text-slate-900 font-bold rounded-2xl hover:bg-amber-500 transition-all shadow-xl active:scale-95 uppercase tracking-widest text-sm">
-                    <i class="fas fa-plus"></i> Admin: Add Events
-                </a>
             </div>
         </section>
     <?php else: ?>

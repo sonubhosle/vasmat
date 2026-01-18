@@ -8,6 +8,8 @@ $totalNotes = $conn->query("SELECT COUNT(*) as count FROM notes")->fetch_assoc()
 $totalEvents = $conn->query("SELECT COUNT(*) as count FROM events")->fetch_assoc()['count'];
 $totalAnnouncements = $conn->query("SELECT COUNT(*) as count FROM announcements")->fetch_assoc()['count'];
 $totalFaculty = $conn->query("SELECT COUNT(*) as count FROM faculty")->fetch_assoc()['count'];
+$totalContactMessages = $conn->query("SELECT COUNT(*) as count FROM contact_messages")->fetch_assoc()['count'];
+$totalSyllabus = $conn->query("SELECT COUNT(*) as count FROM syllabus")->fetch_assoc()['count'];
 
 ?>
 
@@ -25,7 +27,7 @@ $totalFaculty = $conn->query("SELECT COUNT(*) as count FROM faculty")->fetch_ass
             <div class="flex gap-4">
                 <div
                     class="w-12 h-12 rounded-xl flex items-center justify-center text-white bg-blue-600 shadow-lg shadow-blue-500/20">
-                    <i class='bx bx-users text-[25px]'></i>
+                    <i class='bx bx-user text-[25px]'></i>
                 </div>
                 <h3 class="text-[18px] font-bold text-slate-800  gap-2">
                     Faculty
@@ -117,12 +119,11 @@ $totalFaculty = $conn->query("SELECT COUNT(*) as count FROM faculty")->fetch_ass
         </div>
         <div class="flex flex-col h-full ">
             <div class="flex gap-4">
-                <div
-                    class="w-12 h-12 rounded-xl flex items-center justify-center text-white bg-slate-700 shadow-lg shadow-slate-500/20">
-                    <i class='bx bx-error-alt text-[25px]'></i>
+                <div  class="w-12 h-12 rounded-xl flex items-center justify-center text-white bg-slate-700 shadow-lg shadow-slate-500/20">
+                    <i class='bx bx-message-square-detail text-[25px]'></i>
                 </div>
-                <h3 class="text-[18px] font-bold text-slate-800 ">Complaints
-                    <p class="text-xs mt-1 font-medium  text-slate-500">Total 6</p>
+                <h3 class="text-[18px] font-bold text-slate-800 ">Messages
+                    <p class="text-xs mt-1 font-medium  text-slate-500">Total <?= $totalContactMessages ?></p>
                 </h3>
 
             </div>
@@ -147,7 +148,7 @@ $totalFaculty = $conn->query("SELECT COUNT(*) as count FROM faculty")->fetch_ass
                 </div>
                 <h3 class="text-[18px] font-bold text-slate-800 ">
                     Syllabuses
-                    <p class="text-xs mt-1 font-medium  text-slate-500">Uploaded 6</p>
+                    <p class="text-xs mt-1 font-medium  text-slate-500">Uploaded <?= $totalSyllabus ?></p>
                 </h3>
 
             </div>

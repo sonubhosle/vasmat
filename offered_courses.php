@@ -23,7 +23,7 @@ $SIDEBAR_LINKS = [
                         </h2>
 
                     </div>
-                    <div class=" border-2 border-slate-200 shadow-2xl">
+                    <div class=" border-2 border-slate-200 ">
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-slate-50 border-b-2 border-slate-200">
