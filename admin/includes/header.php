@@ -60,7 +60,7 @@ $admin_name = $_SESSION['admin_name'];
       <i class="fas fa-chart-line"></i> Dashboard
     </a>
  
-    <a href="/mit-college/admin/pages/faculty.php" data-page="faculty" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
+    <a href="faculty.php" data-page="faculty" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
       <i class="fas fa-chalkboard-teacher"></i> Faculty
     </a>
     <a href="/mit-college/admin/pages/notes.php" data-page="notes" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">

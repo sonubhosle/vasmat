@@ -152,10 +152,9 @@
                                 class="flex items-center gap-1.5 text-[11px] font-black text-slate-600 group-hover:text-amber-400 uppercase tracking-widest">
                                 Student Corner
                             </button>
-                            <div
-                                class="absolute top-full left-1/2 -translate-x-1/2 pt-3 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all origin-top pointer-events-none group-hover:pointer-events-auto">
+                            <div class="absolute top-full left-1/2 -translate-x-1/2 pt-3 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all origin-top pointer-events-none group-hover:pointer-events-auto">
                                 <div class="bg-white border border-slate-100 shadow-2xl rounded-2xl p-2 min-w-[210px]">
-                                    <a
+                                    <a href="subject_notes.php"
                                         class="flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
                                         Subject Notes
                                     </a>

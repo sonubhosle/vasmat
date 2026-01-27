@@ -154,7 +154,7 @@ if(isset($_POST['login'])){
                                             <i class="bx bx-envelope text-[22px] mt-1"></i>
                                         </div>
                                         <input id="email" name="email" type="email" required
-                                            class="block w-full pl-11 pr-4 py-3.5 border border-slate-200 rounded-2xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500 transition-all bg-white shadow-sm"
+                                            class="block w-full pl-11 pr-4 py-3.5 border border-slate-100 rounded-2xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500 transition-all bg-white shadow-sm"
                                             placeholder="admin@mitcollege.edu" />
                                     </div>
                                 </div>
@@ -168,7 +168,7 @@ if(isset($_POST['login'])){
                                             <i class="bx bx-lock text-[22px] mb-0.5"></i>
                                         </div>
                                         <input id="password" name="password" type="password" required
-                                            class="block w-full pl-11 pr-12 py-3.5 border border-slate-200 rounded-2xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500 transition-all bg-white shadow-sm"
+                                            class="block w-full pl-11 pr-12 py-3.5 border border-slate-100 rounded-2xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500 transition-all bg-white shadow-sm"
                                             placeholder="••••••••" />
                                         <span onclick="togglePassword('password')" 
                                               class="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer text-slate-400 hover:text-amber-500 transition-colors">
@@ -244,7 +244,7 @@ if(isset($_POST['login'])){
                     <button onclick="redirectToDashboard()" class="w-full bg-gradient-to-r from-emerald-400 to-emerald-600 text-white font-semibold py-3 rounded-2xl hover:shadow-lg transition-all">
                         Go to Dashboard Now
                     </button>
-                    <button onclick="closeModal()" class="w-full border border-slate-200 text-slate-600 font-medium py-3 rounded-2xl hover:bg-slate-50 transition-all">
+                    <button onclick="closeModal()" class="w-full border border-slate-100 text-slate-600 font-medium py-3 rounded-2xl hover:bg-slate-50 transition-all">
                         Stay Here
                     </button>
                 </div>

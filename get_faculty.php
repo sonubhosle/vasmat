@@ -88,7 +88,6 @@ if (isset($_GET['fetch'])) {
             type: "GET",
             dataType: "json",
             success: function(res) {
-                console.log(type, res);
                 
                 // Update count
                 $(countId).text(res.length);
