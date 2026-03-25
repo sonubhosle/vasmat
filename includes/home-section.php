@@ -31,7 +31,7 @@ $announcements_result = $conn->query("SELECT * FROM announcements ORDER BY creat
                         alt="Principal" class="w-24 h-24 object-cover object-top  rounded-xl " />
 
                 </div>
-                <h1 class="text-xl font-bold text-slate-800 mb-4">Principals Desk</h1>
+                <h1 class="text-base font-bold text-slate-800 mb-4">Principals Desk</h1>
                 <p class="text-slate-600 font-medium leading-relaxed italic mb-8 flex-1">
                     "Welcome to Mit College, an institution where excellence is a tradition."
                 </p>
@@ -196,7 +196,7 @@ if (isset($announcements_result)) $announcements_result->free();
         </div>
 
         <h1
-            class="text-5xl  font-black text-slate-900 leading-[0.95] tracking-tighter mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            class="text-3xl font-black text-slate-900 leading-[0.95] tracking-tighter mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
             CAMPUS IS YOUR <br />
             <span class="text-amber-500 relative inline-block">
                 SAFE SPACE.

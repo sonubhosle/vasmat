@@ -18,7 +18,7 @@ $SIDEBAR_LINKS = [
                             <span
                                 class="text-[10px] font-black uppercase tracking-[0.3em] text-amber-400">Curriculum</span>
                         </div>
-                        <h2 class="text-4xl  font-black text-slate-900 mb-6 ">
+                        <h2 class="text-2xl font-black text-slate-900 mb-6">
                             Offered <span class="italic font-serif">Courses</span>
                         </h2>
 

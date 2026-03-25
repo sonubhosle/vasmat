@@ -10,7 +10,7 @@
         <div class="absolute -top-24 -left-24 w-[500px] h-[500px] bg-emerald-50 rounded-full blur-[120px] pointer-events-none animate-pulse"></div>
         <div class="absolute -bottom-24 -right-24 w-[600px] h-[600px] bg-rose-50 rounded-full blur-[150px] pointer-events-none animate-pulse" style="animation-delay: 2s"></div>
 
-        <div class="max-w-7xl mx-auto px-6 pt-20 relative z-10">
+        <div class=" px-6 pt-20 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 mb-24">
                 
                 <!-- Brand & Mission Column -->
@@ -82,31 +82,25 @@ MIT College of Computer Science and IT is situated in Basmath, a prominent town 
 
                     <div>
                         <h5 class="text-[12px] font-black uppercase tracking-[0.3em] text-slate-600 mb-6 flex items-center gap-2">
-                             Support
+                             Resources
                         </h5>
                         <ul class="space-y-3">
                             <li>
-                                <a href="admissions.php" class="text-slate-600 hover:text-amber-600 transition-all font-bold text-sm flex items-center gap-2 group">
+                                <a href="subject_notes.php" class="text-slate-600 hover:text-amber-600 transition-all font-bold text-sm flex items-center gap-2 group">
                                     <div class="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-amber-600 group-hover:shadow-[0_0_8px_#ef4444] transition-all"></div>
-                                    Addmissions
+                                    Subject Notes
                                 </a>
                             </li>
                             <li>
-                                <a href="scholarships.php" class="text-slate-600 hover:text-amber-600 transition-all font-bold text-sm flex items-center gap-2 group">
+                                <a href="syllabus.php" class="text-slate-600 hover:text-amber-600 transition-all font-bold text-sm flex items-center gap-2 group">
                                     <div class="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-amber-600 group-hover:shadow-[0_0_8px_#ef4444] transition-all"></div>
-                                    Scollerships
+                                    Syllabus
                                 </a>
                             </li>
                             <li>
-                                <a href="help.php" class="text-slate-600 hover:text-amber-600 transition-all font-bold text-sm flex items-center gap-2 group">
+                                <a href="gallery.php" class="text-slate-600 hover:text-amber-600 transition-all font-bold text-sm flex items-center gap-2 group">
                                     <div class="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-amber-600 group-hover:shadow-[0_0_8px_#ef4444] transition-all"></div>
-                                    Help Center
-                                </a>
-                            </li>
-                            <li>
-                                <a href="faqs.php" class="text-slate-600 hover:text-amber-600 transition-all font-bold text-sm flex items-center gap-2 group">
-                                    <div class="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-amber-600 group-hover:shadow-[0_0_8px_#ef4444] transition-all"></div>
-                                    FAQs
+                                    Photo Gallery
                                 </a>
                             </li>
                         </ul>
@@ -114,11 +108,11 @@ MIT College of Computer Science and IT is situated in Basmath, a prominent town 
 
                     <div class="col-span-2 md:col-span-1">
                         <h5 class="text-[12px] font-black uppercase tracking-[0.3em] text-slate-600 mb-6 flex items-center gap-2">
-                           Legal 
+                           Information
                         </h5>
                        <ul class="space-y-3">
                             <li>
-                                <a href="admissions.php" class="text-slate-600 hover:text-amber-600 transition-all font-bold text-sm flex items-center gap-2 group">
+                                <a href="#" class="text-slate-600 hover:text-amber-600 transition-all font-bold text-sm flex items-center gap-2 group">
                                     <div class="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-amber-600 group-hover:shadow-[0_0_8px_#ef4444] transition-all"></div>
                                     Terms of Service
                                 </a>

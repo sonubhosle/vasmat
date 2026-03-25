@@ -1,31 +1,30 @@
 <?php
-include '../includes/db.php';
 include '../includes/header.php';
+
 $success = "";
 $error = "";
 
 // ADD SYLLABUS
 if (isset($_POST['add_syllabus'])) {
-    $subject = $conn->real_escape_string($_POST['subject_name']);
-    $uploaded_by = $conn->real_escape_string($_POST['uploaded_by']);
-    $year = $conn->real_escape_string($_POST['academic_year']);
+    $subject = $_POST['subject_name'];
+    $uploaded_by = $_POST['uploaded_by'];
+    $year = $_POST['academic_year'];
 
     $uploadDir = __DIR__ . '/../../upload/syllabus/';
-    if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+    $upload = secure_upload($_FILES['syllabus_file'], ['pdf'], $uploadDir);
 
-    $fileName = time() . "_" . $_FILES['syllabus_file']['name'];
-    $tmp = $_FILES['syllabus_file']['tmp_name'];
-
-    if (move_uploaded_file($tmp, $uploadDir . $fileName)) {
-        $sql = "INSERT INTO syllabus (subject_name, uploaded_by, academic_year, syllabus_file)
-                VALUES ('$subject', '$uploaded_by', '$year', '$fileName')";
-        if ($conn->query($sql)) {
+    if ($upload['success']) {
+        $fileName = $upload['filename'];
+        $stmt = $conn->prepare("INSERT INTO syllabus (subject_name, uploaded_by, academic_year, syllabus_file) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssss", $subject, $uploaded_by, $year, $fileName);
+        if ($stmt->execute()) {
             $success = "📚 Syllabus uploaded successfully!";
         } else {
-            $error = "Database error!";
+            $error = "Database error: " . $conn->error;
         }
+        $stmt->close();
     } else {
-        $error = "File upload failed!";
+        $error = "File upload failed: " . $upload['error'];
     }
 }
 
@@ -33,52 +32,76 @@ if (isset($_POST['add_syllabus'])) {
 if (isset($_GET['delete'])) {
     $id = intval($_GET['delete']);
 
-    $res = $conn->query("SELECT syllabus_file FROM syllabus WHERE id=$id");
-    if($row = $res->fetch_assoc()){
+    $stmt = $conn->prepare("SELECT syllabus_file FROM syllabus WHERE id=?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if($row = $result->fetch_assoc()){
         @unlink(__DIR__ . '/../../upload/syllabus/' . $row['syllabus_file']);
     }
+    $stmt->close();
 
-    if ($conn->query("DELETE FROM syllabus WHERE id=$id")) {
+    $stmt = $conn->prepare("DELETE FROM syllabus WHERE id=?");
+    $stmt->bind_param("i", $id);
+    if ($stmt->execute()) {
         $success = "🗑️ Syllabus deleted successfully!";
     } else {
         $error = "Delete failed!";
     }
+    $stmt->close();
 }
 
 // UPDATE SYLLABUS
 if (isset($_POST['update_syllabus'])) {
     $id = intval($_POST['id']);
-    $subject = $conn->real_escape_string($_POST['subject_name']);
-    $uploaded_by = $conn->real_escape_string($_POST['uploaded_by']);
-    $year = $conn->real_escape_string($_POST['academic_year']);
+    $subject = $_POST['subject_name'];
+    $uploaded_by = $_POST['uploaded_by'];
+    $year = $_POST['academic_year'];
 
-    $fileUpdate = "";
+    $fileName = null;
 
     if (!empty($_FILES['syllabus_file']['name'])) {
-        $res = $conn->query("SELECT syllabus_file FROM syllabus WHERE id=$id");
-        if($row = $res->fetch_assoc()){
+        $stmt = $conn->prepare("SELECT syllabus_file FROM syllabus WHERE id=?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if($row = $result->fetch_assoc()){
             @unlink(__DIR__ . '/../../upload/syllabus/' . $row['syllabus_file']);
         }
+        $stmt->close();
 
         $uploadDir = __DIR__ . '/../../upload/syllabus/';
-        $fileName = time() . "_" . $_FILES['syllabus_file']['name'];
-        $tmp = $_FILES['syllabus_file']['tmp_name'];
-        move_uploaded_file($tmp, $uploadDir . $fileName);
-        $fileUpdate = ", syllabus_file='$fileName'";
+        $upload = secure_upload($_FILES['syllabus_file'], ['pdf'], $uploadDir);
+        if ($upload['success']) {
+            $fileName = $upload['filename'];
+        } else {
+            $error = "File upload failed: " . $upload['error'];
+        }
     }
 
-    $sql = "UPDATE syllabus SET 
-            subject_name='$subject',
-            uploaded_by='$uploaded_by',
-            academic_year='$year'
-            $fileUpdate
-            WHERE id=$id";
+    if (empty($error)) {
+        if ($fileName) {
+            $stmt = $conn->prepare("UPDATE syllabus SET subject_name=?, uploaded_by=?, academic_year=?, syllabus_file=? WHERE id=?");
+            $stmt->bind_param("ssssi", $subject, $uploaded_by, $year, $fileName, $id);
+        } else {
+            $stmt = $conn->prepare("UPDATE syllabus SET subject_name=?, uploaded_by=?, academic_year=? WHERE id=?");
+            $stmt->bind_param("sssi", $subject, $uploaded_by, $year, $id);
+        }
 
-    if($conn->query($sql)){
-        $success = "✨ Syllabus updated successfully!";
-    } else {
-        $error = "Update failed!";
+        if($stmt->execute()){
+            $success = "✨ Syllabus updated successfully!";
+        } else {
+            $error = "Update failed!";
+        }
+        $stmt->close();
     }
+}
+
+// Download count update (handle AJAX)
+if (isset($_POST['action']) && $_POST['action'] === 'download' && isset($_POST['id'])) {
+    $id = (int)$_POST['id'];
+    $conn->query("UPDATE syllabus SET download_count = download_count + 1 WHERE id = $id");
+    exit;
 }
 
 // FETCH DATA
@@ -87,7 +110,12 @@ $totalSyllabus = $conn->query("SELECT COUNT(*) as count FROM syllabus")->fetch_a
 $totalDownloads = $conn->query("SELECT SUM(download_count) as total FROM syllabus")->fetch_assoc()['total'];
 $totalSubjects = $conn->query("SELECT COUNT(DISTINCT subject_name) as count FROM syllabus")->fetch_assoc()['count'];
 $currentYear = date('Y');
-$currentYearCount = $conn->query("SELECT COUNT(*) as count FROM syllabus WHERE academic_year LIKE '%$currentYear%'")->fetch_assoc()['count'];
+$stmt = $conn->prepare("SELECT COUNT(*) as count FROM syllabus WHERE academic_year LIKE ?");
+$likeYear = "%$currentYear%";
+$stmt->bind_param("s", $likeYear);
+$stmt->execute();
+$currentYearCount = $stmt->get_result()->fetch_assoc()['count'];
+$stmt->close();
 ?>
 
 <!DOCTYPE html>
@@ -540,6 +568,7 @@ $currentYearCount = $conn->query("SELECT COUNT(*) as count FROM syllabus WHERE a
             <!-- Modal Body -->
             <div class="flex-1 overflow-y-auto p-6">
                 <form method="POST" enctype="multipart/form-data" class="space-y-6" onsubmit="showLoading()" id="addForm">
+                    <?= csrf_field() ?>
                     <!-- Subject Name -->
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">
@@ -656,6 +685,7 @@ $currentYearCount = $conn->query("SELECT COUNT(*) as count FROM syllabus WHERE a
             <!-- Modal Body -->
             <div class="flex-1 overflow-y-auto p-6">
                 <form method="POST" enctype="multipart/form-data" class="space-y-6" onsubmit="showLoading()" id="editForm">
+                    <?= csrf_field() ?>
                     <input type="hidden" name="id" id="edit_id">
                     
                     <!-- Subject Name -->

@@ -45,20 +45,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
             
             // Save to DB if connection exists
             if ($conn) {
-                $name_clean = mysqli_real_escape_string($conn, $name);
-                $email_clean = mysqli_real_escape_string($conn, $email);
-                $phone_clean = mysqli_real_escape_string($conn, $phone);
-                $subject_clean = mysqli_real_escape_string($conn, $subject);
-                $message_clean = mysqli_real_escape_string($conn, $message_content);
+                $stmt = $conn->prepare("INSERT INTO contact_messages (full_name, email, phone, subject, message) VALUES (?, ?, ?, ?, ?)");
+                $stmt->bind_param("sssss", $name, $email, $phone, $subject, $message_content);
                 
-                $sql = "INSERT INTO contact_messages (full_name, email, phone, subject, message)
-                        VALUES ('$name_clean','$email_clean','$phone_clean','$subject_clean','$message_clean')";
-                
-                if($conn->query($sql)) {
+                if($stmt->execute()) {
                     $db_success = true;
                 } else {
                     error_log("DB Error: " . $conn->error);
                 }
+                $stmt->close();
             }
             
             // Try to send email (even if DB fails)
@@ -161,20 +156,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
     </div>
 </div>
 
-<section id="contact" class="py-24 px-6 bg-slate-50 relative overflow-hidden">
-    <div class="max-w-7xl mx-auto">
+<section id="contact" class="py-10 px-6 bg-slate-50 relative overflow-hidden">
+    <div class="">
         <!-- Header -->
-        <div class="text-center mb-16">
-            <span class="text-amber-600 text-[10px] font-black tracking-[0.5em] uppercase mb-4 block">Get In Touch</span>
-            <h2 class="text-4xl md:text-6xl font-black text-slate-900 uppercase tracking-tighter leading-none mb-6">
-                CONTACT <span class="text-amber-600">US</span>
-            </h2>
-            <p class="text-slate-500 font-medium max-w-2xl mx-auto">
-                Have questions about admissions, our programs, or campus safety? Our dedicated team is here to assist
-                you with detailed information and support.
-            </p>
-        </div>
+      <div class="mb-10 animate-fade-in-up ">
 
+                <h2 class="text-2xl md:text-3xl font-black text-slate-900 mb-6">
+                     Get in <span class="italic font-serif underline decoration-amber-400/30">Touch</span>
+                </h2>
+                <p class="text-slate-500 text-lg max-w-2xl">Have questions about admissions, our programs, or campus safety? Our dedicated team is here to assist
+                you with detailed information and support.</p>            
+        </div>
         <div class="grid lg:grid-cols-12 gap-12 items-start">
             <!-- Left Side: Contact Information Cards -->
             <div class="lg:col-span-5 space-y-6">

@@ -1,22 +1,12 @@
 <?php
 include '../includes/header.php';
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-include '../includes/db.php';
-
 $success = "";
 $error = "";
 
 // Set upload directory for events
 $uploadBaseDir = __DIR__ . '/../../upload/';
 $eventsUploadDir = $uploadBaseDir . 'events/';
-
-// Create events upload directory if it doesn't exist
-if (!file_exists($eventsUploadDir)) {
-    mkdir($eventsUploadDir, 0755, true);
-}
 
 // Event status helper
 function getEventStatus($eventDate) {
@@ -42,51 +32,52 @@ function getEventStatus($eventDate) {
 
 // ================= ADD EVENT =================
 if (isset($_POST['add_event'])) {
-    $name = mysqli_real_escape_string($conn, $_POST['event_name']);
-    $date = mysqli_real_escape_string($conn, $_POST['event_date']);
+    $name = $_POST['event_name'];
+    $date = $_POST['event_date'];
     $imagesArr = [];
 
     if (!empty($_FILES['event_images']['name'][0])) {
         foreach ($_FILES['event_images']['name'] as $key => $imgName) {
-            $tmp = $_FILES['event_images']['tmp_name'][$key];
-            $fileSize = $_FILES['event_images']['size'][$key];
-            $newName = time() . "_" . uniqid() . "_" . basename($imgName);
-            $targetPath = $eventsUploadDir . $newName;
-
-            // Check file size (max 5MB per file)
-            if ($fileSize > 5 * 1024 * 1024) {
-                $error = "Image '$imgName' is too large. Max 5MB per file.";
-                continue;
-            }
-
-            // Check if file is an actual image
-            $check = @getimagesize($tmp);
-            if ($check !== false && move_uploaded_file($tmp, $targetPath)) {
-                $imagesArr[] = 'events/' . $newName;
+            $file = [
+                'name' => $_FILES['event_images']['name'][$key],
+                'type' => $_FILES['event_images']['type'][$key],
+                'tmp_name' => $_FILES['event_images']['tmp_name'][$key],
+                'error' => $_FILES['event_images']['error'][$key],
+                'size' => $_FILES['event_images']['size'][$key]
+            ];
+            
+            $upload = secure_upload($file, ['jpg', 'jpeg', 'png', 'gif'], $eventsUploadDir);
+            if ($upload['success']) {
+                $imagesArr[] = 'events/' . $upload['filename'];
             } else {
-                $error = "File '$imgName' is not a valid image.";
+                $error .= "File '$imgName' failed: " . $upload['error'] . " ";
             }
         }
     }
 
-    $imagesJson = !empty($imagesArr) ? json_encode($imagesArr) : '[]';
-
-    $sql = "INSERT INTO events (event_name, event_date, event_images) 
-            VALUES ('$name', '$date', '$imagesJson')";
-    if ($conn->query($sql)) {
-        $success = "🎉 Event added successfully!";
-    } else {
-        $error = "DB Error: " . $conn->error;
+    if (empty($error)) {
+        $imagesJson = json_encode($imagesArr);
+        $stmt = $conn->prepare("INSERT INTO events (event_name, event_date, event_images) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $name, $date, $imagesJson);
+        if ($stmt->execute()) {
+            $success = "🎉 Event added successfully!";
+        } else {
+            $error = "DB Error: " . $conn->error;
+        }
+        $stmt->close();
     }
 }
 
 // ================= DELETE EVENT =================
 if (isset($_GET['delete_event'])) {
     $id = intval($_GET['delete_event']);
-    $res = $conn->query("SELECT event_images FROM events WHERE id=$id");
+    
+    $stmt = $conn->prepare("SELECT event_images FROM events WHERE id=?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    if ($res && $res->num_rows > 0) {
-        $row = $res->fetch_assoc();
+    if ($row = $result->fetch_assoc()) {
         $images = json_decode($row['event_images'] ?? '[]', true) ?: [];
         foreach ($images as $imgName) {
             $filePath = $uploadBaseDir . $imgName;
@@ -95,79 +86,98 @@ if (isset($_GET['delete_event'])) {
             }
         }
     }
+    $stmt->close();
 
-    if ($conn->query("DELETE FROM events WHERE id=$id")) {
+    $stmt = $conn->prepare("DELETE FROM events WHERE id=?");
+    $stmt->bind_param("i", $id);
+    if ($stmt->execute()) {
         $success = "🗑️ Event deleted successfully!";
     } else {
         $error = "Delete failed!";
     }
+    $stmt->close();
 }
 
 // ================= DELETE SINGLE IMAGE =================
 if (isset($_GET['delete_image'])) {
     $event_id = intval($_GET['event_id']);
-    $image_to_delete = basename($_GET['img'] ?? '');
+    $image_to_delete = $_GET['img'] ?? '';
 
-    $res = $conn->query("SELECT event_images FROM events WHERE id=$event_id");
-    if ($res && $res->num_rows > 0) {
-        $row = $res->fetch_assoc();
+    $stmt = $conn->prepare("SELECT event_images FROM events WHERE id=?");
+    $stmt->bind_param("i", $event_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($row = $result->fetch_assoc()) {
         $images = json_decode($row['event_images'] ?? '[]', true) ?: [];
 
-        $images = array_filter($images, fn($img) => $img != $image_to_delete);
-        $imagesJson = json_encode(array_values($images));
+        if (($key = array_search($image_to_delete, $images)) !== false) {
+            unset($images[$key]);
+            $imagesJson = json_encode(array_values($images));
 
-        $conn->query("UPDATE events SET event_images='$imagesJson' WHERE id=$event_id");
+            $stmt2 = $conn->prepare("UPDATE events SET event_images=? WHERE id=?");
+            $stmt2->bind_param("si", $imagesJson, $event_id);
+            $stmt2->execute();
+            $stmt2->close();
 
-        $filePath = $uploadBaseDir . $image_to_delete;
-        if (file_exists($filePath)) {
-            @unlink($filePath);
+            $filePath = $uploadBaseDir . $image_to_delete;
+            if (file_exists($filePath)) {
+                @unlink($filePath);
+            }
+            $success = "🗑️ Image deleted successfully!";
         }
-        $success = "🗑️ Image deleted successfully!";
     }
+    $stmt->close();
 }
 
 // ================= UPDATE EVENT =================
 if (isset($_POST['update_event'])) {
     $id = intval($_POST['event_id']);
-    $name = mysqli_real_escape_string($conn, $_POST['event_name']);
-    $date = mysqli_real_escape_string($conn, $_POST['event_date']);
+    $name = $_POST['event_name'];
+    $date = $_POST['event_date'];
 
-    if ($conn->query("UPDATE events SET event_name='$name', event_date='$date' WHERE id=$id")) {
+    $stmt = $conn->prepare("UPDATE events SET event_name=?, event_date=? WHERE id=?");
+    $stmt->bind_param("ssi", $name, $date, $id);
+    
+    if ($stmt->execute()) {
         $success = "✨ Event updated successfully!";
+        $stmt->close();
 
         // Add more images if uploaded
         if (!empty($_FILES['event_images']['name'][0])) {
-            $res = $conn->query("SELECT event_images FROM events WHERE id=$id");
-            $row = $res->fetch_assoc();
+            $stmt = $conn->prepare("SELECT event_images FROM events WHERE id=?");
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $row = $stmt->get_result()->fetch_assoc();
             $images = json_decode($row['event_images'] ?? '[]', true) ?: [];
+            $stmt->close();
 
             foreach ($_FILES['event_images']['name'] as $key => $imgName) {
-                $tmp = $_FILES['event_images']['tmp_name'][$key];
-                $fileSize = $_FILES['event_images']['size'][$key];
-                $newName = time() . "_" . uniqid() . "_" . basename($imgName);
-                $targetPath = $eventsUploadDir . $newName;
-
-                // Check file size (max 5MB per file)
-                if ($fileSize > 5 * 1024 * 1024) {
-                    $error = "Image '$imgName' is too large. Max 5MB per file.";
-                    continue;
-                }
-
-                // Check if file is an actual image
-                $check = @getimagesize($tmp);
-                if ($check !== false && move_uploaded_file($tmp, $targetPath)) {
-                    $images[] = 'events/' . $newName;
+                $file = [
+                    'name' => $_FILES['event_images']['name'][$key],
+                    'type' => $_FILES['event_images']['type'][$key],
+                    'tmp_name' => $_FILES['event_images']['tmp_name'][$key],
+                    'error' => $_FILES['event_images']['error'][$key],
+                    'size' => $_FILES['event_images']['size'][$key]
+                ];
+                
+                $upload = secure_upload($file, ['jpg', 'jpeg', 'png', 'gif'], $eventsUploadDir);
+                if ($upload['success']) {
+                    $images[] = 'events/' . $upload['filename'];
                 } else {
-                    $error = "File '$imgName' is not a valid image.";
+                    $error .= "File '$imgName' failed: " . $upload['error'] . " ";
                 }
             }
 
             $imagesJson = json_encode($images);
-            $conn->query("UPDATE events SET event_images='$imagesJson' WHERE id=$id");
+            $stmt = $conn->prepare("UPDATE events SET event_images=? WHERE id=?");
+            $stmt->bind_param("si", $imagesJson, $id);
+            $stmt->execute();
+            $stmt->close();
         }
 
     } else {
         $error = "Update failed!";
+        $stmt->close();
     }
 }
 
@@ -529,6 +539,7 @@ $upcomingEvents = $conn->query("SELECT COUNT(*) as count FROM events WHERE event
             <!-- Modal Body -->
             <div class="flex-1 overflow-y-auto p-6">
                 <form method="POST" enctype="multipart/form-data" class="space-y-6" onsubmit="showLoading()" id="addForm">
+                    <?= csrf_field() ?>
                     <!-- Event Name -->
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">
@@ -629,6 +640,7 @@ $upcomingEvents = $conn->query("SELECT COUNT(*) as count FROM events WHERE event
             <!-- Modal Body -->
             <div class="flex-1 overflow-y-auto p-6">
                 <form method="POST" enctype="multipart/form-data" class="space-y-6" onsubmit="showLoading()" id="editForm">
+                    <?= csrf_field() ?>
                     <input type="hidden" name="event_id" id="edit_id">
                     
                     <!-- Event Name -->

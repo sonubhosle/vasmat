@@ -4,9 +4,17 @@ include __DIR__ . '/admin/includes/db.php';
 /* ================= FETCH API ================= */
 if (isset($_GET['fetch'])) {
     $type = $_GET['type'] ?? 'teaching';
+    
+    // Validate type to prevent injection and filter results
+    $allowedTypes = ['teaching', 'non-teaching', 'visiting', 'guest'];
+    if (!in_array($type, $allowedTypes)) {
+        $type = 'teaching';
+    }
 
-    $sql = "SELECT * FROM faculty WHERE faculty_type='$type' ORDER BY id DESC";
-    $res = $conn->query($sql);
+    $stmt = $conn->prepare("SELECT * FROM faculty WHERE faculty_type=? ORDER BY id DESC");
+    $stmt->bind_param("s", $type);
+    $stmt->execute();
+    $res = $stmt->get_result();
 
     $data = [];
     while ($row = $res->fetch_assoc()) {
@@ -26,57 +34,115 @@ if (isset($_GET['fetch'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faculty Directory</title>
+    <title>Faculty Directory | MIT College</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .table-row-hover:hover {
+            background-color: #f8fafc;
+        }
+  
+      
+    </style>
 </head>
 
-<body class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-   
+<body class="bg-gradient-to-br from-slate-50 to-indigo-50/30 min-h-screen font-sans">
+    <div class=" px-6 py-12 ">
+        
+        <!-- Header Section -->
+            <div class="mb-12 animate-fade-in-up ">
 
+                <h2 class="text-2xl md:text-3xl font-black text-slate-900 mb-6">
+                     Our <span class="italic font-serif underline decoration-amber-400/30">Faculty</span>
+                </h2>
+                <p class="text-slate-500 text-lg max-w-2xl">Meet our dedicated team of academic and administrative professionals committed to excellence.</p>            
+        </div>
         <!-- Teaching Staff Section -->
-        <section class="mb-16">
-            <div class="flex items-center gap-4 mb-8">
+        <section class="mb-20">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
                 <div>
-                    <h2 class="text-2xl font-bold text-slate-700">Teaching Staff</h2>
-                    <p class="text-slate-600">Academic Faculty & Instructors</p>
+                    <h2 class="text-3xl font-extrabold text-slate-800 flex items-center gap-3">
+                        <span class="w-2 h-8 bg-blue-600 rounded-full"></span>
+                        Teaching Staff
+                    </h2>
+                    <p class="text-slate-500 ml-5 font-medium">Academic Experts & Mentors</p>
                 </div>
-                <span class="ml-auto bg-gradient-to-r from-blue-100 to-blue-50 border border-blue-200 text-blue-700 text-sm font-semibold px-4 py-2 rounded-full shadow-sm">
-                    <span id="teachingCount">0</span> Members
-                </span>
+                <div class="inline-flex items-center gap-3 bg-blue-50 border border-blue-100 px-6 py-2.5 rounded-2xl">
+                    <i class="fas fa-users text-blue-600"></i>
+                    <span class="text-blue-700 font-bold"><span id="teachingCount">0</span> Members</span>
+                </div>
             </div>
             
-            <div id="teachingData" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Loading skeleton -->
-                <?php for($i=0; $i<4; $i++): ?>
-                <div class="animate-pulse">
-                    <div class="bg-white rounded-xl shadow h-40"></div>
+            <div class="glass-card rounded-[2rem] overflow-hidden shadow-2xl shadow-blue-900/5">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50/50 border-b border-slate-100">
+                                <th class="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">Faculty Member</th>
+                                <th class="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">Designation</th>
+                                <th class="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">Academic Details</th>
+                                <th class="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest text-right">Contact</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teachingData">
+                            <!-- Loading skeletons -->
+                            <?php for($i=0; $i<3; $i++): ?>
+                            <tr class="animate-pulse">
+                                <td colspan="4" class="px-8 py-6 border-b border-slate-50">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-16 h-16 bg-slate-200 rounded-2xl"></div>
+                                        <div class="space-y-2">
+                                            <div class="w-48 h-4 bg-slate-200 rounded-full"></div>
+                                            <div class="w-32 h-3 bg-slate-100 rounded-full"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php endfor; ?>
+                        </tbody>
+                    </table>
                 </div>
-                <?php endfor; ?>
             </div>
         </section>
 
         <!-- Non-Teaching Staff Section -->
-        <section class="mb-16">
-            <div class="flex items-center gap-4 mb-8">
+        <section class="mb-20">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
                 <div>
-                    <h2 class="text-2xl font-bold text-slate-700">Non-Teaching Staff</h2>
-                    <p class="text-slate-600">Administrative & Support Staff</p>
+                    <h2 class="text-3xl font-extrabold text-slate-800 flex items-center gap-3">
+                        <span class="w-2 h-8 bg-emerald-500 rounded-full"></span>
+                        Non-Teaching Staff
+                    </h2>
+                    <p class="text-slate-500 ml-5 font-medium">Administrative & Support Services</p>
                 </div>
-                <span class="ml-auto bg-gradient-to-r from-emerald-100 to-green-50 border border-emerald-200 text-emerald-700 text-sm font-semibold px-4 py-2 rounded-full shadow-sm">
-                    <span id="nonTeachingCount">0</span> Members
-                </span>
+                <div class="inline-flex items-center gap-3 bg-emerald-50 border border-emerald-100 px-6 py-2.5 rounded-2xl">
+                    <i class="fas fa-hand-holding-heart text-emerald-600"></i>
+                    <span class="text-emerald-700 font-bold"><span id="nonTeachingCount">0</span> Members</span>
+                </div>
             </div>
             
-            <div id="nonTeachingData" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Loading skeleton -->
-                <?php for($i=0; $i<4; $i++): ?>
-                <div class="animate-pulse">
-                    <div class="bg-white rounded-xl shadow h-40"></div>
+            <div class="glass-card rounded-[2rem] overflow-hidden shadow-2xl shadow-emerald-900/5">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50/50 border-b border-slate-100">
+                                <th class="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">Staff Member</th>
+                                <th class="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">Role</th>
+                                <th class="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">Experience</th>
+                                <th class="px-8 py-6 text-xs font-black text-slate-400 uppercase tracking-widest text-right">Contact</th>
+                            </tr>
+                        </thead>
+                        <tbody id="nonTeachingData">
+                            <!-- Loading skeletons populated via JS -->
+                        </tbody>
+                    </table>
                 </div>
-                <?php endfor; ?>
             </div>
         </section>
     </div>
@@ -88,143 +154,104 @@ if (isset($_GET['fetch'])) {
             type: "GET",
             dataType: "json",
             success: function(res) {
-                
-                // Update count
                 $(countId).text(res.length);
                 
                 let html = "";
                 if (res.length == 0) {
                     html = `
-                        <div class="col-span-2 bg-gradient-to-br from-slate-50 to-white rounded-2xl shadow-inner border border-slate-200 p-12 text-center">
-                            <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-slate-200 to-slate-300 rounded-full mb-6">
-                                <i class="fas fa-user-slash text-slate-400 text-3xl"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-slate-700 mb-2">No Members Found</h3>
-                            <p class="text-slate-500">There are no ${type} staff members at the moment.</p>
-                        </div>
+                        <tr>
+                            <td colspan="4" class="px-8 py-20 text-center">
+                                <div class="max-w-xs mx-auto">
+                                    <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                        <i class="fas fa-user-slash text-slate-300 text-2xl"></i>
+                                    </div>
+                                    <h4 class="text-slate-700 font-bold mb-1">No Records Found</h4>
+                                    <p class="text-slate-400 text-sm">No ${type} members available at this time.</p>
+                                </div>
+                            </td>
+                        </tr>
                     `;
                 } else {
                     res.forEach(f => {
-                        const bgGradient = type === 'teaching' 
-                            ? 'bg-gradient-to-br from-blue-50 to-white border-blue-100 hover:border-blue-300' 
-                            : 'bg-gradient-to-br from-emerald-50 to-white border-emerald-100 hover:border-emerald-300';
-                        
-                        const textColor = type === 'teaching' ? 'text-blue-600' : 'text-emerald-600';
-                        const iconBg = type === 'teaching' ? 'bg-blue-100 text-blue-600' : 'bg-emerald-100 text-emerald-600';
-                        const badgeBg = type === 'teaching' ? 'bg-gradient-to-r from-blue-500 to-blue-600' : 'bg-gradient-to-r from-emerald-500 to-green-600';
+                        const themeColor = type === 'teaching' ? 'blue' : 'emerald';
+                        const themeClass = type === 'teaching' ? 'text-blue-600 bg-blue-50' : 'text-emerald-600 bg-emerald-50';
                         
                         html += `
-                            <div class="group relative">
-                                <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-0 group-hover:opacity-20 transition duration-500"></div>
-                                <div class="relative ${bgGradient} border-2 rounded-xl shadow-sm p-3 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                                    <div class="flex items-start gap-5">
-                                        <!-- Profile Image -->
-                                        <div class="relative flex-shrink-0">
+                            <tr class="table-row-hover transition-all duration-300 last:border-0 group">
+                                <td class="px-8 py-6">
+                                    <div class="flex items-center gap-5">
+                                        <div class="w-16 h-16 rounded-2xl overflow-hidden border-2 border-white shadow-lg shadow-slate-200 shrink-0">
                                             <img src="upload/faculty/${f.photo}" 
                                                  onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(f.name)}&background=random&color=fff&bold=true&size=150'"
-                                                 class="w-32 h-32 rounded-xl  border-4 border-white">
-                                                
+                                                 class="w-full h-full object-cover faculty-photo">
                                         </div>
-                                        
-                                        <!-- Info -->
-                                        <div class="flex-1 min-w-0">
-                                            <div class="flex items-start justify-between mb-2">
-                                                <div>
-                                                    <h3 class="text-lg font-bold text-slate-800 truncate group-hover:text-blue-700 transition-colors">${f.name}</h3>
-                                                    <div class="flex items-center gap-2 mt-1">
-                                                        <span class="${textColor} font-semibold text-sm">${f.designation}</span>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="flex gap-2 ml-2">
-                                                    ${f.email ? `
-                                                        <a href="mailto:${f.email}" class="${iconBg} w-8 h-8 rounded-full flex items-center justify-center hover:shadow-md transition-all hover:scale-110">
-                                                            <i class="fas fa-envelope text-xs"></i>
-                                                        </a>
-                                                    ` : ''}
-                                                    
-                                                    ${f.phone ? `
-                                                        <a href="tel:${f.phone}" class="${type === 'teaching' ? 'bg-blue-100 text-blue-600' : 'bg-emerald-100 text-emerald-600'} w-8 h-8 rounded-full flex items-center justify-center hover:shadow-md transition-all hover:scale-110">
-                                                            <i class="fas fa-phone text-xs"></i>
-                                                        </a>
-                                                    ` : ''}
-                                                </div>
-                                            </div>
-                                            
-                                            <!-- Details Grid -->
-                                            <div class="flex gap-4 items-center mt-2">
-                                                ${f.education ? `
-                                                    <div class="flex items-center gap-2">
-                                                        <div class="${iconBg} w-6 h-6 rounded flex items-center justify-center flex-shrink-0 mt-0.5">
-                                                            <i class="fas fa-graduation-cap text-xs"></i>
-                                                        </div>
-                                                        <div>
-                                                            <p class="text-xs text-slate-500">Education</p>
-                                                            <p class="text-sm font-medium text-slate-700 truncate">${f.education}</p>
-                                                        </div>
-                                                    </div>
-                                                ` : ''}
-                                                
-                                                ${f.experience ? `
-                                                    <div class="flex items-center gap-2">
-                                                        <div class="${iconBg} w-6 h-6 rounded flex items-center justify-center flex-shrink-0 mt-0.5">
-                                                            <i class="fas fa-briefcase text-xs"></i>
-                                                        </div>
-                                                        <div>
-                                                            <p class="text-xs text-slate-500">Experience</p>
-                                                            <p class="text-sm font-medium text-slate-700">${f.experience}</p>
-                                                        </div>
-                                                    </div>
-                                                ` : ''}
-                                            </div>
-                                            
-                                            <!-- Contact Info -->
-                                            <div class="mt-4 pt-4 border-t border-slate-100">
-                                                <div class="flex items-center justify-between text-sm">
-                                                    ${f.email ? `
-                                                        <span class="text-slate-600 truncate max-w-[60%]">
-                                                            <i class="fas fa-envelope text-slate-400 mr-1"></i>
-                                                            ${f.email}
-                                                        </span>
-                                                    ` : ''}
-                                                    
-                                                    ${f.phone ? `
-                                                        <span class="${textColor} font-medium">
-                                                            <i class="fas fa-phone mr-1"></i>
-                                                            ${f.phone}
-                                                        </span>
-                                                    ` : ''}
-                                                </div>
-                                            </div>
+                                        <div>
+                                            <h4 class="text-[17px] font-black text-slate-800 tracking-tight">${f.name}</h4>
+                                            <p class="text-sm text-slate-400 font-medium">Emp ID: #FAC-${f.id}</p>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <span class="inline-flex px-4 py-1.5 rounded-xl text-xs font-black uppercase tracking-widest ${themeClass} border border-${themeColor}-100">
+                                        ${f.designation}
+                                    </span>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <div class="space-y-2">
+                                        ${f.education ? `
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-8 h-8 rounded-lg ${themeClass} flex items-center justify-center shrink-0">
+                                                    <i class="fas fa-graduation-cap text-xs"></i>
+                                                </div>
+                                                <span class="text-sm font-semibold text-slate-600 truncate max-w-[200px]">${f.education}</span>
+                                            </div>
+                                        ` : ''}
+                                        ${f.experience ? `
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                                                    <i class="fas fa-history text-xs"></i>
+                                                </div>
+                                                <span class="text-sm font-semibold text-slate-600">${f.experience} Exp.</span>
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <div class="flex justify-end gap-3 transition-all duration-300">
+                                        ${f.email ? `
+                                            <a href="mailto:${f.email}" class="w-10 h-10 rounded-xl bg-slate-800 text-white flex items-center justify-center hover:bg-blue-600 hover:scale-110 transition-all shadow-lg shadow-slate-200" title="Email ${f.name}">
+                                                <i class="fas fa-envelope text-sm"></i>
+                                            </a>
+                                        ` : ''}
+                                        ${f.phone ? `
+                                            <a href="tel:${f.phone}" class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700 hover:scale-110 transition-all shadow-lg shadow-blue-500/20" title="Call ${f.name}">
+                                                <i class="fas fa-phone text-sm"></i>
+                                            </a>
+                                        ` : ''}
+                                    </div>
+                                </td>
+                            </tr>
                         `;
                     });
                 }
-                
                 $(targetDiv).html(html);
             },
             error: function() {
                 $(targetDiv).html(`
-                    <div class="col-span-2 bg-gradient-to-br from-red-50 to-white border border-red-200 rounded-2xl p-10 text-center">
-                        <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-red-100 to-red-200 rounded-full mb-4">
-                            <i class="fas fa-exclamation-triangle text-red-500 text-2xl"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-slate-800 mb-2">Failed to Load Data</h3>
-                        <p class="text-slate-600 mb-6">Please check your connection and try again.</p>
-                        <button onclick="loadFaculty('${type}', '${targetDiv}', '${countId}')" 
-                                class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
-                            <i class="fas fa-redo mr-2"></i>Try Again
-                        </button>
-                    </div>
+                    <tr>
+                        <td colspan="4" class="px-8 py-20 text-center">
+                            <div class="bg-red-50 text-red-600 p-6 rounded-3xl border border-red-100 inline-block">
+                                <i class="fas fa-exclamation-circle text-2xl mb-2"></i>
+                                <p class="font-bold">Failed to sync data</p>
+                                <button onclick="loadFaculty('${type}', '${targetDiv}', '${countId}')" class="mt-4 text-sm font-black uppercase tracking-widest hover:underline">Retry Connection</button>
+                            </div>
+                        </td>
+                    </tr>
                 `);
             }
         });
     }
 
-    // Load both sections
     $(document).ready(function() {
         loadFaculty("teaching", "#teachingData", "#teachingCount");
         loadFaculty("non-teaching", "#nonTeachingData", "#nonTeachingCount");

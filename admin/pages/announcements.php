@@ -9,10 +9,6 @@ if (!isset($_SESSION['admin_id'])) {
     exit("Unauthorized");
 }
 
-// DB include
-$dbPath = file_exists("../includes/db.php") ? "../includes/db.php" : "includes/db.php";
-include $dbPath;
-
 $success = "";
 $error = "";
 
@@ -67,38 +63,34 @@ $badgeOptions = [
 
 // ================= ADD =================
 if (isset($_POST['add_announcement'])) {
-    $title = $conn->real_escape_string($_POST['title']);
-    $description = $conn->real_escape_string($_POST['description']);
-    $badge = $conn->real_escape_string($_POST['badge']);
-    $is_active = $_POST['is_active'];
+    $title = $_POST['title'];
+    $description = $_POST['description'];
+    $badge = $_POST['badge'];
+    $is_active = (int)$_POST['is_active'];
 
     $pdfName = null;
 
     if (!empty($_FILES['pdf']['name'])) {
         $uploadDir = __DIR__ . "/../../upload/announcements/";
-        if (!file_exists($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
-        }
+        $upload = secure_upload($_FILES['pdf'], ['pdf'], $uploadDir);
         
-        $pdfName = time() . '_' . basename($_FILES['pdf']['name']);
-        $uploadPath = $uploadDir . $pdfName;
-        
-        if (move_uploaded_file($_FILES['pdf']['tmp_name'], $uploadPath)) {
-            $pdfName = 'announcements/' . $pdfName;
+        if ($upload['success']) {
+            $pdfName = 'announcements/' . $upload['filename'];
         } else {
-            $error = "Failed to upload PDF file.";
+            $error = "File upload failed: " . $upload['error'];
         }
     }
 
     if (empty($error)) {
-        $sql = "INSERT INTO announcements (title, description, badge, pdf, is_active) 
-                VALUES ('$title','$description','$badge','$pdfName','$is_active')";
+        $stmt = $conn->prepare("INSERT INTO announcements (title, description, badge, pdf, is_active) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssi", $title, $description, $badge, $pdfName, $is_active);
 
-        if ($conn->query($sql)) {
+        if ($stmt->execute()) {
             $success = "🎉 Announcement added successfully!";
         } else {
             $error = "Error adding announcement: " . $conn->error;
         }
+        $stmt->close();
     }
 }
 
@@ -106,56 +98,62 @@ if (isset($_POST['add_announcement'])) {
 if (isset($_GET['delete'])) {
     $id = intval($_GET['delete']);
 
-    $res = $conn->query("SELECT pdf FROM announcements WHERE id=$id");
-    if ($row = $res->fetch_assoc()) {
+    $stmt = $conn->prepare("SELECT pdf FROM announcements WHERE id=?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($row = $result->fetch_assoc()) {
         if ($row['pdf']) {
             @unlink(__DIR__ . "/../../upload/" . $row['pdf']);
         }
     }
+    $stmt->close();
 
-    if ($conn->query("DELETE FROM announcements WHERE id=$id")) {
+    $stmt = $conn->prepare("DELETE FROM announcements WHERE id=?");
+    $stmt->bind_param("i", $id);
+    if ($stmt->execute()) {
         $success = "🗑️ Announcement deleted successfully!";
     } else {
         $error = "Failed to delete announcement.";
     }
+    $stmt->close();
 }
 
 // ================= UPDATE =================
 if (isset($_POST['update_announcement'])) {
     $id = intval($_POST['id']);
-    $title = $conn->real_escape_string($_POST['title']);
-    $description = $conn->real_escape_string($_POST['description']);
-    $badge = $conn->real_escape_string($_POST['badge']);
-    $is_active = $_POST['is_active'];
+    $title = $_POST['title'];
+    $description = $_POST['description'];
+    $badge = $_POST['badge'];
+    $is_active = (int)$_POST['is_active'];
 
     $oldPdf = $_POST['old_pdf'];
     $newPdf = $oldPdf;
 
     if (!empty($_FILES['pdf']['name'])) {
         $uploadDir = __DIR__ . "/../../upload/announcements/";
-        if (!file_exists($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
-        }
+        $upload = secure_upload($_FILES['pdf'], ['pdf'], $uploadDir);
         
-        $newPdfName = time() . '_' . basename($_FILES['pdf']['name']);
-        $uploadPath = $uploadDir . $newPdfName;
-        
-        if (move_uploaded_file($_FILES['pdf']['tmp_name'], $uploadPath)) {
-            $newPdf = 'announcements/' . $newPdfName;
+        if ($upload['success']) {
+            $newPdf = 'announcements/' . $upload['filename'];
             if ($oldPdf) {
                 @unlink(__DIR__ . "/../../upload/" . $oldPdf);
             }
+        } else {
+            $error = "File upload failed: " . $upload['error'];
         }
     }
 
-    $sql = "UPDATE announcements 
-            SET title='$title', description='$description', badge='$badge', pdf='$newPdf', is_active='$is_active' 
-            WHERE id=$id";
+    if (empty($error)) {
+        $stmt = $conn->prepare("UPDATE announcements SET title=?, description=?, badge=?, pdf=?, is_active=? WHERE id=?");
+        $stmt->bind_param("ssssii", $title, $description, $badge, $newPdf, $is_active, $id);
 
-    if ($conn->query($sql)) {
-        $success = "✨ Announcement updated successfully!";
-    } else {
-        $error = "Failed to update announcement: " . $conn->error;
+        if ($stmt->execute()) {
+            $success = "✨ Announcement updated successfully!";
+        } else {
+            $error = "Failed to update announcement: " . $conn->error;
+        }
+        $stmt->close();
     }
 }
 
@@ -647,6 +645,7 @@ $activeAnnouncements = $conn->query("SELECT COUNT(*) as count FROM announcements
             <!-- Modal Body with Scroll -->
             <div class="flex-1 overflow-y-auto custom-scrollbar">
                 <form method="POST" enctype="multipart/form-data" class="p-6 space-y-6" onsubmit="showLoading()" id="addForm">
+                    <?= csrf_field() ?>
                     <!-- Title -->
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
@@ -840,6 +839,7 @@ $activeAnnouncements = $conn->query("SELECT COUNT(*) as count FROM announcements
             <!-- Modal Body with Scroll -->
             <div class="flex-1 overflow-y-auto custom-scrollbar">
                 <form method="POST" enctype="multipart/form-data" class="p-6 space-y-6" onsubmit="showLoading()" id="editForm">
+                    <?= csrf_field() ?>
                     <input type="hidden" name="id" id="edit_id">
                     <input type="hidden" name="old_pdf" id="edit_old_pdf">
                     

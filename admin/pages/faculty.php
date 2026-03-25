@@ -1,19 +1,10 @@
 <?php
- 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-
 include __DIR__ . '/../includes/header.php';
-include __DIR__ . '/../includes/db.php';
 
 $success = "";
 $error = "";
 
 $uploadDir = __DIR__ . '/../../upload/faculty/';
-if (!is_dir($uploadDir)) {
-    mkdir($uploadDir, 0777, true);
-}
 
 // Faculty type colors and icons
 $facultyTypes = [
@@ -45,30 +36,36 @@ $facultyTypes = [
 
 // ================= ADD =================
 if(isset($_POST['add_faculty'])){
-    $name = $conn->real_escape_string($_POST['name']);
-    $designation = $conn->real_escape_string($_POST['designation']);
-    $education = $conn->real_escape_string($_POST['education']);
-    $experience = $conn->real_escape_string($_POST['experience']);
-    $faculty_type = $conn->real_escape_string($_POST['faculty_type']);
-    $email = $conn->real_escape_string($_POST['email']);
-    $phone = $conn->real_escape_string($_POST['phone']);
+    $name = $_POST['name'];
+    $designation = $_POST['designation'];
+    $education = $_POST['education'];
+    $experience = $_POST['experience'];
+    $faculty_type = $_POST['faculty_type'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
     $is_active = isset($_POST['is_active']) ? 1 : 0;
 
     $photoName = "";
 
     if(!empty($_FILES['photo']['name'])){
-        $clean = str_replace(" ", "_", $_FILES['photo']['name']);
-        $photoName = time() . "_" . $clean;
-        move_uploaded_file($_FILES['photo']['tmp_name'], $uploadDir . $photoName);
+        $upload = secure_upload($_FILES['photo'], ['jpg', 'jpeg', 'png'], $uploadDir);
+        if ($upload['success']) {
+            $photoName = $upload['filename'];
+        } else {
+            $error = "Photo upload failed: " . $upload['error'];
+        }
     }
 
-    $sql = "INSERT INTO faculty (name, designation, education, experience, faculty_type, email, phone, photo, is_active)
-            VALUES ('$name','$designation','$education','$experience','$faculty_type','$email','$phone','$photoName',$is_active)";
+    if (empty($error)) {
+        $stmt = $conn->prepare("INSERT INTO faculty (name, designation, education, experience, faculty_type, email, phone, photo, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssssi", $name, $designation, $education, $experience, $faculty_type, $email, $phone, $photoName, $is_active);
 
-    if($conn->query($sql)){
-        $success = "🎉 Faculty added successfully!";
-    } else {
-        $error = "Error: " . $conn->error;
+        if($stmt->execute()){
+            $success = "🎉 Faculty added successfully!";
+        } else {
+            $error = "Error: " . $conn->error;
+        }
+        $stmt->close();
     }
 }
 
@@ -76,59 +73,76 @@ if(isset($_POST['add_faculty'])){
 if(isset($_GET['delete'])){
     $id = intval($_GET['delete']);
 
-    $res = $conn->query("SELECT photo FROM faculty WHERE id=$id");
-    if($row = $res->fetch_assoc()){
+    $stmt = $conn->prepare("SELECT photo FROM faculty WHERE id=?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if($row = $result->fetch_assoc()){
         if($row['photo']){
             @unlink($uploadDir . $row['photo']);
         }
     }
+    $stmt->close();
 
-    if($conn->query("DELETE FROM faculty WHERE id=$id")){
+    $stmt = $conn->prepare("DELETE FROM faculty WHERE id=?");
+    $stmt->bind_param("i", $id);
+    if($stmt->execute()){
         $success = "🗑️ Faculty deleted successfully!";
     } else {
         $error = "Failed to delete faculty.";
     }
+    $stmt->close();
 }
 
 // ================= UPDATE =================
 if(isset($_POST['update_faculty'])){
     $id = intval($_POST['id']);
-    $name = $conn->real_escape_string($_POST['name']);
-    $designation = $conn->real_escape_string($_POST['designation']);
-    $education = $conn->real_escape_string($_POST['education']);
-    $experience = $conn->real_escape_string($_POST['experience']);
-    $faculty_type = $conn->real_escape_string($_POST['faculty_type']);
-    $email = $conn->real_escape_string($_POST['email']);
-    $phone = $conn->real_escape_string($_POST['phone']);
+    $name = $_POST['name'];
+    $designation = $_POST['designation'];
+    $education = $_POST['education'];
+    $experience = $_POST['experience'];
+    $faculty_type = $_POST['faculty_type'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
     $is_active = isset($_POST['is_active']) ? 1 : 0;
 
-    $photoUpdate = "";
+    $photoName = null;
 
     if(!empty($_FILES['photo']['name'])){
-        $res = $conn->query("SELECT photo FROM faculty WHERE id=$id");
-        if($old = $res->fetch_assoc()){
-            if($old['photo']){
+        $stmt = $conn->prepare("SELECT photo FROM faculty WHERE id=?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if($old = $result->fetch_assoc()){
+            if($old['photo'] && file_exists($uploadDir . $old['photo'])){
                 @unlink($uploadDir . $old['photo']);
             }
         }
+        $stmt->close();
 
-        $clean = str_replace(" ", "_", $_FILES['photo']['name']);
-        $newName = time() . "_" . $clean;
-        move_uploaded_file($_FILES['photo']['tmp_name'], $uploadDir . $newName);
-        $photoUpdate = ", photo='$newName'";
+        $upload = secure_upload($_FILES['photo'], ['jpg', 'jpeg', 'png'], $uploadDir);
+        if ($upload['success']) {
+            $photoName = $upload['filename'];
+        } else {
+            $error = "Photo upload failed: " . $upload['error'];
+        }
     }
 
-    $sql = "UPDATE faculty 
-            SET name='$name', designation='$designation', education='$education', 
-                experience='$experience', faculty_type='$faculty_type', 
-                email='$email', phone='$phone', is_active=$is_active
-                $photoUpdate
-            WHERE id=$id";
+    if (empty($error)) {
+        if ($photoName) {
+            $stmt = $conn->prepare("UPDATE faculty SET name=?, designation=?, education=?, experience=?, faculty_type=?, email=?, phone=?, photo=?, is_active=? WHERE id=?");
+            $stmt->bind_param("ssssssssii", $name, $designation, $education, $experience, $faculty_type, $email, $phone, $photoName, $is_active, $id);
+        } else {
+            $stmt = $conn->prepare("UPDATE faculty SET name=?, designation=?, education=?, experience=?, faculty_type=?, email=?, phone=?, is_active=? WHERE id=?");
+            $stmt->bind_param("sssssssii", $name, $designation, $education, $experience, $faculty_type, $email, $phone, $is_active, $id);
+        }
 
-    if($conn->query($sql)){
-        $success = "✨ Faculty updated successfully!";
-    } else {
-        $error = "Error: " . $conn->error;
+        if($stmt->execute()){
+            $success = "✨ Faculty updated successfully!";
+        } else {
+            $error = "Error: " . $conn->error;
+        }
+        $stmt->close();
     }
 }
 
@@ -545,6 +559,7 @@ $teachingFaculty = $conn->query("SELECT COUNT(*) as count FROM faculty WHERE fac
             <!-- Modal Body -->
             <div class="flex-1 overflow-y-auto p-6">
                 <form method="POST" enctype="multipart/form-data" class="space-y-6" onsubmit="showLoading()" id="addForm">
+                    <?= csrf_field() ?>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Name -->
                         <div>
@@ -759,6 +774,7 @@ $teachingFaculty = $conn->query("SELECT COUNT(*) as count FROM faculty WHERE fac
             <!-- Modal Body -->
             <div class="flex-1 overflow-y-auto p-6">
                 <form method="POST" enctype="multipart/form-data" class="space-y-6" onsubmit="showLoading()" id="editForm">
+                    <?= csrf_field() ?>
                     <input type="hidden" name="id" id="edit_id">
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

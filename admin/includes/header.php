@@ -1,8 +1,19 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+include_once __DIR__ . '/functions.php';
+
 if(!isset($_SESSION['admin_id'])){
     header("Location: login.php");
     exit();
+}
+
+// Basic CSRF check for all POST requests in the admin panel
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['login']) && !isset($_POST['register'])) {
+    if (!isset($_POST['csrf_token']) || !verify_csrf_token($_POST['csrf_token'])) {
+        die("CSRF validation failed. Refresh the page and try again.");
+    }
 }
 
 $admin_name = $_SESSION['admin_name'];
@@ -74,6 +85,9 @@ $admin_name = $_SESSION['admin_name'];
     </a>
     <a href="/mit-college/admin/pages/admin_events.php" data-page="events" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
       <i class="fa-slab-press fa-regular fa-newspaper"></i> Events
+    </a>
+    <a href="/mit-college/admin/pages/gallery.php" data-page="gallery" class="menu-item flex items-center gap-3 px-6 py-2 hover:text-amber-400 transition ease-in duration-200">
+       <i class='bx bx-images'></i> Gallery
     </a>
   
   

@@ -1,39 +1,44 @@
 <?php
 session_start();
-include 'includes/db.php';
+include __DIR__ . '/includes/db.php';
+include __DIR__ . '/includes/functions.php';
 
 if(isset($_POST['register'])){
-    $name = trim($_POST['name']);
-    $email = trim($_POST['email']);
-    $password = $_POST['password'];
-
-    if(strlen($password) < 6){
-        $error = "Password must be at least 6 characters!";
+    if(!verify_csrf_token()){
+        $error = "CSRF error!";
     } else {
-        $hashed = password_hash($password, PASSWORD_DEFAULT);
+        $name = trim($_POST['name']);
+        $email = trim($_POST['email']);
+        $password = $_POST['password'];
 
-        $check = $conn->prepare("SELECT id FROM admins WHERE email=?");
-        $check->bind_param("s", $email);
-        $check->execute();
-        $result = $check->get_result();
-
-        if($result->num_rows > 0){
-            $error = "Email already exists!";
-            $check->close();
+        if(strlen($password) < 6){
+            $error = "Password must be at least 6 characters!";
         } else {
-            $check->close();
-            
-            $stmt = $conn->prepare("INSERT INTO admins (name, email, password) VALUES (?, ?, ?)");
-            $stmt->bind_param("sss", $name, $email, $hashed);
-            
-            if($stmt->execute()){
-                $registration_success = true;
-                $success_message = "Registration successful! Redirecting to login...";
+            $hashed = password_hash($password, PASSWORD_DEFAULT);
+
+            $check = $conn->prepare("SELECT id FROM admins WHERE email=?");
+            $check->bind_param("s", $email);
+            $check->execute();
+            $result = $check->get_result();
+
+            if($result->num_rows > 0){
+                $error = "Email already exists!";
+                $check->close();
             } else {
-                $error = "Registration failed. Please try again.";
+                $check->close();
+                
+                $stmt = $conn->prepare("INSERT INTO admins (name, email, password) VALUES (?, ?, ?)");
+                $stmt->bind_param("sss", $name, $email, $hashed);
+                
+                if($stmt->execute()){
+                    $registration_success = true;
+                    $success_message = "Registration successful! Redirecting to login...";
+                } else {
+                    $error = "Registration failed. Please try again.";
+                }
+                
+                $stmt->close();
             }
-            
-            $stmt->close();
         }
     }
 }
@@ -125,6 +130,8 @@ if(isset($_POST['register'])){
                             </div>
 
                             <form method="POST" onsubmit="return validatePassword()" class="space-y-4">
+                                <?= csrf_field() ?>
+
                                 <!-- Name and Email side by side -->
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <!-- Name -->

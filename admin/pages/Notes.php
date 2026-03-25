@@ -1,33 +1,34 @@
 <?php
-include '../includes/db.php';
-include '../includes/header.php';
+include '../includes/header.php'; // header.php already includes db.php and functions.php
+
 $success = "";
 $error = "";
 
 // ADD NOTE
 if (isset($_POST['add_note'])) {
-    $class = $conn->real_escape_string($_POST['class']);
-    $subject = $conn->real_escape_string($_POST['subject_name']);
-    $desc = $conn->real_escape_string($_POST['description']);
-    $semester = $conn->real_escape_string($_POST['semester']);
-    $created_by = $conn->real_escape_string($_POST['created_by']);
+    $class = $_POST['class'];
+    $subject = $_POST['subject_name'];
+    $desc = $_POST['description'];
+    $semester = $_POST['semester'];
+    $created_by = $_POST['created_by'];
 
     $uploadDir = __DIR__ . '/../../upload/notes/';
-    if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+    
+    $upload = secure_upload($_FILES['file'], ['pdf', 'doc', 'docx', 'txt', 'ppt', 'pptx'], $uploadDir);
 
-    $fileName = time() . "_" . $_FILES['file']['name'];
-    $tmp = $_FILES['file']['tmp_name'];
-
-    if (move_uploaded_file($tmp, $uploadDir . $fileName)) {
-        $sql = "INSERT INTO notes (class, subject_name, description, file_path, semester, created_by)
-                VALUES ('$class', '$subject', '$desc', '$fileName', '$semester', '$created_by')";
-        if ($conn->query($sql)) {
+    if ($upload['success']) {
+        $fileName = $upload['filename'];
+        $stmt = $conn->prepare("INSERT INTO notes (class, subject_name, description, file_path, semester, created_by) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssss", $class, $subject, $desc, $fileName, $semester, $created_by);
+        
+        if ($stmt->execute()) {
             $success = "📚 Note added successfully!";
         } else {
-            $error = "Database error!";
+            $error = "Database error: " . $conn->error;
         }
+        $stmt->close();
     } else {
-        $error = "File upload failed!";
+        $error = "File upload failed: " . $upload['error'];
     }
 }
 
@@ -35,55 +36,73 @@ if (isset($_POST['add_note'])) {
 if (isset($_GET['delete'])) {
     $id = intval($_GET['delete']);
 
-    $res = $conn->query("SELECT file_path FROM notes WHERE id=$id");
-    if($row = $res->fetch_assoc()){
+    $stmt = $conn->prepare("SELECT file_path FROM notes WHERE id=?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if($row = $result->fetch_assoc()){
         @unlink(__DIR__ . '/../../upload/notes/' . $row['file_path']);
     }
+    $stmt->close();
 
-    if ($conn->query("DELETE FROM notes WHERE id=$id")) {
+    $stmt = $conn->prepare("DELETE FROM notes WHERE id=?");
+    $stmt->bind_param("i", $id);
+    if ($stmt->execute()) {
         $success = "🗑️ Note deleted successfully!";
     } else {
         $error = "Delete failed!";
     }
+    $stmt->close();
 }
 
 // UPDATE NOTE
 if (isset($_POST['update_note'])) {
     $id = intval($_POST['id']);
-    $class = $conn->real_escape_string($_POST['class']);
-    $subject = $conn->real_escape_string($_POST['subject_name']);
-    $desc = $conn->real_escape_string($_POST['description']);
-    $semester = $conn->real_escape_string($_POST['semester']);
-    $created_by = $conn->real_escape_string($_POST['created_by']);
+    $class = $_POST['class'];
+    $subject = $_POST['subject_name'];
+    $desc = $_POST['description'];
+    $semester = $_POST['semester'];
+    $created_by = $_POST['created_by'];
 
-    $fileUpdate = "";
+    $fileName = null;
 
     if (!empty($_FILES['file']['name'])) {
-        $res = $conn->query("SELECT file_path FROM notes WHERE id=$id");
-        if($row = $res->fetch_assoc()){
+        $stmt = $conn->prepare("SELECT file_path FROM notes WHERE id=?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if($row = $result->fetch_assoc()){
             @unlink(__DIR__ . '/../../upload/notes/' . $row['file_path']);
         }
+        $stmt->close();
 
         $uploadDir = __DIR__ . '/../../upload/notes/';
-        $fileName = time() . "_" . $_FILES['file']['name'];
-        $tmp = $_FILES['file']['tmp_name'];
-        move_uploaded_file($tmp, $uploadDir . $fileName);
-        $fileUpdate = ", file_path='$fileName'";
+        $upload = secure_upload($_FILES['file'], ['pdf', 'doc', 'docx', 'txt', 'ppt', 'pptx'], $uploadDir);
+        
+        if ($upload['success']) {
+            $fileName = $upload['filename'];
+        } else {
+            $error = "File upload failed: " . $upload['error'];
+        }
     }
 
-    $sql = "UPDATE notes SET 
-            class='$class',
-            subject_name='$subject',
-            description='$desc',
-            semester='$semester',
-            created_by='$created_by'
-            $fileUpdate
-            WHERE id=$id";
+    if (empty($error)) {
+        if ($fileName) {
+            $stmt = $conn->prepare("UPDATE notes SET class=?, subject_name=?, description=?, semester=?, created_by=?, file_path=? WHERE id=?");
+            $stmt->bind_param("ssssssi", $class, $subject, $desc, $semester, $created_by, $fileName, $id);
+        } else {
+            $stmt = $conn->prepare("UPDATE notes SET class=?, subject_name=?, description=?, semester=?, created_by=? WHERE id=?");
+            $stmt->bind_param("sssssi", $class, $subject, $desc, $semester, $created_by, $id);
+        }
 
-    if($conn->query($sql)){
-        $success = "✨ Note updated successfully!";
-    } else {
-        $error = "Update failed!";
+        if($stmt->execute()){
+            $success = "✨ Note updated successfully!";
+        } else {
+            $error = "Update failed: " . $conn->error;
+        }
+        $stmt->close();
     }
 }
 
@@ -452,6 +471,7 @@ $totalNotes = $conn->query("SELECT COUNT(*) as count FROM notes")->fetch_assoc()
             <!-- Modal Body -->
             <div class="flex-1 overflow-y-auto p-6">
                 <form method="POST" enctype="multipart/form-data" class="space-y-6" onsubmit="showLoading()" id="addForm">
+                    <?= csrf_field() ?>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Class -->
                         <div>
@@ -600,6 +620,7 @@ $totalNotes = $conn->query("SELECT COUNT(*) as count FROM notes")->fetch_assoc()
             <!-- Modal Body -->
             <div class="flex-1 overflow-y-auto p-6">
                 <form method="POST" enctype="multipart/form-data" class="space-y-6" onsubmit="showLoading()" id="editForm">
+                    <?= csrf_field() ?>
                     <input type="hidden" name="id" id="edit_id">
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

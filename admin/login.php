@@ -1,6 +1,7 @@
 <?php
 session_start();
-include './includes/db.php';
+include __DIR__ . '/includes/db.php';
+include __DIR__ . '/includes/functions.php';
 
 if(isset($_SESSION['admin_id'])){
     header("Location: index.php");
@@ -8,28 +9,32 @@ if(isset($_SESSION['admin_id'])){
 }
 
 if(isset($_POST['login'])){
-    $email = trim($_POST['email']);
-    $password = $_POST['password'];
-
-    $stmt = $conn->prepare("SELECT * FROM admins WHERE email=?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $admin = $result->fetch_assoc();
-
-    if($admin && password_verify($password, $admin['password'])){
-        session_regenerate_id(true);
-        $_SESSION['admin_id'] = $admin['id'];
-        $_SESSION['admin_name'] = $admin['name'];
-        
-        // Set flag for success modal
-        $login_success = true;
-        // Don't redirect immediately - let JavaScript handle it after showing modal
+    if(!verify_csrf_token()){
+        $error = "CSRF error!";
     } else {
-        $error = "Invalid email or password!";
+        $email = trim($_POST['email']);
+        $password = $_POST['password'];
+
+        $stmt = $conn->prepare("SELECT * FROM admins WHERE email=?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $admin = $result->fetch_assoc();
+
+        if($admin && password_verify($password, $admin['password'])){
+            session_regenerate_id(true);
+            $_SESSION['admin_id'] = $admin['id'];
+            $_SESSION['admin_name'] = $admin['name'];
+            
+            // Set flag for success modal
+            $login_success = true;
+            // Don't redirect immediately - let JavaScript handle it after showing modal
+        } else {
+            $error = "Invalid email or password!";
+        }
+        
+        $stmt->close();
     }
-    
-    $stmt->close();
 }
 ?>
 
@@ -145,6 +150,8 @@ if(isset($_POST['login'])){
                             </div>
 
                             <form method="POST" class="space-y-4">
+                                <?= csrf_field() ?>
+
                                 <div>
                                     <label class="block text-sm font-semibold text-slate-700 mb-2.5" for="email">
                                         Admin Email

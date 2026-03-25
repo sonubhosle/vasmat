@@ -61,9 +61,22 @@ const navBar = document.getElementById("navBar");
 const brandMiniDesktop = document.getElementById("brandMiniDesktop");
 const brandMiniMobile = document.getElementById("brandMiniMobile");
 const navInner = document.getElementById("navInner");
-let isCollapsed = false;
+let isCollapsed = !bigHeader; // If no bigHeader, treat as already collapsed
+
+// On non-index pages, show the mini brand immediately 
+if (!bigHeader) {
+    if(brandMiniDesktop) {
+        brandMiniDesktop.classList.remove("opacity-0", "-translate-x-10", "pointer-events-none");
+    }
+    if(navInner) {
+        navInner.classList.remove("justify-center");
+        navInner.classList.add("justify-end");
+    }
+}
 
 window.addEventListener("scroll", () => {
+  if (!bigHeader) return; // Skip scroll logic on non-index pages
+
   if (window.scrollY > 120 && !isCollapsed) {
     isCollapsed = true;
     bigHeader.classList.remove("max-h-96", "pt-6", "pb-3", "opacity-100");
@@ -77,7 +90,6 @@ window.addEventListener("scroll", () => {
     
     // Mobile changes
     brandMiniMobile.classList.remove("opacity-0", "-translate-x-10", "pointer-events-none");
-    mobileRightButton.classList.remove("opacity-0", "pointer-events-none");
     
   } else if (window.scrollY <= 0 && isCollapsed) {
     isCollapsed = false;

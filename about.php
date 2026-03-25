@@ -1,6 +1,6 @@
 <?php include 'includes/header.php'; ?>
 <section id="about" class="py-10 px-6 bg-white">
-    <div class="max-w-7xl mx-auto">
+    <div class="">
         <div class="grid lg:grid-cols-2 gap-16 items-start ">
             <div>
                 <div
@@ -9,7 +9,7 @@
                     About Our Institution
                 </div>
                 <h2
-                    class="text-4xl md:text-5xl font-black text-slate-900 uppercase tracking-tighter leading-[0.9] mb-8">
+                    class="text-2xl md:text-3xl font-black text-slate-900 uppercase tracking-tighter leading-[0.9] mb-8">
                     MIT COLLEGE <br /> <span
                         class="bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">BASMATH</span>
                 </h2>
@@ -97,7 +97,7 @@
         <div>
             <span class="text-amber-500 text-[10px] font-black tracking-[0.4em] uppercase mb-4 block">Visit
                 Details</span>
-            <h3 class="text-3xl font-black text-slate-700 uppercase tracking-tighter leading-none mb-6">
+            <h3 class="text-xl font-black text-slate-700 uppercase tracking-tighter leading-none mb-6">
                 OFFICIAL <br /> <span
                     class="bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">CAMPUS
                     CORE</span>

@@ -16,9 +16,11 @@
 </head>
 <body class="bg-slate-100 text-slate-800 leading-normal tracking-normal">
 
-    <header class="sticky top-0 left-0 w-full z-50">
+    <?php $currentPage = basename($_SERVER['PHP_SELF']); ?>
+    <header class="sticky top-0 left-0 w-full z-[200]">
 
-        <!-- BIG HEADER -->
+        <?php if ($currentPage === 'index.php'): ?>
+        <!-- BIG HEADER — index.php only -->
         <div id="bigHeader"
             class="bg-white transition-all duration-700 ease-in-out origin-top overflow-hidden  max-h-96 pt-6 pb-3 opacity-100">
             <div class="max-w-7xl mx-auto px-6 text-center">
@@ -52,6 +54,7 @@
                 </div>
             </div>
         </div>
+        <?php endif; ?>
 
         <!-- NAV BAR -->
         <nav id="navBar" class="transition ease-in duration-300 bg-white shadow-sm border-t border-b border-slate-100 py-2 ">
@@ -64,33 +67,30 @@
                         <i class="fa-solid fa-bars"></i>
                     </button>
 
-                    <!-- CENTER: Mini Brand (visible on mobile when scrolled) -->
+                    <!-- Mini Brand (mobile) -->
                     <div id="brandMiniMobile"
-                        class="lg:hidden  flex items-center gap-2 transition-all duration-500 opacity-0 -translate-x-10 pointer-events-none">
-                        <div
-                            class="px-3 py-2 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center text-white font-black text-2xl font-extrabold shadow-lg">
-                            M</div>
-                        <div class="flex flex-col">
-                            <span class="font-black text-slate-900 text-lg uppercase">MIT COLLEGE</span>
-                            <span class="text-[12px] font-bold text-slate-600 uppercase">COMPUTER SCI. & I.T.</span>
+                        class="lg:hidden flex items-center gap-2 transition-all duration-500 <?= $currentPage === 'index.php' ? 'opacity-0 -translate-x-10 pointer-events-none' : '' ?>">
+                        <div class="w-9 h-9 bg-slate-900 rounded-xl flex items-center justify-center text-white font-black text-base shadow-xl shrink-0">M</div>
+                        <div class="flex flex-col leading-none">
+                            <span class="font-black text-slate-900 text-sm uppercase tracking-tight">MIT College</span>
+                            <span class="text-[10px] font-bold text-slate-500 uppercase">Comp. Sci. &amp; I.T.</span>
                         </div>
                     </div>
 
                 </div>
-                <!-- LEFT (Desktop): Mini Brand (hidden by default on desktop) -->
+                <!-- Mini Brand (desktop) -->
                 <div id="brandMiniDesktop"
-                    class="hidden lg:flex absolute left-6 w-56 gap-2 transition-all duration-500 opacity-0 -translate-x-10 pointer-events-none">
-                    <div
-                        class="px-3 py-2 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center text-white font-black text-2xl font-extrabold shadow-lg">
-                        M</div>
-                    <div class="flex flex-col">
-                        <span class="font-black text-slate-900 text-lg uppercase">MIT COLLEGE</span>
-                        <span class="text-[12px] font-bold text-slate-600 uppercase">COMPUTER SCI. & I.T.</span>
+                    class="hidden lg:flex items-center absolute left-6 gap-3 transition-all duration-500 <?= $currentPage === 'index.php' ? 'opacity-0 -translate-x-10 pointer-events-none' : '' ?>">
+                    <div class="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-xl shrink-0">M</div>
+                    <div class="flex flex-col leading-none">
+                        <span class="font-black text-slate-900 text-sm uppercase tracking-tight">MIT College</span>
+                        <span class="text-[10px] font-bold text-slate-500 uppercase">Comp. Sci. &amp; I.T.</span>
                     </div>
                 </div>
-                <!-- CENTER: Desktop Menu -->
+
+                <!-- CENTER/RIGHT: Desktop Menu -->
                 <div id="navInner"
-                    class="hidden lg:flex items-center transition-all duration-500 justify-center w-full py-1">
+                    class="hidden lg:flex items-center transition-all duration-500 w-full py-1 <?= $currentPage === 'index.php' ? 'justify-center' : 'justify-end' ?>">
                     <div id="desktopMenu" class="flex items-center gap-8">
 
                         <a href="index.php"
@@ -102,21 +102,22 @@
                                 class="flex items-center gap-1.5 text-[11px] font-black text-slate-600 group-hover:text-amber-400 uppercase tracking-widest">
                                 Courses
                             </a>
-                            <div
-                                class="absolute top-full left-1/2 -translate-x-1/2 pt-3 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all origin-top pointer-events-none group-hover:pointer-events-auto">
-                                <div class="bg-white border border-slate-100 shadow-2xl rounded-2xl p-2 min-w-[210px]">
-                                    <a href="offered_courses.php"
-                                        class=" flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
-                                        Offered Courses
-                                    </a>
-                                    <a href="fees_structure.php"
-                                        class=" flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
-                                        Fees Structure
-                                    </a>
-                                    <a href="courses.php"
-                                        class=" flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
-                                        Our Courses
-                                    </a>
+                            <div class="absolute top-full left-1/2 -translate-x-1/2 pt-5 pointer-events-none group-hover:pointer-events-auto z-50">
+                                <div class="bg-white border border-slate-100 shadow-2xl rounded-2xl overflow-hidden transition-all duration-500 ease-in-out max-h-0 opacity-0 group-hover:max-h-[400px] group-hover:opacity-100">
+                                    <div class="p-2 min-w-[210px] flex flex-col">
+                                        <a href="offered_courses.php"
+                                            class=" flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
+                                            Offered Courses
+                                        </a>
+                                        <a href="fees_structure.php"
+                                            class=" flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
+                                            Fees Structure
+                                        </a>
+                                        <a href="courses.php"
+                                            class=" flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
+                                            Our Courses
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -127,21 +128,19 @@
                                 class="flex items-center gap-1.5 text-[11px] font-black text-slate-600 group-hover:text-amber-400 uppercase tracking-widest">
                                 Facilities
                             </a>
-                            <div
-                                class="absolute top-full left-1/2 -translate-x-1/2 pt-3 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all origin-top pointer-events-none group-hover:pointer-events-auto">
-                                <div class="bg-white border border-slate-100 shadow-2xl rounded-2xl p-2 min-w-[210px]">
-                                    <a
-                                        class="flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
-                                        Library
-                                    </a>
-                                    <a
-                                        class="flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
-                                        Seminar Hall
-                                    </a>
-                                    <a
-                                        class="flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
-                                        Computer Labs
-                                    </a>
+                            <div class="absolute top-full left-1/2 -translate-x-1/2 pt-5 pointer-events-none group-hover:pointer-events-auto z-50">
+                                <div class="bg-white border border-slate-100 shadow-2xl rounded-2xl overflow-hidden transition-all duration-500 ease-in-out max-h-0 opacity-0 group-hover:max-h-[400px] group-hover:opacity-100">
+                                    <div class="p-2 min-w-[210px] flex flex-col">
+                                        <a class="flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
+                                            Library
+                                        </a>
+                                        <a class="flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
+                                            Seminar Hall
+                                        </a>
+                                        <a class="flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
+                                            Computer Labs
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -152,37 +151,37 @@
                                 class="flex items-center gap-1.5 text-[11px] font-black text-slate-600 group-hover:text-amber-400 uppercase tracking-widest">
                                 Student Corner
                             </button>
-                            <div class="absolute top-full left-1/2 -translate-x-1/2 pt-3 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all origin-top pointer-events-none group-hover:pointer-events-auto">
-                                <div class="bg-white border border-slate-100 shadow-2xl rounded-2xl p-2 min-w-[210px]">
-                                    <a href="subject_notes.php"
-                                        class="flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
-                                        Subject Notes
-                                    </a>
-                                    <a
-                                        class="flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
-                                        Syllabus
-                                    </a>
-                                    <a
-                                        class="flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
-                                        Photo Gallery
-                                    </a>
-                                    <a
-                                        class="flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
-                                        Help
-                                    </a>
+                            <div class="absolute top-full left-1/2 -translate-x-1/2 pt-5 pointer-events-none group-hover:pointer-events-auto z-50">
+                                <div class="bg-white border border-slate-100 shadow-2xl rounded-2xl overflow-hidden transition-all duration-500 ease-in-out max-h-0 opacity-0 group-hover:max-h-[400px] group-hover:opacity-100">
+                                    <div class="p-2 min-w-[210px] flex flex-col">
+                                        <a href="subject_notes.php"
+                                            class="flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
+                                            Subject Notes
+                                        </a>
+                                        <a href="syllabus.php"
+                                            class="flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
+                                            Syllabus
+                                        </a>
+                                        <a href="gallery.php"
+                                            class="flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
+                                            Photo Gallery
+                                        </a>
+                                        <a class="flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[12px] font-black text-slate-500  uppercase tracking-widest rounded-xl transition ease-in duration-300">
+                                            Help
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
 
-                        <a href="admissions.php" class="text-[11px] font-black text-slate-600 hover:text-amber-400 uppercase tracking-widest">Admissions</a>
                         <a href="get_events.php" class="text-[11px] font-black text-slate-600 hover:text-amber-400 uppercase tracking-widest">Events</a>
 
                         <a href="get_faculty.php" class="text-[11px] font-black text-slate-600 hover:text-amber-400 uppercase tracking-widest">Faculty</a>
  
                         <a href="about.php" class="text-[11px] font-black text-slate-600 hover:text-amber-400 uppercase tracking-widest">About</a>
  
-                            <a href="contact.php" class="text-[11px] font-black text-white  uppercase tracking-widest bg-gradient-to-br from-amber-400 to-amber-600 px-4 py-2.5 rounded-2xl shadow-sm shadow-amber-500/40">
+                            <a href="contact.php" class="text-[11px] font-black text-white uppercase tracking-widest bg-slate-900 hover:bg-slate-800 transition-colors px-4 py-2.5 rounded-2xl shadow-lg shadow-slate-900/20">
                             Contact Us
                         </a>
 
@@ -190,7 +189,7 @@
                 </div>
                 <!-- RIGHT: Another Button (Example) -->
                 <a href="" id="mobileRightButton"
-                    class="flex lg:hidden text-[11px] font-black text-white  uppercase tracking-widest bg-gradient-to-br from-amber-400 to-amber-600 px-4 py-2.5 rounded-2xl shadow-2xl shadow-amber-500/40">
+                    class="flex lg:hidden text-[11px] font-black text-white hover:text-white uppercase tracking-widest bg-slate-900 px-4 py-2.5 rounded-2xl shadow-lg shadow-slate-900/20">
                     For Enquiry
                 </a>
             </div>
@@ -247,18 +246,18 @@
 
                         <div id="mobCourses" class="overflow-hidden transition-all duration-500 max-h-0 opacity-0">
                             <div class="grid gap-2 pt-2">
-                                <button
+                                <a href="offered_courses.php"
                                     class="flex items-center gap-4 p-4 text-[11px] font-bold text-slate-500 uppercase bg-slate-50/50 hover:bg-amber-50 hover:text-amber-600 rounded-xl">
                                     <i class="fa-solid fa-book text-slate-400"></i> Offered Courses
-                                </button>
-                                <button
+                                </a>
+                                <a href="fees_structure.php"
                                     class="flex items-center gap-4 p-4 text-[11px] font-bold text-slate-500 uppercase bg-slate-50/50 hover:bg-amber-50 hover:text-amber-600 rounded-xl">
                                     <i class="fa-solid fa-scale-balanced text-slate-400"></i> Fees Structure
-                                </button>
-                                <button
+                                </a>
+                                <a href="courses.php"
                                     class="flex items-center gap-4 p-4 text-[11px] font-bold text-slate-500 uppercase bg-slate-50/50 hover:bg-amber-50 hover:text-amber-600 rounded-xl">
                                     <i class="fa-solid fa-graduation-cap text-slate-400"></i> Our Courses
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -277,18 +276,18 @@
 
                         <div id="mobFacilities" class="overflow-hidden transition-all duration-500 max-h-0 opacity-0">
                             <div class="grid gap-2 pt-2">
-                                <button
+                                <a href="about.php#library"
                                     class="flex items-center gap-4 p-4 text-[11px] font-bold text-slate-500 uppercase bg-slate-50/50 hover:bg-amber-50 hover:text-amber-600 rounded-xl">
                                     <i class="fa-solid fa-book-open text-slate-400"></i> Library
-                                </button>
-                                <button
+                                </a>
+                                <a href="about.php#seminar-hall"
                                     class="flex items-center gap-4 p-4 text-[11px] font-bold text-slate-500 uppercase bg-slate-50/50 hover:bg-amber-50 hover:text-amber-600 rounded-xl">
                                     <i class="fa-solid fa-users text-slate-400"></i> Seminar Hall
-                                </button>
-                                <button
+                                </a>
+                                <a href="about.php#labs"
                                     class="flex items-center gap-4 p-4 text-[11px] font-bold text-slate-500 uppercase bg-slate-50/50 hover:bg-amber-50 hover:text-amber-600 rounded-xl">
                                     <i class="fa-solid fa-bolt text-slate-400"></i> Computer Labs
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -307,31 +306,29 @@
 
                         <div id="mobStudent" class="overflow-hidden transition-all duration-500 max-h-0 opacity-0">
                             <div class="grid gap-2 pt-2">
-                                <button
+                                <a href="subject_notes.php"
                                     class="flex items-center gap-4 p-4 text-[11px] font-bold text-slate-500 uppercase bg-slate-50/50 hover:bg-amber-50 hover:text-amber-600 rounded-xl">
                                     <i class="fa-solid fa-file-lines text-slate-400"></i> Subject Notes
-                                </button>
-                                <button
+                                </a>
+                                <a href="syllabus.php"
                                     class="flex items-center gap-4 p-4 text-[11px] font-bold text-slate-500 uppercase bg-slate-50/50 hover:bg-amber-50 hover:text-amber-600 rounded-xl">
                                     <i class="fa-solid fa-layer-group text-slate-400"></i> Syllabus
-                                </button>
-                                <button
+                                </a>
+                                <a href="gallery.php"
                                     class="flex items-center gap-4 p-4 text-[11px] font-bold text-slate-500 uppercase bg-slate-50/50 hover:bg-amber-50 hover:text-amber-600 rounded-xl">
                                     <i class="fa-solid fa-camera text-slate-400"></i> Photo Gallery
-                                </button>
-                                <button
+                                </a>
+                                <a href="#"
                                     class="flex items-center gap-4 p-4 text-[11px] font-bold text-slate-500 uppercase bg-slate-50/50 hover:bg-amber-50 hover:text-amber-600 rounded-xl">
                                     <i class="fa-solid fa-circle-question text-slate-400"></i> Help
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
 
-                    <button
-                        class="w-full text-left text-sm font-black text-slate-700 uppercase tracking-tight py-5 border-b border-slate-100">Admissions</button>
-                    <button
-                        class="w-full text-left text-sm font-black text-slate-700 uppercase tracking-tight py-5 border-b border-slate-100">Photo
-                        Gallery</button>
+                    <a href="gallery.php"
+                        class="w-full text-left text-sm font-black text-slate-700 uppercase tracking-tight py-5 border-b border-slate-100 block">Photo
+                        Gallery</a>
 
                 </div>
 

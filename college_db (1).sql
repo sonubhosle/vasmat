@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 18, 2026 at 04:27 PM
+-- Generation Time: Jan 27, 2026 at 07:28 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42,7 +42,7 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`id`, `name`, `email`, `password`, `created_at`, `reset_token`, `reset_expires`) VALUES
-(4, 'sonu', 'sbhosle1011@gmail.com', '$2y$10$4veGoTV05OlMfiBipO/kf.X9Ze29nrD5R.QUUx0736SuCtVTxT9XK', '2026-01-13 18:20:51', 'a846da303dc4f03f19306342cfce9756c34464e6929b244e6725788e70eba3a0', '2026-01-15 13:56:52');
+(4, 'sonu', 'sbhosle1011@gmail.com', '$2y$10$0Pc34WnQvvCZClI9b8aG8.hgUCDN9ldH8xm1a3GGfuC4A0mi8RbZ6', '2026-01-13 18:20:51', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -185,7 +185,10 @@ CREATE TABLE `notes` (
 --
 
 INSERT INTO `notes` (`id`, `class`, `subject_name`, `description`, `file_path`, `semester`, `created_by`, `created_at`, `updated_at`) VALUES
-(2, 'BCA', 'Data SCi', 'lklkl', '1768507209_Document (87).pdf', 'V', 'Sonu Bhosle', '2026-01-15 20:00:09', '2026-01-15 20:00:09');
+(3, 'BCA', 'Data SCi', 'jjj', '1769524139_Invoice #INV000001 - MIT COLLEGE OF COMPUTER SCI. & I.T.pdf', 'V', 'Sonu Bhosle', '2026-01-27 14:28:59', '2026-01-27 14:28:59'),
+(4, 'BCA', 'Web Developement', 'Notes', '1769530565_Invoice #INV000001 - MIT COLLEGE OF COMPUTER SCI. & I.T.pdf', 'IV', 'Sonu Bhosle', '2026-01-27 16:16:05', '2026-01-27 16:16:05'),
+(5, 'B.SC CS', 'Java', 'Notes', '1769530600_Invoice #INV000001 - MIT COLLEGE OF COMPUTER SCI. & I.T.pdf', 'IV', 'Sonu Bhosle', '2026-01-27 16:16:40', '2026-01-27 16:16:40'),
+(6, 'B.SC CS', 'Software Testing', 'hj', '1769530636_Invoice #INV000001 - MIT COLLEGE OF COMPUTER SCI. & I.T.pdf', 'V', 'Sonu Bhosle', '2026-01-27 16:17:16', '2026-01-27 16:17:16');
 
 -- --------------------------------------------------------
 
@@ -311,7 +314,7 @@ ALTER TABLE `faculty`
 -- AUTO_INCREMENT for table `notes`
 --
 ALTER TABLE `notes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `syllabus`
