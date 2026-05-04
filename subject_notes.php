@@ -9,7 +9,7 @@ $subject_val = isset($_GET['subject']) ? $_GET['subject'] : '';
 $semester_val = isset($_GET['semester']) ? $_GET['semester'] : '';
 
 // Build query with filters using prepared statements
-$sql = "SELECT * FROM notes WHERE 1=1";
+$sql = "SELECT * FROM notes WHERE status = 'approved'";
 $params = [];
 $types = "";
 

@@ -28,7 +28,7 @@
                     </p>
                 </div>
                 <h3
-                    class="text-lg mt-6 text-slate-700 flex gap-2 items-center font-black text-slate-900 uppercase mb-4 tracking-tight">
+                    class="text-lg mt-6  flex gap-2 items-center font-black text-slate-900 uppercase mb-4 tracking-tight">
                     <i class='fas fa-map-marker-alt text-lg'></i>
                     Our Location
                 </h3>
@@ -45,7 +45,7 @@
             <div class="grid grid-cols-1  gap-6">
                 <div class="p-8 bg-slate-50  rounded-[40px] border border-slate-100 group">
                     <h3
-                        class="text-lg text-slate-700 flex gap-2 items-center font-black text-slate-900 uppercase mb-4 tracking-tight">
+                        class="text-lg  flex gap-2 items-center font-black text-slate-900 uppercase mb-4 tracking-tight">
                         <i class='fa-regular fa-eye text-lg'></i>
                         Our Vision
                     </h3>
@@ -56,7 +56,7 @@
                 </div>
                 <div class="p-8 bg-slate-50 rounded-[40px] border border-slate-100">
                     <h3
-                        class="text-lg text-slate-700 flex gap-2 items-center font-black text-slate-900 uppercase mb-4 tracking-tight">
+                        class="text-lg flex gap-2 items-center font-black text-slate-900 uppercase mb-4 tracking-tight">
                         <i class="fas fa-bullseye  text-lg"></i>
                         Our Mission
                     </h3>
@@ -67,7 +67,7 @@
                 </div>
                 <div class="p-8 bg-slate-50 rounded-[40px] border border-slate-100">
                     <h3
-                        class="text-lg  text-slate-700 flex gap-2 items-center font-black text-slate-900 uppercase mb-4 tracking-tight">
+                        class="text-lg   flex gap-2 items-center font-black text-slate-900 uppercase mb-4 tracking-tight">
                         <i class="fas fa-medal text-lg"></i>
                         Our Values
                     </h3>

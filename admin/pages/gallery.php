@@ -98,7 +98,7 @@ $photos = $conn->query("SELECT * FROM gallery ORDER BY id DESC");
 </div>
 
 <!-- Add Photo Modal -->
-<div id="addPhotoModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-6">
+<div id="addPhotoModal" class="hidden fixed inset-0 z-50  items-center justify-center p-6">
     <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="this.parentElement.classList.add('hidden')"></div>
     <div class="bg-white rounded-[2.5rem] p-10 w-full max-w-xl relative animate-in zoom-in-95 duration-300">
         <h2 class="text-3xl font-black text-slate-900 mb-2">Upload Photo</h2>

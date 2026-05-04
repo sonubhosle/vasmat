@@ -2,45 +2,37 @@
 
     <footer class="bg-white text-slate-900 overflow-hidden relative border-t border-slate-100">
         <!-- High-Tech Background Elements -->
-        <div class="absolute inset-0 z-0 opacity-[0.03]" 
-             style="background-image: linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px); background-size: 40px 40px;">
-        </div>
-        
-        <!-- Glowing Orbs -->
-        <div class="absolute -top-24 -left-24 w-[500px] h-[500px] bg-emerald-50 rounded-full blur-[120px] pointer-events-none animate-pulse"></div>
-        <div class="absolute -bottom-24 -right-24 w-[600px] h-[600px] bg-rose-50 rounded-full blur-[150px] pointer-events-none animate-pulse" style="animation-delay: 2s"></div>
-
-        <div class=" px-6 pt-20 relative z-10">
+        <div class=" px-6 pt-12 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 mb-24">
                 
                 <!-- Brand & Mission Column -->
                 <div class="lg:col-span-5 space-y-10">
                     <div class="flex flex-col gap-6">
-                        <div class="flex items-center gap-5 group cursor-default">
+                        <a href="index.php" class="flex items-center gap-5 group cursor-default">
                             <div class="relative">
-                                <div class="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-xl group-hover:rotate-6 transition-transform duration-500">M</div>
+                                <div class="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-500 rounded-full flex items-center justify-center text-white font-black text-2xl shadow-xl group-hover:rotate-6 transition-transform duration-500">M</div>
                             </div>
                             <div>
                                 <h4 class="text-3xl font-black tracking-tighter uppercase leading-none text-slate-900">MIT COLLEGE</h4>
                                 <p class="text-[10px] font-black text-slate-600 uppercase tracking-[0.2em] mt-2">COMPUTER SCI. & I.T.</p>
                             </div>
-                        </div>
+</a>
                         
                         <p class="text-slate-500 text-base font-medium leading-relaxed max-w-md">
 MIT College of Computer Science and IT is situated in Basmath, a prominent town in the Hingoli district of Maharashtra.                        </p>
                     </div>
 
                     <div class="flex flex-wrap gap-4">
-                        <a href="#" aria-label="Facebook" class="w-12 h-12 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-center transition-all duration-300 bg-gradient-to-br hover:from-amber-400 hover:to-amber-600 hover:border-transparent hover:-translate-y-1 group">
+                        <a href="#" aria-label="Facebook" class="w-12 h-12 bg-slate-50 border border-slate-200 rounded-3xl flex items-center justify-center transition-all duration-300 bg-gradient-to-br hover:from-amber-400 hover:to-amber-500 hover:border-transparent hover:-translate-y-1 group">
                             <i class="bx bxl-facebook text-[20px]  text-slate-500 group-hover:text-white transition-colors"></i>
                         </a>
-                        <a href="#" aria-label="X" class="w-12 h-12 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-center transition-all duration-300 bg-gradient-to-br hover:from-amber-400 hover:to-amber-600 hover:border-trans hover:-translate-y-1 group">
+                        <a href="#" aria-label="X" class="w-12 h-12 bg-slate-50 border border-slate-200 rounded-3xl flex items-center justify-center transition-all duration-300 bg-gradient-to-br hover:from-amber-400 hover:to-amber-500 hover:border-trans hover:-translate-y-1 group">
                             <i class="bx bxl-twitter text-[20px] text-slate-500 group-hover:text-white transition-colors"></i>
                         </a>
-                        <a href="#" aria-label="Instagram" class="w-12 h-12 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-center transition-all duration-300 bg-gradient-to-br hover:from-amber-400 hover:to-amber-600 hover:border-transparent hover:-translate-y-1 group">
+                        <a href="#" aria-label="Instagram" class="w-12 h-12 bg-slate-50 border border-slate-200 rounded-3xl flex items-center justify-center transition-all duration-300 bg-gradient-to-br hover:from-amber-400 hover:to-amber-500 hover:border-transparent hover:-translate-y-1 group">
                             <i class="bx bxl-instagram text-[20px] text-slate-500 group-hover:text-white transition-colors"></i>
                         </a>
-                        <a href="#" aria-label="LinkedIn" class="w-12 h-12 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-center transition-all duration-300 bg-gradient-to-br hover:from-amber-400 hover:to-amber-600 hover:border-transparent hover:-translate-y-1 group">
+                        <a href="#" aria-label="LinkedIn" class="w-12 h-12 bg-slate-50 border border-slate-200 rounded-3xl flex items-center justify-center transition-all duration-300 bg-gradient-to-br hover:from-amber-400 hover:to-amber-500 hover:border-transparent hover:-translate-y-1 group">
                             <i class="bx bxl-linkedin text-[20px] text-slate-500 group-hover:text-white transition-colors"></i>
                         </a>
                     </div>
@@ -49,30 +41,30 @@ MIT College of Computer Science and IT is situated in Basmath, a prominent town 
                 <!-- Navigation Grid -->
                 <div class="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-10">
                     <div>
-                        <h5 class="text-[12px] font-black uppercase tracking-[0.3em] text-slate-600 mb-6 flex items-center gap-2">
-                            System
+                        <h5 class="text-lg  font-semibold text-slate-800 mb-6 flex items-center gap-2">
+                            Quick Links
                         </h5>
                         <ul class="space-y-3">
                             <li>
-                                <a href="index.php" class="text-slate-600 hover:text-amber-600 transition-all font-bold text-sm flex items-center gap-2 group">
+                                <a href="index.php" class="text-slate-600 hover:text-amber-600 transition-all font-semibold text-sm flex items-center gap-2 group">
                                     <div class="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-amber-600 group-hover:shadow-[0_0_8px_#ef4444] transition-all"></div>
                                     Home
                                 </a>
                             </li>
                             <li>
-                                <a href="courses.php" class="text-slate-600 hover:text-amber-600 transition-all font-bold text-sm flex items-center gap-2 group">
+                                <a href="courses.php" class="text-slate-600 hover:text-amber-600 transition-all font-semibold text-sm flex items-center gap-2 group">
                                     <div class="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-amber-600 group-hover:shadow-[0_0_8px_#ef4444] transition-all"></div>
                                     Courses
                                 </a>
                             </li>
                             <li>
-                                <a href="about.php" class="text-slate-600 hover:text-amber-600 transition-all font-bold text-sm flex items-center gap-2 group">
+                                <a href="about.php" class="text-slate-600 hover:text-amber-600 transition-all font-semibold text-sm flex items-center gap-2 group">
                                     <div class="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-amber-600 group-hover:shadow-[0_0_8px_#ef4444] transition-all"></div>
                                     About Us
                                 </a>
                             </li>
                             <li>
-                                <a href="contact.php" class="text-slate-600 hover:text-amber-600 transition-all font-bold text-sm flex items-center gap-2 group">
+                                <a href="contact.php" class="text-slate-600 hover:text-amber-600 transition-all font-semibold text-sm flex items-center gap-2 group">
                                     <div class="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-amber-600 group-hover:shadow-[0_0_8px_#ef4444] transition-all"></div>
                                    Contact Us
                                 </a>
@@ -81,24 +73,24 @@ MIT College of Computer Science and IT is situated in Basmath, a prominent town 
                     </div>
 
                     <div>
-                        <h5 class="text-[12px] font-black uppercase tracking-[0.3em] text-slate-600 mb-6 flex items-center gap-2">
+                        <h5 class="text-lg  font-semibold text-slate-800 mb-6 flex items-center gap-2">
                              Resources
                         </h5>
                         <ul class="space-y-3">
                             <li>
-                                <a href="subject_notes.php" class="text-slate-600 hover:text-amber-600 transition-all font-bold text-sm flex items-center gap-2 group">
+                                <a href="subject_notes.php" class="text-slate-600 hover:text-amber-600 transition-all font-semibold text-sm flex items-center gap-2 group">
                                     <div class="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-amber-600 group-hover:shadow-[0_0_8px_#ef4444] transition-all"></div>
                                     Subject Notes
                                 </a>
                             </li>
                             <li>
-                                <a href="syllabus.php" class="text-slate-600 hover:text-amber-600 transition-all font-bold text-sm flex items-center gap-2 group">
+                                <a href="syllabus.php" class="text-slate-600 hover:text-amber-600 transition-all font-semibold text-sm flex items-center gap-2 group">
                                     <div class="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-amber-600 group-hover:shadow-[0_0_8px_#ef4444] transition-all"></div>
                                     Syllabus
                                 </a>
                             </li>
                             <li>
-                                <a href="gallery.php" class="text-slate-600 hover:text-amber-600 transition-all font-bold text-sm flex items-center gap-2 group">
+                                <a href="gallery.php" class="text-slate-600 hover:text-amber-600 transition-all font-semibold text-sm flex items-center gap-2 group">
                                     <div class="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-amber-600 group-hover:shadow-[0_0_8px_#ef4444] transition-all"></div>
                                     Photo Gallery
                                 </a>
@@ -107,24 +99,24 @@ MIT College of Computer Science and IT is situated in Basmath, a prominent town 
                     </div>
 
                     <div class="col-span-2 md:col-span-1">
-                        <h5 class="text-[12px] font-black uppercase tracking-[0.3em] text-slate-600 mb-6 flex items-center gap-2">
+                        <h5 class="text-lg  font-semibold text-slate-800 mb-6 flex items-center gap-2">
                            Information
                         </h5>
                        <ul class="space-y-3">
                             <li>
-                                <a href="#" class="text-slate-600 hover:text-amber-600 transition-all font-bold text-sm flex items-center gap-2 group">
+                                <a href="#" class="text-slate-600 hover:text-amber-600 transition-all font-semibold text-sm flex items-center gap-2 group">
                                     <div class="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-amber-600 group-hover:shadow-[0_0_8px_#ef4444] transition-all"></div>
                                     Terms of Service
                                 </a>
                             </li>
                             <li>
-                                <a href="scholarships.php" class="text-slate-600 hover:text-amber-600 transition-all font-bold text-sm flex items-center gap-2 group">
+                                <a href="scholarships.php" class="text-slate-600 hover:text-amber-600 transition-all font-semibold text-sm flex items-center gap-2 group">
                                     <div class="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-amber-600 group-hover:shadow-[0_0_8px_#ef4444] transition-all"></div>
                                     Privacy Policy
                                 </a>
                             </li>
                             <li>
-                                <a href="help.php" class="text-slate-600 hover:text-amber-600 transition-all font-bold text-sm flex items-center gap-2 group">
+                                <a href="help.php" class="text-slate-600 hover:text-amber-600 transition-all font-semibold text-sm flex items-center gap-2 group">
                                     <div class="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-amber-600 group-hover:shadow-[0_0_8px_#ef4444] transition-all"></div>
                                     Sitemap
                                 </a>
@@ -137,7 +129,7 @@ MIT College of Computer Science and IT is situated in Basmath, a prominent town 
 
             <!-- Contact Strip -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 ">
-                <div class="flex items-center gap-5 bg-slate-50 border border-slate-100 p-6 rounded-[32px] group hover:bg-white hover:shadow-xl transition-all border border-slate-200 cursor-default">
+                <div class="flex items-center gap-5 bg-slate-50 p-6 rounded-[32px] group hover:bg-white hover:shadow-xl transition-all border border-slate-200 cursor-default">
                     <div class="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-all duration-500 border border-slate-100 group-hover:transparent">
                       <i class='bx bx-map text-[25px]'></i>
                     </div>
@@ -147,7 +139,7 @@ MIT College of Computer Science and IT is situated in Basmath, a prominent town 
                     </div>
                 </div>
                 
-                <div class="flex items-center gap-5 bg-slate-50 border border-slate-100 p-6 rounded-[32px] group hover:bg-white hover:shadow-xl transition-all border border-slate-200 cursor-default">
+                <div class="flex items-center gap-5 bg-slate-50 p-6 rounded-[32px] group hover:bg-white hover:shadow-xl transition-all border border-slate-200 cursor-default">
                     <div class="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-all duration-500 border border-slate-100 group-hover:transparent">
                         <i class='bx bx-envelope text-[25px]'></i>
                     </div>
@@ -157,7 +149,7 @@ MIT College of Computer Science and IT is situated in Basmath, a prominent town 
                     </div>
                 </div>
                 
-                <div class="flex items-center gap-5 bg-slate-50 border border-slate-100 p-6 rounded-[32px] group hover:bg-white hover:shadow-xl transition-all border border-slate-200 cursor-default">
+                <div class="flex items-center gap-5 bg-slate-50 p-6 rounded-[32px] group hover:bg-white hover:shadow-xl transition-all border border-slate-200 cursor-default">
                     <div class="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-all duration-500 border border-slate-100 group-hover:transparent">
                         <i class='bx bx-phone text-[25px]'></i>
                     </div>
@@ -173,7 +165,7 @@ MIT College of Computer Science and IT is situated in Basmath, a prominent town 
                 
                 <div class="flex flex-col justify-between  w-full md:flex-row items-center gap-10">
                     <div class="text-center md:text-left">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                        <p class="text-[13px] font-semibold text-slate-700  tracking-[0.2em]">
                              &copy; <?php echo date('Y'); ?> mitvasmat.com. All rights reserved.
                         </p>
                       
@@ -182,14 +174,14 @@ MIT College of Computer Science and IT is situated in Basmath, a prominent town 
                     <div class="h-10 w-px bg-slate-100 hidden md:block"></div>
                     
                     <div class="flex gap-8">
-                        <a href="#" class="text-[10px] font-black text-slate-400 hover:text-slate-900 transition-colors uppercase tracking-widest">Terms</a>
-                        <a href="#" class="text-[10px] font-black text-slate-400 hover:text-slate-900 transition-colors uppercase tracking-widest">Privacy</a>
-                        <a href="#" class="text-[10px] font-black text-slate-400 hover:text-slate-900 transition-colors uppercase tracking-widest">Security</a>
+                        <a href="#" class="text-[13px] font-semibold text-slate-700 hover:text-slate-900 transition-colors  tracking-widest">Terms</a>
+                        <a href="#" class="text-[13px] font-semibold text-slate-700 hover:text-slate-900 transition-colors  tracking-widest">Privacy</a>
+                        <a href="#" class="text-[13px] font-semibold text-slate-700 hover:text-slate-900 transition-colors  tracking-widest">Security</a>
                     </div>
                 </div>
 
                     <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" 
-                            class="absolute bottom-10 right-10 w-14 h-14 bg-slate-900 text-white rounded-[22px] flex items-center justify-center hover:bg-amber-600 transition-all shadow-xl active:scale-90 group">
+                            class="absolute bottom-20 right-10 w-14 h-14 bg-slate-900 text-white rounded-[22px] flex items-center justify-center hover:bg-amber-600 transition-all shadow-xl active:scale-90 group">
                         <i  class="bx bx-chevrons-up text-[25px] group-hover:-translate-y-1 transition-transform"></i>
                     </button>
             </div>

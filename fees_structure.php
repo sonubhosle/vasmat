@@ -12,7 +12,7 @@ $SIDEBAR_LINKS = [
 <div class="w-fll px-4 sm:px-6 lg:px-8 py-20">
     <div class="flex flex-col lg:flex-row gap-12">
      
-                <div class="space-y-6 w-full space-y-24">
+                <div class=" w-full space-y-24">
                     <div class="mb-12">
                         <div class="flex items-center gap-4 mb-4">
                             <span

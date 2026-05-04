@@ -53,7 +53,7 @@ include 'includes/header.php';
 </div>
 
 <!-- Simple Lightbox -->
-<div id="lightbox" class="hidden fixed inset-0 z-[1000] p-6 flex items-center justify-center transition-all duration-500 opacity-0 bg-slate-950/95 backdrop-blur-xl">
+<div id="lightbox" class="hidden fixed inset-0 z-[1000] p-6 items-center justify-center transition-all duration-500 opacity-0 bg-slate-950/95 backdrop-blur-xl">
     <button onclick="closeLightbox()" class="absolute top-8 right-8 w-14 h-14 bg-white/10 text-white rounded-2xl flex items-center justify-center hover:bg-white/20 transition-all active:scale-95 group">
         <i class="fas fa-times text-2xl group-hover:rotate-90 transition-transform"></i>
     </button>

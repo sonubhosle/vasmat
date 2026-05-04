@@ -55,7 +55,7 @@ $admin_name = $_SESSION['admin_name'];
 
  <div class="flex ">
     
-<aside class="sticky top-0 w-64 z-100 bg-gradient-to-b from-slate-800 to-slate-900 text-white min-h-screen  relative">
+<aside class="sticky top-0 w-64 z-100 bg-gradient-to-b from-slate-800 to-slate-900 text-white min-h-screen">
   <div class="flex items-center gap-3 mb-2 border-b border-white/20 p-5">
     <div class="w-12 h-12 rounded-full border-2 border-white/20 bg-white/10 flex items-center justify-center text-2xl">
       <i class="fa-slab-press fa-regular fa-user"></i>

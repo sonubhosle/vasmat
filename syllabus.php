@@ -13,7 +13,7 @@ $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 $year_filter = isset($_GET['year']) ? trim($_GET['year']) : '';
 
 // Base query for counting AND selecting
-$sql_where = " WHERE 1=1 ";
+$sql_where = " WHERE status = 'approved' ";
 $params = [];
 $types = "";
 

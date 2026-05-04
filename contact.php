@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
 ?>
 
 <!-- Success/Error Popup Modal -->
-<div id="messagePopup" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300 hidden">
+<div id="messagePopup" class="fixed inset-0 z-[9999]  items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300 hidden">
     <div class="bg-white rounded-xl p-8 max-w-md w-[90%] mx-4 transform transition-all duration-500 scale-95 opacity-0">
         <div id="popupIcon" class="text-6xl text-center mb-4"></div>
         <h3 id="popupTitle" class="text-2xl font-black text-slate-900 text-center mb-2"></h3>

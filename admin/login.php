@@ -9,26 +9,38 @@ if(isset($_SESSION['admin_id'])){
 }
 
 if(isset($_POST['login'])){
-    if(!verify_csrf_token()){
-        $error = "CSRF error!";
+    $token = $_POST['csrf_token'] ?? '';
+    if(!verify_csrf_token($token)){
+        $error = "CSRF error! Please try again.";
     } else {
         $email = trim($_POST['email']);
         $password = $_POST['password'];
 
-        $stmt = $conn->prepare("SELECT * FROM admins WHERE email=?");
+        $stmt = $conn->prepare("SELECT id, name, email, password, role, status, reference_id FROM users WHERE email = ? LIMIT 1");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
-        $admin = $result->fetch_assoc();
+        $user = $result->fetch_assoc();
 
-        if($admin && password_verify($password, $admin['password'])){
-            session_regenerate_id(true);
-            $_SESSION['admin_id'] = $admin['id'];
-            $_SESSION['admin_name'] = $admin['name'];
-            
-            // Set flag for success modal
-            $login_success = true;
-            // Don't redirect immediately - let JavaScript handle it after showing modal
+        if($user && password_verify($password, $user['password'])){
+            if ($user['status'] !== 'active') {
+                $error = "Your account is deactivated.";
+            } elseif (!in_array($user['role'], ['admin', 'superadmin'])) {
+                $error = "Unauthorized access role.";
+            } else {
+                session_regenerate_id(true);
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_name'] = $user['name'];
+                $_SESSION['role'] = $user['role'];
+                $_SESSION['reference_id'] = $user['reference_id'];
+                
+                // For backward compatibility if needed
+                $_SESSION['admin_id'] = $user['id'];
+                $_SESSION['admin_name'] = $user['name'];
+                
+                // Set flag for success modal
+                $login_success = true;
+            }
         } else {
             $error = "Invalid email or password!";
         }
