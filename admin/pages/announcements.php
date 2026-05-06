@@ -1,13 +1,7 @@
 <?php
 include '../includes/header.php';
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-if (!isset($_SESSION['admin_id'])) {
-    exit("Unauthorized");
-}
+require_once __DIR__ . '/../../includes/auth_helper.php';
+checkRole(['admin', 'superadmin']);
 
 $success = "";
 $error = "";
@@ -163,14 +157,16 @@ $totalAnnouncements = $conn->query("SELECT COUNT(*) as count FROM announcements"
 $activeAnnouncements = $conn->query("SELECT COUNT(*) as count FROM announcements WHERE is_active = 1")->fetch_assoc()['count'];
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Announcements Management</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<?php
+// Page-specific styles
+?>
+<style>
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+</style>
+<?php // Content Start ?>
     <style>
         /* Custom Animations */
         @keyframes fadeInUp {
@@ -392,8 +388,8 @@ $activeAnnouncements = $conn->query("SELECT COUNT(*) as count FROM announcements
             animation: pulse 2s infinite;
         }
     </style>
-</head>
-<body class="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen">
+<?php // Head closed removed ?>
+<?php // Body Start removed ?>
     
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center transition-all duration-300 hidden">
@@ -429,85 +425,57 @@ $activeAnnouncements = $conn->query("SELECT COUNT(*) as count FROM announcements
     </div>
     <?php endif; ?>
 
-    <div class="w-full ">
-        <!-- Header -->
-        <div class="mb-10 animate-fade-in-up">
-            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
-                <div>
-                    <h1 class="text-3xl font-bold text-slate-800 mb-2 flex items-center gap-3">
-                        <div class="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-lg">
-                            <i class="fas fa-bullhorn text-white text-xl"></i>
-                        </div>
-                        Announcements Management
-                    </h1>
-                    <p class="text-slate-600">Manage and publish announcements for your platform</p>
-                </div>
-                <button onclick="openAddModal()"
-                        class="px-6 py-3.5 bg-gradient-to-r from-amber-400 to-amber-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group">
-                    <i class="fas fa-plus"></i>
-                    Add New Announcement
-                    <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform duration-200"></i>
-                </button>
-            </div>
+    <header class="flex justify-between items-end mb-12">
+        <div>
+            <span class="text-[10px] font-black uppercase tracking-[0.4em] text-amber-500 mb-2 block">Communication Hub</span>
+            <h2 class="text-4xl font-black text-slate-900 tracking-tight">System <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600">Announcements</span></h2>
+        </div>
+        <button onclick="openAddModal()"
+                class="px-8 py-4 bg-slate-900 text-white font-black rounded-2xl shadow-xl shadow-slate-900/10 hover:shadow-slate-900/20 transform hover:-translate-y-1 transition-all duration-300 flex items-center gap-3 group text-xs uppercase tracking-widest">
+            <i class="fas fa-plus"></i>
+            Post New Alert
+            <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform duration-200"></i>
+        </button>
+    </header>
 
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white rounded-2xl p-6 card-glow border border-slate-100">
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-bullhorn text-blue-600 text-2xl"></i>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="stat-card p-8 rounded-[2.5rem] border border-slate-100 shadow-sm transition-all group">
+                    <div class="flex items-center gap-5">
+                        <div class="w-14 h-14 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center text-2xl border border-amber-100 shadow-sm">
+                            <i class="fas fa-bullhorn"></i>
                         </div>
                         <div>
-                            <p class="text-sm text-slate-600 font-medium">Total Announcements</p>
-                            <h3 class="text-3xl font-bold text-slate-800 mt-1"><?= $totalAnnouncements ?></h3>
-                        </div>
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-slate-100">
-                        <div class="flex items-center gap-2 text-sm text-slate-500">
-                            <i class="fas fa-arrow-up text-green-500"></i>
-                            <span>Updated in real-time</span>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Posts</p>
+                            <h3 class="text-3xl font-black text-slate-900 mt-1"><?= $totalAnnouncements ?></h3>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl p-6 card-glow border border-slate-100">
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-check-circle text-emerald-600 text-2xl"></i>
+                <div class="stat-card p-8 rounded-[2.5rem] border border-slate-100 shadow-sm transition-all group">
+                    <div class="flex items-center gap-5">
+                        <div class="w-14 h-14 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center text-2xl border border-emerald-100 shadow-sm">
+                            <i class="fas fa-satellite-dish"></i>
                         </div>
                         <div>
-                            <p class="text-sm text-slate-600 font-medium">Active</p>
-                            <h3 class="text-3xl font-bold text-slate-800 mt-1"><?= $activeAnnouncements ?></h3>
-                        </div>
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-slate-100">
-                        <div class="flex items-center gap-2 text-sm text-slate-500">
-                            <i class="fas fa-eye text-blue-500"></i>
-                            <span>Visible to users</span>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active Alerts</p>
+                            <h3 class="text-3xl font-black text-slate-900 mt-1"><?= $activeAnnouncements ?></h3>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl p-6 card-glow border border-slate-100">
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-clock text-purple-600 text-2xl"></i>
+                <div class="stat-card p-8 rounded-[2.5rem] border border-slate-100 shadow-sm transition-all group">
+                    <div class="flex items-center gap-5">
+                        <div class="w-14 h-14 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center text-2xl border border-blue-100 shadow-sm">
+                            <i class="fas fa-eye"></i>
                         </div>
                         <div>
-                            <p class="text-sm text-slate-600 font-medium">Last Updated</p>
-                            <h3 class="text-2xl font-bold text-slate-800 mt-1">
-                                <?= date('F j, Y') ?>
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-slate-100">
-                        <div class="flex items-center gap-2 text-sm text-slate-500">
-                            <i class="fas fa-history text-purple-500"></i>
-                            <span><?= date('h:i A') ?></span>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Global Reach</p>
+                            <h3 class="text-3xl font-black text-slate-900 mt-1">100%</h3>
                         </div>
                     </div>
                 </div>
             </div>
+<?php // Content Start ?>
         </div>
 
         <!-- Main Content -->
@@ -1427,5 +1395,4 @@ $activeAnnouncements = $conn->query("SELECT COUNT(*) as count FROM announcements
         `;
         document.head.appendChild(style);
     </script>
-</body>
-</html>
+<?php include '../includes/footer.php'; ?>

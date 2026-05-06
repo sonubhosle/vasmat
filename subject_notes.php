@@ -8,41 +8,36 @@ $class_val = isset($_GET['class']) ? $_GET['class'] : '';
 $subject_val = isset($_GET['subject']) ? $_GET['subject'] : '';
 $semester_val = isset($_GET['semester']) ? $_GET['semester'] : '';
 
-// Build query with filters using prepared statements
-$sql = "SELECT * FROM notes WHERE status = 'approved'";
+// Build query with filters using UNION to include faculty uploads
+$sql_notes = "SELECT id, subject_name, description, file_path, class, semester, created_by, created_at, 'legacy' as source 
+              FROM notes WHERE status = 'approved'";
+
+$sql_faculty = "SELECT fc.id, fc.title as subject_name, fc.description, fc.file_path, 'General' as class, 'N/A' as semester, f.name as created_by, fc.created_at, 'faculty' as source 
+                FROM faculty_content fc 
+                JOIN faculty f ON fc.faculty_id = f.id 
+                WHERE fc.type = 'notes' AND fc.status = 'approved'";
+
+$final_sql = "SELECT * FROM (($sql_notes) UNION ($sql_faculty)) as combined WHERE 1=1";
+
 $params = [];
 $types = "";
 
 if (!empty($search)) {
-    $sql .= " AND (subject_name LIKE ? OR description LIKE ? OR class LIKE ?)";
+    $final_sql .= " AND (subject_name LIKE ? OR description LIKE ? OR class LIKE ?)";
     $searchTerm = "%$search%";
-    $params[] = $searchTerm;
-    $params[] = $searchTerm;
-    $params[] = $searchTerm;
+    $params[] = $searchTerm; $params[] = $searchTerm; $params[] = $searchTerm;
     $types .= "sss";
 }
 
 if (!empty($class_val)) {
-    $sql .= " AND class = ?";
+    $final_sql .= " AND class = ?";
     $params[] = $class_val;
     $types .= "s";
 }
 
-if (!empty($subject_val)) {
-    $sql .= " AND subject_name = ?";
-    $params[] = $subject_val;
-    $types .= "s";
-}
+$final_sql .= " ORDER BY created_at DESC";
 
-if (!empty($semester_val)) {
-    $sql .= " AND semester = ?";
-    $params[] = $semester_val;
-    $types .= "s";
-}
-
-$sql .= " ORDER BY created_at DESC";
-
-$stmt = $conn->prepare($sql);
+$stmt = $conn->prepare($final_sql);
 if (!empty($params)) {
     $stmt->bind_param($types, ...$params);
 }
@@ -440,13 +435,16 @@ $semesters = $conn->query("SELECT DISTINCT semester FROM notes WHERE semester IS
                                     </td>
                                     <td class="px-8 py-6">
                                         <div class="flex justify-end gap-3">
-                                            <a href="upload/notes/<?= rawurlencode($row['file_path']) ?>" 
+                                            <?php 
+                                                $filePath = ($row['source'] === 'faculty') ? $row['file_path'] : 'upload/notes/' . $row['file_path'];
+                                            ?>
+                                            <a href="<?= $filePath ?>" 
                                                target="_blank"
                                                class="w-10 h-10 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-amber-500 hover:text-white hover:scale-110 transition-all shadow-sm"
                                                title="Preview File">
                                                 <i class="fas fa-eye text-xs"></i>
                                             </a>
-                                            <a href="upload/notes/<?= rawurlencode($row['file_path']) ?>" 
+                                            <a href="<?= $filePath ?>" 
                                                download="<?= htmlspecialchars($row['subject_name']) . '.' . $fileExt ?>"
                                                class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center hover:bg-emerald-500 hover:scale-110 transition-all shadow-lg shadow-slate-900/10 download-btn"
                                                title="Download File">

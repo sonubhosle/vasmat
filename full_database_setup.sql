@@ -82,11 +82,21 @@ CREATE TABLE IF NOT EXISTS `syllabus` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- 6. Original Table: events
+CREATE TABLE IF NOT EXISTS `events` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `event_name` varchar(255) NOT NULL,
+  `event_date` date NOT NULL,
+  `event_images` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- --------------------------------------------------------
 -- NEW ROLE-BASED AUTH SYSTEM TABLES
 -- --------------------------------------------------------
 
--- 6. Central Users Table
+-- 7. Central Users Table
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -102,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 7. Faculty Content Table (for uploads)
+-- 8. Faculty Content Table (for uploads)
 CREATE TABLE IF NOT EXISTS `faculty_content` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `faculty_id` int(11) NOT NULL,
@@ -114,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `faculty_content` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 8. Activity Logs
+-- 9. Activity Logs
 CREATE TABLE IF NOT EXISTS `activity_logs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,

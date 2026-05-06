@@ -7,10 +7,11 @@ $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = trim($_POST['title'] ?? '');
+    $description = trim($_POST['description'] ?? '');
     $type = $_POST['type'] ?? '';
     $faculty_id = $_SESSION['reference_id'];
 
-    if (empty($title) || empty($type) || !isset($_FILES['file'])) {
+    if (empty($title) || empty($description) || empty($type) || !isset($_FILES['file'])) {
         $error = "Please fill in all fields and select a file.";
     } else {
         $file = $_FILES['file'];
@@ -34,8 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             if (move_uploaded_file($file['tmp_name'], $target_path)) {
                 $db_path = "upload/faculty/" . $filename;
-                $stmt = $conn->prepare("INSERT INTO faculty_content (faculty_id, title, file_path, type, status) VALUES (?, ?, ?, ?, 'pending')");
-                $stmt->bind_param("isss", $faculty_id, $title, $db_path, $type);
+                $stmt = $conn->prepare("INSERT INTO faculty_content (faculty_id, title, description, file_path, type, status) VALUES (?, ?, ?, ?, ?, 'pending')");
+                $stmt->bind_param("issss", $faculty_id, $title, $description, $db_path, $type);
                 
                 if ($stmt->execute()) {
                     $success = "Content uploaded successfully and is pending approval.";
@@ -124,6 +125,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="text" name="title" required 
                                    class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all text-sm font-semibold text-slate-700" 
                                    placeholder="e.g. Data Structures Unit 1 Notes">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-black text-slate-700 uppercase tracking-widest mb-3 px-1">Description</label>
+                            <textarea name="description" required rows="3"
+                                   class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all text-sm font-semibold text-slate-700 resize-none" 
+                                   placeholder="Briefly describe what this content is about..."></textarea>
                         </div>
 
                         <div>

@@ -39,8 +39,10 @@ function csrf_field() {
 /**
  * Sanitize output to prevent XSS
  */
-function e($text) {
-    return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+if (!function_exists('e')) {
+    function e($text) {
+        return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+    }
 }
 
 /**

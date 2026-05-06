@@ -1,5 +1,7 @@
 <?php
 include '../includes/header.php';
+require_once __DIR__ . '/../../includes/auth_helper.php';
+checkRole(['admin', 'superadmin']);
 
 $success = "";
 $error = "";
@@ -187,9 +189,7 @@ $totalEvents = $conn->query("SELECT COUNT(*) as count FROM events")->fetch_assoc
 $upcomingEvents = $conn->query("SELECT COUNT(*) as count FROM events WHERE event_date > NOW()")->fetch_assoc()['count'];
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<?php // Header removed ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Events Management</title>
@@ -1013,5 +1013,4 @@ $upcomingEvents = $conn->query("SELECT COUNT(*) as count FROM events WHERE event
             observer.observe(card);
         });
     </script>
-</body>
-</html>
+<?php include '../includes/footer.php'; ?>

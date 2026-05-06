@@ -2,7 +2,7 @@
 include __DIR__ . '/../admin/includes/db.php';
 
 // Fetch Announcements from database
-$announcements_query = $conn->query("SELECT * FROM announcements WHERE status = 'approved' ORDER BY created_at DESC");
+$announcements_query = $conn->query("SELECT * FROM announcements WHERE status = 'approved' AND is_active = 1 ORDER BY created_at DESC");
 $announcements_items = [];
 
 if ($announcements_query && $announcements_query->num_rows > 0) {

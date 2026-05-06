@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         header("Location: ../superadmin/dashboard.php");
                         break;
                     case 'admin':
-                        header("Location: ../admin/dashboard.php");
+                        header("Location: ../admin/index.php");
                         break;
                     case 'faculty':
                         header("Location: ../faculty/dashboard.php");

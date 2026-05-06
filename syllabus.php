@@ -12,40 +12,35 @@ $start_from = ($page - 1) * $results_per_page;
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 $year_filter = isset($_GET['year']) ? trim($_GET['year']) : '';
 
-// Base query for counting AND selecting
-$sql_where = " WHERE status = 'approved' ";
-$params = [];
-$types = "";
+// Build query with filters using UNION to include faculty uploads
+$sql_syllabus = "SELECT id, subject_name, academic_year, syllabus_file, uploaded_by, status, created_at, 'legacy' as source 
+                  FROM syllabus WHERE status = 'approved'";
+
+$sql_faculty_syllabus = "SELECT fc.id, fc.title as subject_name, 'Current' as academic_year, fc.file_path as syllabus_file, f.name as uploaded_by, fc.status, fc.created_at, 'faculty' as source 
+                        FROM faculty_content fc 
+                        JOIN faculty f ON fc.faculty_id = f.id 
+                        WHERE fc.type = 'syllabus' AND fc.status = 'approved'";
+
+$final_sql = "SELECT * FROM (($sql_syllabus) UNION ($sql_faculty_syllabus)) as combined WHERE 1=1";
 
 if (!empty($search)) {
-    $sql_where .= " AND (subject_name LIKE ? OR academic_year LIKE ? OR uploaded_by LIKE ?) ";
+    $final_sql .= " AND (subject_name LIKE ? OR academic_year LIKE ? OR uploaded_by LIKE ?) ";
     $search_param = "%$search%";
-    $params[] = $search_param;
-    $params[] = $search_param;
-    $params[] = $search_param;
+    $params[] = $search_param; $params[] = $search_param; $params[] = $search_param;
     $types .= "sss";
 }
 
-if (!empty($year_filter)) {
-    $sql_where .= " AND academic_year = ? ";
-    $params[] = $year_filter;
-    $types .= "s";
-}
-
-// Count total records for pagination
-$count_query = "SELECT COUNT(*) as total FROM syllabus" . $sql_where;
-$stmt_count = $conn->prepare($count_query);
+// Count total records for pagination (using a subquery for accuracy)
+$count_stmt = $conn->prepare("SELECT COUNT(*) as total FROM ($final_sql) as t");
 if (!empty($params)) {
-    $stmt_count->bind_param($types, ...$params);
+    $count_stmt->bind_param($types, ...$params);
 }
-$stmt_count->execute();
-$total_result = $stmt_count->get_result();
-$total_rows = $total_result->fetch_assoc()['total'];
+$count_stmt->execute();
+$total_rows = $count_stmt->get_result()->fetch_assoc()['total'];
 $total_pages = ceil($total_rows / $results_per_page);
-$stmt_count->close();
 
-// Fetch filtered syllabus records
-$query = "SELECT * FROM syllabus" . $sql_where . " ORDER BY id DESC LIMIT ?, ?";
+// Fetch filtered syllabus records with pagination
+$query = "$final_sql ORDER BY created_at DESC LIMIT ?, ?";
 $stmt = $conn->prepare($query);
 $stmt_types = $types . "ii";
 $stmt_params = array_merge($params, [$start_from, $results_per_page]);
@@ -182,13 +177,14 @@ include 'includes/header.php';
                                 </td>
                                 <td class="px-8 py-6">
                                     <div class="flex justify-end gap-3">
-                                        <a href="upload/syllabus/<?= rawurlencode($row['syllabus_file']) ?>" 
+                                        <?php $filePath = ($row['source'] === 'faculty') ? $row['syllabus_file'] : 'upload/syllabus/' . rawurlencode($row['syllabus_file']); ?>
+                                        <a href="<?= $filePath ?>" 
                                            target="_blank"
                                            class="w-10 h-10 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-emerald-500 hover:text-white hover:scale-110 transition-all shadow-sm"
                                            title="Preview">
                                             <i class="fas fa-eye text-xs"></i>
                                         </a>
-                                        <a href="upload/syllabus/<?= rawurlencode($row['syllabus_file']) ?>" 
+                                        <a href="<?= $filePath ?>" 
                                            download
                                            class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center hover:bg-blue-500 hover:scale-110 transition-all shadow-lg shadow-slate-900/10"
                                            title="Download">
@@ -209,7 +205,7 @@ include 'includes/header.php';
                     <div class="flex gap-2">
                         <?php for($i = 1; $i <= $total_pages; $i++): ?>
                             <a href="?page=<?= $i ?>&search=<?= urlencode($search) ?>&year=<?= urlencode($year_filter) ?>" 
-                               class="w-8 h-8 rounded-lg flex items-center justify-center transition-all <?= $i == $page ? 'bg-emerald-500 text-white shadow-lg' : 'bg-white text-slate-600 hover:bg-slate-100' ?> text-xs font-bold">
+                               class="w-8 h-8 rounded-lg flex items-center justify-center transition-all <?= $i == $page ? 'bg-emerald-500  shadow-lg' : 'bg-white text-slate-600 hover:bg-slate-100' ?> text-xs font-bold">
                                 <?= $i ?>
                             </a>
                         <?php endfor; ?>
