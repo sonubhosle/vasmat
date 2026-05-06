@@ -47,11 +47,14 @@ $logs = $conn->query("
                 <a href="manage-admins.php" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-900 rounded-xl font-bold text-sm transition-all">
                     <i class="fas fa-user-shield"></i> Manage Admins
                 </a>
-                <a href="system-logs.php" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-900 rounded-xl font-bold text-sm transition-all text-slate-400">
+                <a href="faculty-approvals.php" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-900 rounded-xl font-bold text-sm transition-all">
+                    <i class="fas fa-users-cog"></i> Faculty Approvals
+                </a>
+                <a href="system-logs.php" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-900 rounded-xl font-bold text-sm transition-all">
                     <i class="fas fa-terminal"></i> Activity Logs
                 </a>
-                <a href="database-backup.php" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-900 rounded-xl font-bold text-sm transition-all text-slate-400">
-                    <i class="fas fa-database"></i> Database
+                <a href="database-backup.php" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-900 rounded-xl font-bold text-sm transition-all">
+                    <i class="fas fa-database"></i> Database Backup
                 </a>
             </nav>
 

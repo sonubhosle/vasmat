@@ -150,6 +150,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <span class="text-[10px] font-black text-slate-600 uppercase tracking-widest">Timetable</span>
                                     </div>
                                 </label>
+                                <label class="cursor-pointer group">
+                                    <input type="radio" name="type" value="circulars" class="hidden peer">
+                                    <div class="p-4 border-2 border-slate-100 rounded-2xl text-center peer-checked:border-amber-500 peer-checked:bg-amber-50 transition-all group-hover:border-amber-200">
+                                        <i class="fas fa-bullhorn text-slate-400 group-hover:text-amber-500 transition-all peer-checked:text-amber-600 mb-2 block"></i>
+                                        <span class="text-[10px] font-black text-slate-600 uppercase tracking-widest">Circulars</span>
+                                    </div>
+                                </label>
                             </div>
                         </div>
 

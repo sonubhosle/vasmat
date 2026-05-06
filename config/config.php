@@ -5,7 +5,7 @@
 
 // Site Settings
 define('SITE_NAME', 'MIT College of Computer Science & IT');
-define('BASE_URL', 'http://localhost/mit-college/');
+define('BASE_URL', 'http://localhost/vasmat/');
 
 // Database Settings (Redirecting to central db file)
 require_once __DIR__ . '/../admin/includes/db.php';
