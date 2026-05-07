@@ -142,72 +142,91 @@ include 'includes/header.php';
     <?= count($pending_items) ?> item<?= count($pending_items) != 1 ? 's' : '' ?> · <?= ucfirst($selected_status) ?> Queue
 </p>
 
-<!-- Content Cards Grid -->
-<?php if (empty($pending_items)): ?>
-<div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm py-24 text-center">
-    <div class="w-20 h-20 bg-slate-50 border border-slate-100 rounded-3xl flex items-center justify-center mx-auto mb-6 text-slate-200">
-        <i class="fas fa-inbox text-4xl"></i>
+<!-- Content Table -->
+<div class="bg-white rounded-[3rem] border border-slate-100 shadow-xl shadow-slate-200/50 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left">
+            <thead>
+                <tr class="bg-slate-50/50">
+                    <th class="px-8 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Material Info</th>
+                    <th class="px-8 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Submitted By</th>
+                    <th class="px-8 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Category</th>
+                    <th class="px-8 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Date</th>
+                    <th class="px-8 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-50">
+                <?php if (empty($pending_items)): ?>
+                    <tr>
+                        <td colspan="5" class="px-8 py-24 text-center">
+                            <div class="flex flex-col items-center gap-4">
+                                <div class="w-20 h-20 bg-slate-50 text-slate-200 rounded-3xl flex items-center justify-center text-3xl">
+                                    <i class="fas fa-inbox"></i>
+                                </div>
+                                <div>
+                                    <p class="text-slate-900 font-black uppercase text-xs tracking-widest mb-1">Queue is empty</p>
+                                    <p class="text-slate-400 text-[10px] font-bold">No <?= $selected_status ?> submissions found.</p>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                <?php else: ?>
+                    <?php foreach ($pending_items as $item):
+                        $typeMap = [
+                            'notes'     => ['icon' => 'fa-book',           'bg' => 'bg-blue-50',   'text' => 'text-blue-600'],
+                            'syllabus'  => ['icon' => 'fa-graduation-cap', 'bg' => 'bg-purple-50', 'text' => 'text-purple-600'],
+                            'timetable' => ['icon' => 'fa-calendar-alt',   'bg' => 'bg-amber-50',  'text' => 'text-amber-600'],
+                        ];
+                        $tm = $typeMap[$item['type']] ?? ['icon' => 'fa-file-alt', 'bg' => 'bg-slate-50', 'text' => 'text-slate-500'];
+                    ?>
+                    <tr class="hover:bg-slate-50/50 transition-all group">
+                        <td class="px-8 py-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 <?= $tm['bg'] ?> <?= $tm['text'] ?> rounded-2xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                                    <i class="fas <?= $tm['icon'] ?>"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-black text-slate-900 mb-1 leading-tight"><?= e($item['title']) ?></p>
+                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest truncate max-w-[250px]"><?= e($item['description'] ?: 'No description provided') ?></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-8 py-6">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white text-[10px] font-black"><?= strtoupper(substr($item['faculty_name'], 0, 1)) ?></div>
+                                <span class="text-xs font-bold text-slate-700"><?= e($item['faculty_name']) ?></span>
+                            </div>
+                        </td>
+                        <td class="px-8 py-6">
+                            <span class="px-4 py-1.5 bg-slate-100 text-slate-600 text-[10px] font-black rounded-full uppercase tracking-widest border border-slate-200"><?= ucfirst($item['type']) ?></span>
+                        </td>
+                        <td class="px-8 py-6">
+                            <span class="text-xs font-bold text-slate-500"><?= date('d M Y', strtotime($item['created_at'])) ?></span>
+                        </td>
+                        <td class="px-8 py-6 text-right">
+                            <div class="flex items-center justify-end gap-3 scale-95 group-hover:scale-100 transition-all">
+                                <button onclick='viewDetails(<?= json_encode($item) ?>)' class="w-10 h-10 bg-slate-100 text-slate-600 rounded-xl flex items-center justify-center hover:bg-slate-900 hover:text-white transition-all shadow-sm" title="View Full Details">
+                                    <i class="fas fa-eye text-xs"></i>
+                                </button>
+                                <?php if ($selected_status !== 'approved'): ?>
+                                <a href="process-approval.php?id=<?= $item['id'] ?>&action=approve" class="w-10 h-10 bg-emerald-50 text-emerald-500 rounded-xl flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-all shadow-lg shadow-emerald-500/10" title="Approve">
+                                    <i class="fas fa-check text-xs"></i>
+                                </a>
+                                <?php endif; ?>
+                                <?php if ($selected_status !== 'rejected'): ?>
+                                <a href="process-approval.php?id=<?= $item['id'] ?>&action=reject" class="w-10 h-10 bg-rose-50 text-rose-500 rounded-xl flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all shadow-sm" title="Reject">
+                                    <i class="fas fa-xmark text-xs"></i>
+                                </a>
+                                <?php endif; ?>
+                            </div>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
     </div>
-    <p class="text-slate-900 font-black uppercase text-xs tracking-widest mb-2">Queue is Empty</p>
-    <p class="text-slate-400 text-xs font-medium">No <?= $selected_status ?> submissions found.</p>
 </div>
-<?php else: ?>
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-    <?php foreach ($pending_items as $item):
-        $typeMap = [
-            'notes'     => ['icon' => 'fa-book',           'bg' => 'bg-blue-50',   'text' => 'text-blue-600',   'badge' => 'bg-blue-100 text-blue-700'],
-            'syllabus'  => ['icon' => 'fa-graduation-cap', 'bg' => 'bg-purple-50', 'text' => 'text-purple-600', 'badge' => 'bg-purple-100 text-purple-700'],
-            'timetable' => ['icon' => 'fa-calendar-alt',   'bg' => 'bg-amber-50',  'text' => 'text-amber-600',  'badge' => 'bg-amber-100 text-amber-700'],
-        ];
-        $tm = $typeMap[$item['type']] ?? ['icon' => 'fa-file-alt', 'bg' => 'bg-slate-50', 'text' => 'text-slate-500', 'badge' => 'bg-slate-100 text-slate-600'];
-    ?>
-    <div class="bg-white rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden group animate-in fade-in zoom-in-95 duration-300">
-        <!-- Card Top Bar -->
-        <div class="h-1.5 w-full <?= $selected_status === 'pending' ? 'bg-amber-400' : ($selected_status === 'approved' ? 'bg-emerald-400' : 'bg-rose-400') ?>"></div>
-
-        <div class="p-7">
-            <!-- Header Row -->
-            <div class="flex justify-between items-start mb-5">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 <?= $tm['bg'] ?> <?= $tm['text'] ?> rounded-xl flex items-center justify-center text-base">
-                        <i class="fas <?= $tm['icon'] ?>"></i>
-                    </div>
-                    <span class="text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-xl <?= $tm['badge'] ?>"><?= ucfirst($item['type']) ?></span>
-                </div>
-                <span class="text-[9px] font-bold text-slate-400"><?= date('d M Y', strtotime($item['created_at'])) ?></span>
-            </div>
-
-            <!-- Title -->
-            <h4 class="text-sm font-black text-slate-900 mb-2 leading-tight line-clamp-2"><?= e($item['title']) ?></h4>
-
-            <!-- Faculty -->
-            <div class="flex items-center gap-2 mb-5">
-                <div class="w-6 h-6 bg-slate-900 rounded-lg flex items-center justify-center text-white text-[9px] font-black"><?= strtoupper(substr($item['faculty_name'], 0, 1)) ?></div>
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest"><?= e($item['faculty_name']) ?></p>
-            </div>
-
-            <!-- Description -->
-            <?php if(!empty($item['description'])): ?>
-            <p class="text-xs text-slate-500 font-medium leading-relaxed line-clamp-2 mb-5 bg-slate-50 rounded-xl p-3"><?= e($item['description']) ?></p>
-            <?php endif; ?>
-
-            <!-- Actions -->
-            <div class="flex items-center gap-2 pt-5 border-t border-slate-50">
-                <button onclick='viewDetails(<?= json_encode($item) ?>)' class="flex-1 bg-slate-100 text-slate-600 rounded-xl py-2.5 text-[9px] font-black uppercase tracking-widest hover:bg-slate-200 transition-all flex items-center justify-center gap-2">
-                    <i class="fas fa-eye"></i> View
-                </button>
-                <a href="process-approval.php?id=<?= $item['id'] ?>&action=approve" class="flex-1 bg-emerald-500 text-white rounded-xl py-2.5 text-[9px] font-black uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2">
-                    <i class="fas fa-check"></i> Approve
-                </a>
-                <a href="process-approval.php?id=<?= $item['id'] ?>&action=reject" class="w-10 h-10 bg-rose-50 text-rose-500 rounded-xl flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all flex-shrink-0">
-                    <i class="fas fa-xmark text-xs"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-    <?php endforeach; ?>
-</div>
-<?php endif; ?>
 
 <!-- Details Modal -->
 <div id="detailsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden items-center justify-center p-6">
@@ -305,6 +324,10 @@ function viewDetails(item) {
     document.getElementById('modalFileLink').href = '/vasmat/' + item.file_path;
     document.getElementById('modalApproveBtn').href = 'process-approval.php?id=' + item.id + '&action=approve';
     document.getElementById('modalRejectBtn').href = 'process-approval.php?id=' + item.id + '&action=reject';
+
+    // Hide approval/rejection buttons if already in that state
+    document.getElementById('modalApproveBtn').style.display = '<?= $selected_status ?>' === 'approved' ? 'none' : 'flex';
+    document.getElementById('modalRejectBtn').style.display = '<?= $selected_status ?>' === 'rejected' ? 'none' : 'flex';
 
     modal.classList.remove('hidden');
     modal.classList.add('flex');

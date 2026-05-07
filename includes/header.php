@@ -92,15 +92,15 @@
                 <!-- CENTER/RIGHT: Desktop Menu -->
                 <div id="navInner"
                     class="hidden lg:flex items-center transition-all duration-500 w-full py-1 <?= $currentPage === 'index.php' ? 'justify-center' : 'justify-end' ?>">
-                    <div id="desktopMenu" class="flex items-center gap-8">
+                    <div id="desktopMenu" class="flex items-center gap-5">
 
                         <a href="index.php"
-                            class="text-[13px] font-black text-slate-600 hover:text-amber-400  tracking-widest transition ease-in duration-500 cursor-pointer">Home</a>
+                            class="text-[13px] font-semibold text-slate-600 hover:text-amber-400  tracking-widest transition ease-in duration-500 cursor-pointer">Home</a>
 
                             <!-- Departments  -->
                                 <div class="relative group">
                             <a href="courses.php"
-                                class="flex items-center gap-1.5 text-[13px] font-black text-slate-600 group-hover:text-amber-400  tracking-widest transition ease-in duration-300 cursor-pointer">
+                                class="flex items-center gap-1.5 text-[13px] font-semibold text-slate-600 group-hover:text-amber-400  tracking-widest transition ease-in duration-300 cursor-pointer">
                                 Departments
                             </a>
                             <div class="absolute top-full left-1/2 -translate-x-1/2 pt-5 pointer-events-none group-hover:pointer-events-auto z-50">
@@ -123,7 +123,7 @@
                         <!-- COURSES -->
                         <div class="relative group">
                             <a href="courses.php"
-                                class="flex items-center gap-1.5 text-[13px] font-black text-slate-600 group-hover:text-amber-400  tracking-widest transition ease-in duration-500 cursor-pointer">
+                                class="flex items-center gap-1.5 text-[13px] font-semibold text-slate-600 group-hover:text-amber-400  tracking-widest transition ease-in duration-500 cursor-pointer">
                                 Courses
                             </a>
                             <div class="absolute top-full left-1/2 -translate-x-1/2 pt-5 pointer-events-none group-hover:pointer-events-auto z-50">
@@ -149,7 +149,7 @@
                         <!-- FACILITIES -->
                         <div class="relative group">
                             <a href="faculty.php"
-                                class="flex items-center gap-1.5 text-[13px] font-black text-slate-600 group-hover:text-amber-400  tracking-widest transition ease-in duration-500 cursor-pointer">
+                                class="flex items-center gap-1.5 text-[13px] font-semibold text-slate-600 group-hover:text-amber-400  tracking-widest transition ease-in duration-500 cursor-pointer">
                                 Facilities
                             </a>
                             <div class="absolute top-full left-1/2 -translate-x-1/2 pt-5 pointer-events-none group-hover:pointer-events-auto z-50">
@@ -175,7 +175,7 @@
                         <!-- STUDENT CORNER -->
                         <div class="relative group">
                             <button
-                                class="flex items-center gap-1.5 text-[13px] font-black text-slate-600 group-hover:text-amber-400  tracking-widest transition ease-in duration-500 cursor-pointer">
+                                class="flex items-center gap-1.5 text-[13px] font-semibold text-slate-600 group-hover:text-amber-400  tracking-widest transition ease-in duration-500 cursor-pointer">
                                 Student Corner
                             </button>
                             <div class="absolute top-full left-1/2 -translate-x-1/2 pt-5 pointer-events-none group-hover:pointer-events-auto z-50">
@@ -203,14 +203,14 @@
                         </div>
                         
 
-                        <a href="get_events.php" class="text-[13px] font-black text-slate-600 hover:text-amber-400  tracking-widest">Events</a>
-                        <a href="naac.php" class="text-[13px] font-black text-slate-600 hover:text-amber-400 uppercase tracking-widest transition ease-in duration-500 cursor-pointer">NAAC</a>
+                        <a href="get_events.php" class="text-[13px] font-semibold text-slate-600 hover:text-amber-400  tracking-widest">Events</a>
+                        <a href="naac.php" class="text-[13px] font-semibold text-slate-600 hover:text-amber-400 uppercase tracking-widest transition ease-in duration-500 cursor-pointer">NAAC</a>
 
-                        <a href="get_faculty.php" class="text-[13px] font-black text-slate-600 hover:text-amber-400  tracking-widest transition ease-in duration-500 cursor-pointer">Faculty</a>
+                        <a href="get_faculty.php" class="text-[13px] font-semibold text-slate-600 hover:text-amber-400  tracking-widest transition ease-in duration-500 cursor-pointer">Faculty</a>
  
-                        <a href="about.php" class="text-[13px] font-black text-slate-600 hover:text-amber-400 tracking-widest transition ease-in duration-500 cursor-pointer">About</a>
+                        <a href="about.php" class="text-[13px] font-semibold text-slate-600 hover:text-amber-400 tracking-widest transition ease-in duration-500 cursor-pointer">About</a>
  
-                            <a href="contact.php" class="text-[13px] font-black text-white tracking-widest bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-400 transition-all px-4 py-2.5 rounded-2xl shadow-lg shadow-slate-900/20">
+                            <a href="contact.php" class="text-[13px] font-semibold text-white tracking-widest bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-400 transition-all px-4 py-2.5 rounded-3xl  ">
                             Contact Us
                         </a>
 

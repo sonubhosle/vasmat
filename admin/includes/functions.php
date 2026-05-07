@@ -80,7 +80,8 @@ function secure_upload($file, $allowed_extensions, $upload_dir) {
         'jpg' => 'image/jpeg',
         'jpeg' => 'image/jpeg',
         'png' => 'image/png',
-        'gif' => 'image/gif'
+        'gif' => 'image/gif',
+        'webp' => 'image/webp'
     ];
 
     $is_allowed_mime = false;

@@ -35,6 +35,22 @@ if ($id > 0 && in_array($action, ['approve', 'reject'])) {
             logActivity($conn, $_SESSION['user_id'], 'Rejection', 'Admin ' . $action . 'd content ID: ' . $id);
         }
 
+        // Notify the Faculty Member
+        if ($content) {
+            $stmt_usr = $conn->prepare("SELECT id FROM users WHERE reference_id = ? AND role = 'faculty'");
+            $stmt_usr->bind_param("i", $content['faculty_id']);
+            $stmt_usr->execute();
+            $user_data = $stmt_usr->get_result()->fetch_assoc();
+            if ($user_data) {
+                $notif_title = ($status === 'approved') ? 'Submission Approved' : 'Submission Rejected';
+                $notif_msg = ($status === 'approved') 
+                    ? "Great news! Your submission '{$content['title']}' has been approved and is now live." 
+                    : "Your submission '{$content['title']}' was rejected. Please review the guidelines or contact the admin.";
+                addNotification($conn, $user_data['id'], $notif_title, $notif_msg);
+            }
+            $stmt_usr->close();
+        }
+
         $conn->commit();
         $_SESSION['success'] = "Content successfully " . $status . ".";
     } catch (Exception $e) {

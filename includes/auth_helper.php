@@ -13,7 +13,14 @@ require_once __DIR__ . '/../config/config.php';
  */
 function checkRole($allowed_roles) {
     if (!isset($_SESSION['user_id'])) {
-        header("Location: " . BASE_URL . "auth/login.php");
+        $requestUri = $_SERVER['REQUEST_URI'];
+        if (strpos($requestUri, '/superadmin/') !== false) {
+            header("Location: " . BASE_URL . "auth/superadmin-login.php");
+        } elseif (strpos($requestUri, '/admin/') !== false) {
+            header("Location: " . BASE_URL . "auth/admin-login.php");
+        } else {
+            header("Location: " . BASE_URL . "auth/faculty-login.php");
+        }
         exit;
     }
 
@@ -78,6 +85,15 @@ function logActivity($conn, $user_id, $action, $description = '') {
     $ip = $_SERVER['REMOTE_ADDR'];
     $stmt = $conn->prepare("INSERT INTO activity_logs (user_id, action, description, ip_address) VALUES (?, ?, ?, ?)");
     $stmt->bind_param("isss", $user_id, $action, $description, $ip);
+    $stmt->execute();
+    $stmt->close();
+}
+/**
+ * Add Notification
+ */
+function addNotification($conn, $user_id, $title, $message) {
+    $stmt = $conn->prepare("INSERT INTO notifications (user_id, title, message) VALUES (?, ?, ?)");
+    $stmt->bind_param("iss", $user_id, $title, $message);
     $stmt->execute();
     $stmt->close();
 }

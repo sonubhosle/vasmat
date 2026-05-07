@@ -9,16 +9,16 @@ $SIDEBAR_LINKS = [
 ];
 ?>
 
-<div class="w-fll px-4 sm:px-6 lg:px-8 py-20">
+<div class="w-fll px-4 sm:px-6 lg:px-8 py-5">
     <div class="flex flex-col lg:flex-row gap-12">
      
-                <div class=" lg:w-[70%] space-y-24">
-                    <div class="mb-12">
-                        <div class="flex items-center gap-4 mb-4">
+                <div class=" lg:w-[70%] space-y-10">
+                    <div class="">
+                        <div class="flex items-center gap-4 mb-2">
                             <span
-                                class="text-[10px] font-black uppercase tracking-[0.3em] text-amber-400">Curriculum</span>
+                                class="text-[12px] font-black  text-amber-400">Curriculum</span>
                         </div>
-                        <h2 class="text-2xl font-black text-slate-900 mb-6">
+                        <h2 class="text-2xl font-black text-slate-900 mb-4">
                             Offered <span class="italic font-serif">Courses</span>
                         </h2>
 
@@ -133,9 +133,6 @@ $SIDEBAR_LINKS = [
                                 </a>
                             <?php endforeach; ?>
                         </nav>
-                    </div>
-                    <div class="">
-                        <a href="admission.php" class="text-lg font-semibold text-white tracking-widest  bg-gradient-to-r from-amber-400 to-amber-600 w-full h-12 flex items-center justify-center rounded-xl">Get Started</a>
                     </div>
                 </div>
             </div>

@@ -59,7 +59,7 @@ $logs = $conn->query("
             </nav>
 
             <div class="mt-auto">
-                <a href="../auth/logout.php" class="flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-400/10 rounded-xl font-bold text-sm transition-all">
+                <a href="../auth/superadmin-logout.php" class="flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-400/10 rounded-xl font-bold text-sm transition-all">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
             </div>

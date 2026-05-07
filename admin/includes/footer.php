@@ -7,6 +7,7 @@
     </div>
 
     <!-- Scripts -->
+    <script src="/vasmat/assets/js/notifications.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const sidebar = document.getElementById('admin-sidebar');

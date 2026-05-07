@@ -26,7 +26,7 @@ if (isset($_POST['add_event'])) {
                 'error' => $_FILES['event_images']['error'][$i],
                 'size' => $_FILES['event_images']['size'][$i]
             ];
-            $upload = secure_upload($file, ['jpg', 'jpeg', 'png', 'gif'], $eventsUploadDir);
+            $upload = secure_upload($file, ['jpg', 'jpeg', 'png', 'gif', 'webp'], $eventsUploadDir);
             if ($upload['success']) $imagesArr[] = 'events/' . $upload['filename'];
         }
     }
@@ -53,7 +53,7 @@ if (isset($_POST['edit_event'])) {
                 'error' => $_FILES['event_images']['error'][$i],
                 'size' => $_FILES['event_images']['size'][$i]
             ];
-            $upload = secure_upload($file, ['jpg', 'jpeg', 'png', 'gif'], $eventsUploadDir);
+            $upload = secure_upload($file, ['jpg', 'jpeg', 'png', 'gif', 'webp'], $eventsUploadDir);
             if ($upload['success']) $imagesArr[] = 'events/' . $upload['filename'];
         }
         $imagesJson = json_encode($imagesArr);
@@ -198,7 +198,7 @@ $totalEvents = $conn->query("SELECT COUNT(*) as count FROM events")->fetch_assoc
                 </div>
                 <div>
                     <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block px-1">Event Images (Max 5)</label>
-                    <input type="file" name="event_images[]" multiple accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100">
+                    <input type="file" name="event_images[]" multiple accept="image/jpeg, image/png, image/gif, image/webp" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100">
                 </div>
             </div>
             <div class="mt-10 flex gap-4">
@@ -226,7 +226,7 @@ $totalEvents = $conn->query("SELECT COUNT(*) as count FROM events")->fetch_assoc
                 </div>
                 <div>
                     <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block px-1">Event Images (Max 5, replaces existing)</label>
-                    <input type="file" name="event_images[]" multiple accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100">
+                    <input type="file" name="event_images[]" multiple accept="image/jpeg, image/png, image/gif, image/webp" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100">
                 </div>
             </div>
             <div class="mt-10 flex gap-4">

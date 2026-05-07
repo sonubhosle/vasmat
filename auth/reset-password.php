@@ -7,7 +7,7 @@ $token = $_GET['token'] ?? '';
 $role = $_GET['role'] ?? '';
 
 if (empty($token)) {
-    header("Location: login.php");
+    header("Location: " . ($role ?: 'faculty') . "-login.php");
     exit;
 }
 

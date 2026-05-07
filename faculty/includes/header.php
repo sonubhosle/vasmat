@@ -1,19 +1,26 @@
 <?php
 require_once __DIR__ . '/../../includes/auth_helper.php';
-require_once __DIR__ . '/functions.php';
 
-// If not logged in as admin, redirect to login
-checkRole(['admin', 'superadmin']);
+// If not logged in as faculty, redirect to login
+checkRole('faculty');
 
 // Get active page for sidebar highlighting
 $current_page = basename($_SERVER['PHP_SELF']);
+$faculty_id = $_SESSION['reference_id'];
+
+// Fetch faculty data for profile display
+$stmt = $conn->prepare("SELECT name, photo, designation FROM faculty WHERE id = ?");
+$stmt->bind_param("i", $faculty_id);
+$stmt->execute();
+$faculty_user = $stmt->get_result()->fetch_assoc();
+$stmt->close();
 ?>
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MIT Admin | College Management System</title>
+    <title>MIT Faculty | <?= SITE_NAME ?></title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +30,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <!-- Icons & Styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://unpkg.com/@lucide/icons"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -81,6 +87,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         .nav-link-active {
             background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0) 100%);
             border-left: 3px solid #f59e0b;
+            color: white !important;
         }
 
         .stat-card {
@@ -96,98 +103,75 @@ $current_page = basename($_SERVER['PHP_SELF']);
             transform: translateY(-6px);
         }
 
-        /* Float Animation */
-        @keyframes floating {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-            100% { transform: translateY(0px); }
+        .tab-active {
+            background: #0f172a;
+            color: white;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
         }
-        .float-anim {
-            animation: floating 3s ease-in-out infinite;
+        .tab-inactive {
+            background: white;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
         }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb {
-            background: #e2e8f0;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
-
-        @media (max-width: 768px) {
-            .sidebar-hidden { transform: translateX(-100%); }
-            .sidebar-visible { transform: translateX(0); }
+        .tab-inactive:hover {
+            border-color: #cbd5e1;
+            color: #0f172a;
+            background: #f8fafc;
         }
     </style>
 </head>
-<body class="min-h-screen text-slate-900 overflow-x-hidden selection:bg-primary-100 selection:text-primary-700">
+<body class="bg-slate-50">
+    <!-- Sidebar Overlay (Mobile) -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[45] hidden md:hidden transition-opacity duration-300"></div>
 
-    <!-- Mobile Overlay -->
-    <div id="sidebar-overlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[40] opacity-0 pointer-events-none transition-opacity duration-300 md:hidden"></div>
-
-    <!-- Sidebar Wrapper -->
-    <aside id="admin-sidebar" class="fixed top-0 left-0 h-screen w-[280px] bg-secondary z-[50] sidebar-transition sidebar-hidden md:translate-x-0 border-r border-slate-800/10 ">
-        <div class="h-full flex flex-col p-8">
-            <!-- Logo Section -->
-            <div class="flex items-center gap-4 mb-12">
-                <div class="w-12 h-12 bg-gradient-to-tr from-primary-400 to-primary-600 rounded-2xl flex items-center justify-center shadow-xl shadow-primary-600/30">
-                    <i class="fas fa-graduation-cap text-white text-xl"></i>
-                </div>
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed left-0 top-0 bottom-0 w-[280px] bg-secondary z-[50] flex flex-col sidebar-transition -translate-x-full md:translate-x-0 shadow-2xl md:shadow-none">
+        <div class="p-8 flex flex-col h-full">
+            <!-- Brand -->
+            <div class="flex items-center gap-4 mb-12 px-2">
+                <div class="w-12 h-12 bg-primary-500 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-xl shadow-primary-500/20">M</div>
                 <div>
-                    <h1 class="text-white font-black text-xl tracking-tight leading-none">VASMAT</h1>
-                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] mt-1.5">Admin Elite</p>
+                    <h1 class="text-white font-black text-lg uppercase tracking-tight leading-none mb-1">MIT College</h1>
+                    <p class="text-[9px] font-black text-primary-500 uppercase tracking-widest">Faculty Portal</p>
                 </div>
             </div>
 
-            <!-- Navigation Links -->
-            <div class="flex-1 space-y-8 overflow-y-auto pr-2">
-                <!-- Group 1: Core -->
+            <!-- Navigation Groups -->
+            <div class="flex-1 space-y-10 overflow-y-auto pr-2 custom-scrollbar">
+                <!-- Group 1: General -->
                 <div>
-                    <h3 class="text-[10px] font-black text-slate-600 uppercase tracking-[0.2em] mb-4 px-4">Workspace</h3>
+                    <h3 class="text-[10px] font-black text-slate-600 uppercase tracking-[0.2em] mb-4 px-4">Menu</h3>
                     <nav class="space-y-1">
-                        <a href="/vasmat/admin/index.php" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group <?= $current_page == 'index.php' ? 'nav-link-active text-white' : 'text-slate-400 hover:text-white hover:bg-white/5' ?>">
+                        <a href="/vasmat/faculty/dashboard.php" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group <?= $current_page == 'dashboard.php' ? 'nav-link-active' : 'text-slate-400 hover:text-white hover:bg-white/5' ?>">
                             <span class="w-6 h-6 rounded-xl flex items-center justify-center flex-shrink-0 bg-amber-500/20 text-amber-400 group-hover:bg-amber-500 group-hover:text-white transition-all">
                                 <i class="fas fa-house-chimney text-xs"></i>
                             </span>
                             <span>Dashboard</span>
                         </a>
-                        <a href="/vasmat/admin/approve-content.php" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group <?= $current_page == 'approve-content.php' ? 'nav-link-active text-white' : 'text-slate-400 hover:text-white hover:bg-white/5' ?>">
-                            <span class="w-6 h-6 rounded-xl flex items-center justify-center flex-shrink-0 bg-purple-500/20 text-purple-400 group-hover:bg-purple-500 group-hover:text-white transition-all">
-                                <i class="fas fa-clipboard-check text-xs"></i>
+                        <a href="/vasmat/faculty/upload.php" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group <?= $current_page == 'upload.php' ? 'nav-link-active' : 'text-slate-400 hover:text-white hover:bg-white/5' ?>">
+                            <span class="w-6 h-6 rounded-xl flex items-center justify-center flex-shrink-0 bg-blue-500/20 text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all">
+                                <i class="fas fa-cloud-upload-alt text-xs"></i>
                             </span>
-                            <span>Approvals</span>
+                            <span>Upload Content</span>
+                        </a>
+                        <a href="/vasmat/faculty/my-uploads.php" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group <?= $current_page == 'my-uploads.php' ? 'nav-link-active' : 'text-slate-400 hover:text-white hover:bg-white/5' ?>">
+                            <span class="w-6 h-6 rounded-xl flex items-center justify-center flex-shrink-0 bg-purple-500/20 text-purple-400 group-hover:bg-purple-500 group-hover:text-white transition-all">
+                                <i class="fas fa-file-alt text-xs"></i>
+                            </span>
+                            <span>My History</span>
                         </a>
                     </nav>
                 </div>
 
-                <!-- Group 2: Academic -->
+                <!-- Group 2: Personal -->
                 <div>
-                    <h3 class="text-[10px] font-black text-slate-600 uppercase tracking-[0.2em] mb-4 px-4">Academic</h3>
+                    <h3 class="text-[10px] font-black text-slate-600 uppercase tracking-[0.2em] mb-4 px-4">Account</h3>
                     <nav class="space-y-1">
-                        <a href="/vasmat/admin/manage-faculty.php" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group <?= $current_page == 'manage-faculty.php' ? 'nav-link-active text-white' : 'text-slate-400 hover:text-white hover:bg-white/5' ?>">
-                            <span class="w-6 h-6 rounded-xl flex items-center justify-center flex-shrink-0 bg-blue-500/20 text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all">
-                                <i class="fas fa-user-tie text-xs"></i>
-                            </span>
-                            <span>Faculties</span>
-                        </a>
-                        <a href="/vasmat/admin/pages/announcements.php" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group <?= $current_page == 'announcements.php' ? 'nav-link-active text-white' : 'text-slate-400 hover:text-white hover:bg-white/5' ?>">
-                            <span class="w-6 h-6 rounded-xl flex items-center justify-center flex-shrink-0 bg-rose-500/20 text-rose-400 group-hover:bg-rose-500 group-hover:text-white transition-all">
-                                <i class="fas fa-bullhorn text-xs"></i>
-                            </span>
-                            <span>Notices</span>
-                        </a>
-                        <a href="/vasmat/admin/pages/admin_events.php" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group <?= $current_page == 'admin_events.php' ? 'nav-link-active text-white' : 'text-slate-400 hover:text-white hover:bg-white/5' ?>">
+                        <a href="/vasmat/faculty/profile.php" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group <?= $current_page == 'profile.php' ? 'nav-link-active' : 'text-slate-400 hover:text-white hover:bg-white/5' ?>">
                             <span class="w-6 h-6 rounded-xl flex items-center justify-center flex-shrink-0 bg-emerald-500/20 text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white transition-all">
-                                <i class="fas fa-calendar-days text-xs"></i>
+                                <i class="fas fa-user-circle text-xs"></i>
                             </span>
-                            <span>Events</span>
-                        </a>
-                        <a href="/vasmat/admin/pages/gallery.php" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group <?= $current_page == 'gallery.php' ? 'nav-link-active text-white' : 'text-slate-400 hover:text-white hover:bg-white/5' ?>">
-                            <span class="w-6 h-6 rounded-xl flex items-center justify-center flex-shrink-0 bg-pink-500/20 text-pink-400 group-hover:bg-pink-500 group-hover:text-white transition-all">
-                                <i class="fas fa-images text-xs"></i>
-                            </span>
-                            <span>Gallery</span>
+                            <span>Profile Settings</span>
                         </a>
                     </nav>
                 </div>
@@ -195,9 +179,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
             <!-- Bottom Section -->
             <div class="mt-auto pt-8 border-t border-white/5">
-                <a href="/vasmat/auth/admin-logout.php" class="flex items-center gap-3 px-5 py-4 rounded-2xl text-xs font-black uppercase tracking-widest text-rose-400 bg-rose-500/5 hover:bg-rose-500 hover:text-white transition-all shadow-lg shadow-rose-500/0 hover:shadow-rose-500/20">
+                <a href="/vasmat/auth/faculty-logout.php" class="flex items-center gap-3 px-5 py-4 rounded-2xl text-xs font-black uppercase tracking-widest text-rose-400 bg-rose-500/5 hover:bg-rose-500 hover:text-white transition-all shadow-lg shadow-rose-500/0 hover:shadow-rose-500/20">
                     <i class="fas fa-power-off"></i>
-                    <span>Log Out Account</span>
+                    <span>Log Out Portal</span>
                 </a>
             </div>
         </div>
@@ -210,7 +194,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <header class="sticky top-0 z-[30] glass px-8 py-5 flex items-center justify-between w-full">
             <div class="flex items-center gap-8 flex-1">
                 <!-- Mobile Toggle -->
-                <button id="sidebar-toggle" class="md:hidden w-12 h-12 flex items-center justify-center bg-white border border-slate-200 rounded-2xl text-slate-600 shadow-sm hover:bg-slate-50 transition-all active:scale-95">
+                <button id="sidebar-toggle-btn" class="md:hidden w-12 h-12 flex items-center justify-center bg-white border border-slate-200 rounded-2xl text-slate-600 shadow-sm hover:bg-slate-50 transition-all active:scale-95">
                     <i class="fas fa-bars-staggered text-lg"></i>
                 </button>
             </div>
@@ -244,12 +228,16 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
                 <div class="flex items-center gap-4 pl-6 border-l border-slate-200">
                     <div class="hidden sm:flex flex-col items-end">
-                        <p class="text-sm font-black text-slate-900 leading-none mb-1"><?= e($_SESSION['user_name']) ?></p>
-                        <p class="text-[9px] font-black text-primary-600 uppercase tracking-widest bg-primary-50 px-2 py-0.5 rounded-md border border-primary-100">Super Administrator</p>
+                        <p class="text-sm font-black text-slate-900 leading-none mb-1"><?= e($faculty_user['name']) ?></p>
+                        <p class="text-[9px] font-black text-primary-600 uppercase tracking-widest bg-primary-50 px-2 py-0.5 rounded-md border border-primary-100"><?= e($faculty_user['designation'] ?: 'Department Faculty') ?></p>
                     </div>
                     <div class="relative group">
-                        <div class="w-12 h-12 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl flex items-center justify-center text-white text-sm font-black cursor-pointer ring-4 ring-white shadow-xl hover:scale-105 transition-transform border border-slate-700">
-                            <?= strtoupper(substr($_SESSION['user_name'], 0, 2)) ?>
+                        <div class="w-12 h-12 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl flex items-center justify-center text-white text-sm font-black cursor-pointer ring-4 ring-white shadow-xl hover:scale-105 transition-transform border border-slate-700 overflow-hidden">
+                            <?php if($faculty_user['photo']): ?>
+                                <img src="../upload/photos/<?= e($faculty_user['photo']) ?>" class="w-full h-full object-cover">
+                            <?php else: ?>
+                                <?= strtoupper(substr($faculty_user['name'], 0, 2)) ?>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -257,5 +245,4 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </header>
 
         <!-- Main Content Area -->
-        <main class="flex-1 p-6">
-
+        <main class="flex-1 p-6 md:p-10">
