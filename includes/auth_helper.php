@@ -31,7 +31,7 @@ function checkRole($allowed_roles) {
                 header("Location: " . BASE_URL . "superadmin/dashboard.php");
                 break;
             case 'admin':
-                header("Location: " . BASE_URL . "admin/dashboard.php");
+                header("Location: " . BASE_URL . "admin/index.php");
                 break;
             case 'faculty':
                 header("Location: " . BASE_URL . "faculty/dashboard.php");

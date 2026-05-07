@@ -43,6 +43,6 @@ if ($id > 0 && in_array($action, ['approve', 'reject'])) {
     }
 }
 
-header("Location: dashboard.php");
+header("Location: index.php");
 exit;
 ?>

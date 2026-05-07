@@ -8,11 +8,11 @@
         type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/mit-college/assets/css/style.css">
+    <link rel="stylesheet" href="/vasmat/assets/css/style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.259.0/dist/lucide.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="/mit-college/assets/js/navScript.js?v=2"></script>
+    <script src="/vasmat/assets/js/navScript.js?v=2"></script>
 
 </head>
 <body class="bg-slate-100 text-slate-800 leading-normal tracking-normal">

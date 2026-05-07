@@ -1,5 +1,5 @@
 <?php
-require_once 'c:/xampp/htdocs/mit-college/admin/includes/db.php';
+require_once 'c:/xampp/htdocs/vasmat/admin/includes/db.php';
 
 $sql = "CREATE TABLE IF NOT EXISTS `events` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

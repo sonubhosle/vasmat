@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/auth_helper.php';
+require_once __DIR__ . '/../includes/mail_helper.php';
 
 $error = '';
 $success = '';
@@ -11,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($email)) {
         $error = "Please enter your email address.";
     } else {
-        $stmt = $conn->prepare("SELECT id FROM users WHERE email = ? AND role = ? LIMIT 1");
+        $stmt = $conn->prepare("SELECT id, name FROM users WHERE email = ? AND role = ? LIMIT 1");
         $stmt->bind_param("ss", $email, $role);
         $stmt->execute();
         $user = $stmt->get_result()->fetch_assoc();
@@ -24,8 +25,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt_update->bind_param("ssi", $token, $expires, $user['id']);
             $stmt_update->execute();
             
-            // In a real app, send email here. For now, we simulate.
-            $success = "A reset link has been sent to your email. (Simulation Token: $token)";
+            // Send Real Email
+            if (sendResetEmail($email, $token, $role)) {
+                $success = "A reset link has been sent to your email ($email). Please check your inbox.";
+            } else {
+                // FALLBACK FOR LOCALHOST DEVELOPMENT
+                $link = getLastResetLink();
+                if (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || $_SERVER['REMOTE_ADDR'] === '127.0.0.1') {
+                    $success = "A reset link has been generated. Since this is a local environment, you can use the link below:<br><br><a href='$link' class='text-blue-600 underline break-all'>$link</a>";
+                } else {
+                    $error = "Failed to send email. Please contact system administrator.";
+                }
+            }
         } else {
             $error = "No account found with that email for this role.";
         }

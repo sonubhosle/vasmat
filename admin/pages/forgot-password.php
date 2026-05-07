@@ -54,7 +54,7 @@ if($result->num_rows > 0){
     $host = $_SERVER['HTTP_HOST'];
     
     // Since your files are in admin/pages/, the correct path is:
-    $resetLink = "$protocol://$host/mit-college/admin/pages/reset-password.php?token=$token";
+    $resetLink = "$protocol://$host/vasmat/admin/pages/reset-password.php?token=$token";
     
     // ... rest of email sending code ...
         $mail = new PHPMailer(true);

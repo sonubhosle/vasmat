@@ -65,7 +65,7 @@ $pending_faculty = $conn->query("SELECT * FROM users WHERE role = 'faculty' AND 
                 <h1 class="text-white font-black text-sm uppercase tracking-tight">MIT Admin</h1>
             </div>
             <nav class="flex-1 space-y-2">
-                <a href="dashboard.php" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-900 rounded-xl font-bold text-sm">
+                <a href="index.php" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-900 rounded-xl font-bold text-sm">
                     <i class="fas fa-th-large"></i> Dashboard
                 </a>
                 <a href="faculty-approvals.php" class="flex items-center gap-3 px-4 py-3 bg-amber-500/10 text-amber-500 rounded-xl font-bold text-sm">
