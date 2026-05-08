@@ -144,4 +144,69 @@ CREATE TABLE IF NOT EXISTS `activity_logs` (
 INSERT IGNORE INTO `users` (`name`, `email`, `password`, `role`, `status`) 
 VALUES ('Super Admin', 'superadmin@college.edu', '$2y$10$D.yq76.4k/V/j.K9p1BfRe5uJ7I.X/K8f2f/3t4XW5eFfGfHfIfJf', 'superadmin', 'active');
 
+-- 10. NAAC Documents Table
+CREATE TABLE IF NOT EXISTS `naac_docs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `category` enum('AQAR', 'SSR', 'Minutes', 'Policy', 'Disclosure', 'Certificate') NOT NULL,
+  `year` varchar(20) DEFAULT NULL,
+  `file_path` varchar(255) NOT NULL,
+  `status` enum('Active', 'Archived') DEFAULT 'Active',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 11. Committees Table
+CREATE TABLE IF NOT EXISTS `committees` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `icon` varchar(50) DEFAULT NULL,
+  `color` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 12. Committee Members
+CREATE TABLE IF NOT EXISTS `committee_members` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `committee_id` int(11) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `designation` varchar(100) DEFAULT NULL,
+  `role` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `committee_id` (`committee_id`),
+  CONSTRAINT `committee_members_ibfk_1` FOREIGN KEY (`committee_id`) REFERENCES `committees` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 13. Feedback Table
+CREATE TABLE IF NOT EXISTS `feedback` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_type` enum('Student', 'Parent', 'Faculty', 'Employer', 'Alumni') DEFAULT NULL,
+  `category` enum('Curriculum', 'Infrastructure', 'Support', 'Overall') DEFAULT NULL,
+  `rating` int(11) DEFAULT NULL,
+  `comments` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 14. Placements Table
+CREATE TABLE IF NOT EXISTS `placements` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `student_name` varchar(255) DEFAULT NULL,
+  `company` varchar(255) DEFAULT NULL,
+  `package` decimal(10,2) DEFAULT NULL,
+  `year` varchar(20) DEFAULT NULL,
+  `image_path` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Seed Initial Committees
+INSERT IGNORE INTO `committees` (`name`, `description`, `icon`, `color`) VALUES 
+('Anti-Ragging Committee', 'Ensuring a zero-tolerance campus environment.', 'fa-user-shield', 'amber'),
+('Internal Complaint Committee', 'Cell for prevention of sexual harassment.', 'fa-venus', 'rose'),
+('Grievance Redressal Cell', 'Platform for students and staff to raise concerns.', 'fa-hands-helping', 'blue'),
+('Women Development Cell', 'Promoting gender equality and empowerment.', 'fa-female', 'purple'),
+('SC/ST Cell', 'Protecting the interests of reserved category students.', 'fa-users', 'emerald'),
+('IQAC Cell', 'Internal Quality Assurance Cell for systematic institutional evaluation.', 'fa-microchip', 'blue');
+
 COMMIT;

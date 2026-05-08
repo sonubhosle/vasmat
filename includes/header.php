@@ -3,10 +3,23 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>MIT COLLEGE OF COMPUTER SCI. & I.T. Socity Market, Basmath Tq. Basmath Dist. Hingoli PIN : 431512</title>
-    <link rel="icon" href="https://mitbasmath.com/wp-content/uploads/2025/12/cropped-cropped-Mit-Logo.png"
-        type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>MIT College of Computer Science & IT | NAAC Accredited | Basmath, Hingoli</title>
+    <meta name="description" content="MIT College Basmath offers premium Computer Science & IT education. NAAC Accredited institution affiliated with SRTMU Nanded. Best BCA, B.Sc CS, and IT courses in Hingoli district.">
+    <meta name="keywords" content="MIT College Basmath, Computer Science Hingoli, BCA Basmath, NAAC Accredited College, SRTMU Nanded affiliated, Best IT College Maharashtra">
+    <meta name="author" content="MIT College Basmath">
+    <link rel="canonical" href="http://localhost/vasmat/<?= basename($_SERVER['PHP_SELF']) ?>">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="MIT College of Computer Science & IT | Basmath">
+    <meta property="og:description" content="Empowering students with excellence in IT and Computer Science education.">
+    <meta property="og:image" content="https://mitbasmath.com/wp-content/uploads/2025/12/cropped-cropped-Mit-Logo.png">
+
+    <link rel="icon" href="https://mitbasmath.com/wp-content/uploads/2025/12/cropped-cropped-Mit-Logo.png" type="image/png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/vasmat/assets/css/style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -17,7 +30,10 @@
 </head>
 <body class="bg-slate-100 text-slate-800 leading-normal tracking-normal">
 
-    <?php $currentPage = basename($_SERVER['PHP_SELF']); ?>
+    <?php 
+    require_once __DIR__ . '/../config/config.php';
+    $currentPage = basename($_SERVER['PHP_SELF']); 
+    ?>
     <header class="sticky top-0 left-0 w-full z-[200]">
 
         <?php if ($currentPage === 'index.php'): ?>
@@ -99,10 +115,10 @@
 
                             <!-- Departments  -->
                                 <div class="relative group">
-                            <a href="courses.php"
-                                class="flex items-center gap-1.5 text-[14px] font-semibold text-slate-600 group-hover:text-amber-400   transition ease-in duration-300 cursor-pointer">
-                                Departments
-                            </a>
+                                <button
+                                    class="flex items-center gap-1.5 text-[14px] font-semibold text-slate-600 group-hover:text-amber-400 transition ease-in duration-300 cursor-pointer">
+                                    Departments <i class="fa-solid fa-chevron-down text-[10px] opacity-50"></i>
+                                </button>
                             <div class="absolute top-full left-1/2 -translate-x-1/2 pt-5 pointer-events-none group-hover:pointer-events-auto z-50">
                                 <div class="bg-white border border-slate-100 shadow-2xl rounded-2xl overflow-hidden transition-all duration-500 ease-in-out max-h-0 opacity-0 group-hover:max-h-[400px] group-hover:opacity-100">
                                     <div class="p-2 min-w-[210px] flex flex-col">
@@ -122,10 +138,10 @@
 
                         <!-- COURSES -->
                         <div class="relative group">
-                            <a href="courses.php"
-                                class="flex items-center gap-1.5 text-[14px] font-semibold text-slate-600 group-hover:text-amber-400   transition ease-in duration-500 cursor-pointer">
-                                Courses
-                            </a>
+                            <button
+                                class="flex items-center gap-1.5 text-[14px] font-semibold text-slate-600 group-hover:text-amber-400 transition ease-in duration-500 cursor-pointer">
+                                Courses <i class="fa-solid fa-chevron-down text-[10px] opacity-50"></i>
+                            </button>
                             <div class="absolute top-full left-1/2 -translate-x-1/2 pt-5 pointer-events-none group-hover:pointer-events-auto z-50">
                                 <div class="bg-white border border-slate-100 shadow-2xl rounded-2xl overflow-hidden transition-all duration-500 ease-in-out max-h-0 opacity-0 group-hover:max-h-[400px] group-hover:opacity-100">
                                     <div class="p-2 min-w-[210px] flex flex-col">
@@ -145,72 +161,121 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- FACILITIES -->
+                        <!-- INSTITUTIONAL -->
                         <div class="relative group">
-                            <a href="faculty.php"
-                                class="flex items-center gap-1.5 text-[14px] font-semibold text-slate-600 group-hover:text-amber-400   transition ease-in duration-500 cursor-pointer">
-                                Facilities
-                            </a>
+                            <button class="flex items-center gap-1.5 text-[14px] font-semibold text-slate-600 group-hover:text-amber-400 transition ease-in duration-300">
+                                Institutional <i class="fa-solid fa-chevron-down text-[10px] opacity-50"></i>
+                            </button>
                             <div class="absolute top-full left-1/2 -translate-x-1/2 pt-5 pointer-events-none group-hover:pointer-events-auto z-50">
-                                <div class="bg-white border border-slate-100 shadow-2xl rounded-2xl overflow-hidden transition-all duration-500 ease-in-out max-h-0 opacity-0 group-hover:max-h-[400px] group-hover:opacity-100">
-                                    <div class="p-2 min-w-[210px] flex flex-col">
-                                        <a href="about.php#library"
-                                            class=" flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[13px] font-semibold text-slate-500    rounded-xl transition ease-in duration-300">
-                                            Library
-                                        </a>
-                                        <a href="about.php#seminar-hall"
-                                            class=" flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[13px] font-semibold text-slate-500   rounded-xl transition ease-in duration-300">
-                                            Seminar Hall
-                                        </a>
-                                        <a href="about.php#labs"
-                                            class=" flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[13px] font-semibold text-slate-500  rounded-xl transition ease-in duration-300">
-                                            Computer Labs
-                                        </a>
+                                <div class="bg-white border border-slate-100 shadow-2xl rounded-2xl overflow-hidden transition-all duration-500 ease-in-out max-h-0 opacity-0 group-hover:max-h-[500px] group-hover:opacity-100">
+                                    <div class="p-2 min-w-[220px] flex flex-col">
+                                        <a href="about.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">About College</a>
+                                        <a href="organogram.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Institutional Organogram</a>
+                                        <a href="research.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Research & Publications</a>
+                                        <a href="disclosures.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Mandatory Disclosures</a>
+                                        <a href="committees.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Statutory Committees</a>
+                                        <a href="code_of_conduct.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Code of Conduct</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- STUDENT CORNER -->
+                        <!-- QUALITY & NAAC -->
                         <div class="relative group">
-                            <button
-                                class="flex items-center gap-1.5 text-[14px] font-semibold text-slate-600 group-hover:text-amber-400   transition ease-in duration-500 cursor-pointer">
-                                Student Corner
+                            <button class="flex items-center gap-1.5 text-[14px] font-semibold text-slate-600 group-hover:text-amber-400 transition ease-in duration-300" aria-label="Quality and NAAC Menu">
+                                Quality (NAAC) <i class="fa-solid fa-chevron-down text-[10px] opacity-50"></i>
+                            </button>
+                            <div class="absolute top-full left-1/2 -translate-x-1/2 pt-5 pointer-events-none group-hover:pointer-events-auto z-50">
+                                <div class="bg-white border border-slate-100 shadow-2xl rounded-2xl overflow-hidden transition-all duration-500 ease-in-out max-h-0 opacity-0 group-hover:max-h-[500px] group-hover:opacity-100">
+                                    <div class="p-2 min-w-[220px] flex flex-col">
+                                        <a href="iqac.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">IQAC Portal</a>
+                                        <a href="naac.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">SSR & AQAR Reports</a>
+                                        <a href="academic_calendar.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Academic Calendar</a>
+                                        <a href="best_practices.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Best Practices</a>
+                                        <a href="feedback.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Stakeholder Feedback</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STUDENT LIFE -->
+                        <div class="relative group">
+                            <button class="flex items-center gap-1.5 text-[14px] font-semibold text-slate-600 group-hover:text-amber-400 transition ease-in duration-300">
+                                Student Life <i class="fa-solid fa-chevron-down text-[10px] opacity-50"></i>
+                            </button>
+                            <div class="absolute top-full left-1/2 -translate-x-1/2 pt-5 pointer-events-none group-hover:pointer-events-auto z-50">
+                                <div class="bg-white border border-slate-100 shadow-2xl rounded-2xl overflow-hidden transition-all duration-500 ease-in-out max-h-0 opacity-0 group-hover:max-h-[500px] group-hover:opacity-100">
+                                    <div class="p-2 min-w-[210px] flex flex-col">
+                                        <a href="subject_notes.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Subject Notes</a>
+                                        <a href="nss_ncc.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">NSS & NCC</a>
+                                        <a href="scholarship.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Scholarships</a>
+                                        <a href="gallery.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Photo Gallery</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CAREER -->
+                        <div class="relative group">
+                            <button class="flex items-center gap-1.5 text-[14px] font-semibold text-slate-600 group-hover:text-amber-400 transition ease-in duration-300">
+                                Career <i class="fa-solid fa-chevron-down text-[10px] opacity-50"></i>
                             </button>
                             <div class="absolute top-full left-1/2 -translate-x-1/2 pt-5 pointer-events-none group-hover:pointer-events-auto z-50">
                                 <div class="bg-white border border-slate-100 shadow-2xl rounded-2xl overflow-hidden transition-all duration-500 ease-in-out max-h-0 opacity-0 group-hover:max-h-[400px] group-hover:opacity-100">
-                                    <div class="p-2 min-w-[210px] flex flex-col">
-                                        <a href="subject_notes.php"
-                                            class="flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[13px] font-semibold text-slate-500   rounded-xl transition ease-in duration-300">
-                                            Subject Notes
-                                        </a>
-                                        <a href="syllabus.php"
-                                            class="flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[13px] font-semibold text-slate-500   rounded-xl transition ease-in duration-300">
-                                            Syllabus
-                                        </a>
-                                        <a href="gallery.php"
-                                            class="flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[13px] font-semibold text-slate-500   rounded-xl transition ease-in duration-300">
-                                            Photo Gallery
-                                        </a>
-                                        <a href="help.php"
-                                            class="flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[13px] font-semibold text-slate-500    rounded-xl transition ease-in duration-300">
-                                            Help
-                                        </a>
+                                    <div class="p-2 min-w-[200px] flex flex-col">
+                                        <a href="placement.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Placement Cell</a>
+                                        <a href="alumni.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Alumni Network</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
 
-                        <a href="get_events.php" class="text-[14px] font-semibold text-slate-600 hover:text-amber-400  ">Events</a>
-                        <a href="naac.php" class="text-[14px] font-semibold text-slate-600 hover:text-amber-400 uppercase  transition ease-in duration-500 cursor-pointer">NAAC</a>
 
                         <a href="get_faculty.php" class="text-[14px] font-semibold text-slate-600 hover:text-amber-400 transition ease-in duration-500 cursor-pointer">Faculty</a>
  
-                        <a href="about.php" class="text-[14px] font-semibold text-slate-600 hover:text-amber-400  transition ease-in duration-500 cursor-pointer">About</a>
+
+                        <!-- LOGIN / REGISTER -->
+                        <div class="relative group">
+                            <button
+                                class="flex items-center gap-1.5 text-[14px] font-semibold text-slate-600 group-hover:text-amber-400 transition ease-in duration-500 cursor-pointer">
+                                Access<i class="fa-solid fa-chevron-down text-[10px] opacity-50"></i>
+                            </button>
+                            <div class="absolute top-full right-0 pt-5 pointer-events-none group-hover:pointer-events-auto z-50">
+                                <div class="bg-white border border-slate-100 shadow-2xl rounded-2xl overflow-hidden transition-all duration-500 ease-in-out max-h-0 opacity-0 group-hover:max-h-[500px] group-hover:opacity-100">
+                                    <div class="p-2 min-w-[220px] flex flex-col">
+                                        <?php if (isset($_SESSION['user_id'])): ?>
+                                            <div class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Welcome, <?= explode(' ', $_SESSION['user_name'])[0] ?></div>
+                                            <a href="<?= BASE_URL . ($_SESSION['role'] === 'faculty' ? 'faculty/dashboard.php' : 'admin/index.php') ?>"
+                                                class="flex items-center px-3 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-600 rounded-xl transition ease-in duration-300">
+                                                <i class="fa-solid fa-gauge-high mr-2 opacity-50"></i> Dashboard
+                                            </a>
+                                            <a href="<?= BASE_URL ?>auth/<?= $_SESSION['role'] ?>-logout.php"
+                                                class="flex items-center px-3 py-2 hover:bg-rose-50 hover:text-rose-600 text-[13px] font-semibold text-slate-600 rounded-xl transition ease-in duration-300">
+                                                <i class="fa-solid fa-power-off mr-2 opacity-50"></i> Logout
+                                            </a>
+                                        <?php else: ?>
+                                            <!-- Admin Section -->
+                                            <div class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Admin Portal</div>
+                                            <a href="/vasmat/auth/admin-login.php"
+                                                class="items-center px-3 py-2 w-full flex justify-center text-white bg-gradient-to-r from-amber-400 to-amber-500 text-center text-[13px] font-semibold rounded-3xl transition ease-in duration-300">
+                                                Admin Login / Signup
+                                            </a>
+                                         
+                                            <div class="h-px bg-slate-50 my-1 mx-2"></div>
+                                            
+                                            <!-- Faculty Section -->
+                                            <div class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Faculty Portal</div>
+                                            <a href="/vasmat/auth/faculty-login.php"
+                                                class="flex items-center w-full justify-center px-3 py-2 text-white bg-gradient-to-r from-violet-500 to-fuchsia-500 text-center text-[13px] font-semibold rounded-3xl transition ease-in duration-300">
+                                                Faculty Login / Signup
+                                            </a>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
  
-                            <a href="contact.php" class="text-[14px] font-semibold text-slate-600 hover:text-amber-400  transition ease-in duration-500 cursor-pointer ">
+                            <a href="contact.php" class="text-[14px] font-semibold text-white bg-gradient-to-br from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-400 transition-all px-4 py-2 rounded-2xl shadow-lg shadow-slate-900/20">
                             Contact Us
                         </a>
 
@@ -257,6 +322,34 @@
                         class="w-full text-left text-[13px] font-semibold text-slate-700  py-2 flex justify-between items-center group hover:text-amber-600 transition ease-in duration-300">
                         Home
                     </a>
+
+                    <!-- Institutional -->
+                    <div class="">
+                        <button onclick="toggleAccordion('mobInst')"
+                            class="w-full flex items-center justify-between py-2 text-[13px] font-semibold text-slate-700 hover:text-amber-600 transition ease-in duration-300">
+                                Institutional
+                            <i id="icon-mobInst" class="fa-solid fa-chevron-down text-slate-300 transition-transform"></i>
+                        </button>
+                        <div id="mobInst" data-open="false" class="overflow-hidden transition-all duration-500" style="max-height: 0px; opacity: 0;">
+                            <div class="grid gap-2 pt-2">
+                                <a href="about.php" class="flex items-center gap-2 px-3 text-[12px] font-semibold text-slate-600 hover:text-amber-600 transition duration-300">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span> About College
+                                </a>
+                                <a href="organogram.php" class="flex items-center gap-2 px-3 text-[12px] font-semibold text-slate-600 hover:text-amber-600 transition duration-300">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span> Organogram
+                                </a>
+                                <a href="disclosures.php" class="flex items-center gap-2 px-3 text-[12px] font-semibold text-slate-600 hover:text-amber-600 transition duration-300">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span> Mandatory Disclosures
+                                </a>
+                                <a href="committees.php" class="flex items-center gap-2 px-3 text-[12px] font-semibold text-slate-600 hover:text-amber-600 transition duration-300">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span> Statutory Committees
+                                </a>
+                                <a href="code_of_conduct.php" class="flex items-center gap-2 px-3 text-[12px] font-semibold text-slate-600 hover:text-amber-600 transition duration-300">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span> Code of Conduct
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Departments -->
                     <div class="">
@@ -371,17 +464,97 @@
                     <a href="get_events.php"
                         class="w-full text-left text-[13px] py-2 font-semibold text-slate-700   block">Events</a>
 
-                    <!-- NAAC -->
-                    <a href="naac.php"
-                        class="w-full text-left text-[13px] py-2 font-semibold text-slate-700   block uppercase">NAAC</a>
+                    <!-- Research -->
+                    <a href="research.php" class="w-full text-left text-[13px] py-2 font-semibold text-slate-700 block">Research</a>
+
+                    <!-- Career -->
+                    <div class="">
+                        <button onclick="toggleAccordion('mobCareer')"
+                            class="w-full flex items-center justify-between py-2 text-[13px] font-semibold text-slate-700 tracking-tight hover:text-amber-600">
+                                Career & Placement
+                            <i id="icon-mobCareer" class="fa-solid fa-chevron-down text-slate-300 transition-transform"></i>
+                        </button>
+                        <div id="mobCareer" data-open="false" class="overflow-hidden transition-all duration-500" style="max-height: 0px; opacity: 0;">
+                            <div class="grid gap-2 pt-2">
+                                <a href="placement.php" class="flex items-center gap-2 px-3 text-[12px] font-semibold text-slate-600 hover:text-amber-600 transition duration-300">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span> Placement Cell
+                                </a>
+                                <a href="alumni.php" class="flex items-center gap-2 px-3 text-[12px] font-semibold text-slate-600 hover:text-amber-600 transition duration-300">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span> Alumni Network
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NAAC & Quality -->
+                    <div class="">
+                        <button onclick="toggleAccordion('mobNaac')"
+                            class="w-full flex items-center justify-between py-2 text-[13px] font-semibold text-slate-700 tracking-tight hover:text-amber-600">
+                                Quality (NAAC)
+                            <i id="icon-mobNaac" class="fa-solid fa-chevron-down text-slate-300 transition-transform"></i>
+                        </button>
+                        <div id="mobNaac" data-open="false" class="overflow-hidden transition-all duration-500" style="max-height: 0px; opacity: 0;">
+                            <div class="grid gap-2 pt-2">
+                                <a href="iqac.php" class="flex items-center gap-2 px-3 text-[12px] font-semibold text-slate-600 hover:text-amber-600 transition duration-300">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span> IQAC Portal
+                                </a>
+                                <a href="naac.php" class="flex items-center gap-2 px-3 text-[12px] font-semibold text-slate-600 hover:text-amber-600 transition duration-300">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span> SSR & AQAR Reports
+                                </a>
+                                <a href="academic_calendar.php" class="flex items-center gap-2 px-3 text-[12px] font-semibold text-slate-600 hover:text-amber-600 transition duration-300">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span> Academic Calendar
+                                </a>
+                                <a href="best_practices.php" class="flex items-center gap-2 px-3 text-[12px] font-semibold text-slate-600 hover:text-amber-600 transition duration-300">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span> Best Practices
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Faculty -->
                     <a href="get_faculty.php"
                         class="w-full text-left text-[13px] py-2 font-semibold text-slate-700   block">Faculty</a>
 
-                    <!-- About -->
-                    <a href="about.php"
-                        class="w-full text-left text-[13px] py-2 font-semibold text-slate-700   block">About</a>
+
+                    <!-- Auth Section -->
+                    <div class="">
+                        <button onclick="toggleAccordion('mobAuth')"
+                            class="w-full flex items-center justify-between py-2 text-[13px] font-semibold text-slate-700 tracking-tight hover:text-amber-600">
+                                Login / Register
+                            <i id="icon-mobAuth" class="fa-solid fa-chevron-down text-slate-300 transition-transform"></i>
+                        </button>
+
+                        <div id="mobAuth" data-open="false" class="overflow-hidden transition-all duration-500" style="max-height: 0px; opacity: 0;">
+                            <div class="grid gap-2 pt-2 pb-4">
+                                <?php if (isset($_SESSION['user_id'])): ?>
+                                    <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Signed in as <?= e($_SESSION['user_name']) ?></div>
+                                    <a href="<?= BASE_URL . ($_SESSION['role'] === 'faculty' ? 'faculty/dashboard.php' : 'admin/index.php') ?>"
+                                        class="flex items-center gap-2 px-5 text-[12px] font-semibold text-slate-600 hover:text-amber-600 transition ease-in duration-300">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Dashboard
+                                    </a>
+                                    <a href="<?= BASE_URL ?>auth/<?= $_SESSION['role'] ?>-logout.php"
+                                        class="flex items-center gap-2 px-5 text-[12px] font-semibold text-rose-600 hover:text-rose-700 transition ease-in duration-300">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Logout
+                                    </a>
+                                <?php else: ?>
+                                    <!-- Admin -->
+                                    <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Admin</div>
+                                    <a href="/vasmat/auth/admin-login.php"
+                                        class="flex items-center justify-center w-full gap-2 px-5 text-[12px] bg-gradient-to-r from-amber-400 to-amber-500 text-white font-semibold rounded-3xl transition ease-in duration-300">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span> Admin Login / Signup
+                                    </a>
+
+                                    <!-- Faculty -->
+                                    <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">Faculty</div>
+                                    <a href="/vasmat/auth/faculty-login.php"
+                                        class="flex items-center justify-center w-full gap-2 px-5 text-[12px] bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-semibold rounded-3xl transition ease-in duration-300">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span> Faculty Login / Signup
+                                    </a>
+                                    
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
 

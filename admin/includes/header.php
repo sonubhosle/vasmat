@@ -158,6 +158,18 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             </span>
                             <span>Approvals</span>
                         </a>
+                        <a href="/vasmat/admin/naac_admin.php" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group <?= $current_page == 'naac_admin.php' ? 'nav-link-active text-white' : 'text-slate-400 hover:text-white hover:bg-white/5' ?>">
+                            <span class="w-6 h-6 rounded-xl flex items-center justify-center flex-shrink-0 bg-amber-500/20 text-amber-400 group-hover:bg-amber-500 group-hover:text-white transition-all">
+                                <i class="fas fa-folder-open text-xs"></i>
+                            </span>
+                            <span>NAAC DMS</span>
+                        </a>
+                        <a href="/vasmat/admin/feedback_analysis.php" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group <?= $current_page == 'feedback_analysis.php' ? 'nav-link-active text-white' : 'text-slate-400 hover:text-white hover:bg-white/5' ?>">
+                            <span class="w-6 h-6 rounded-xl flex items-center justify-center flex-shrink-0 bg-blue-500/20 text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all">
+                                <i class="fas fa-chart-pie text-xs"></i>
+                            </span>
+                            <span>Feedback Analysis</span>
+                        </a>
                     </nav>
                 </div>
 

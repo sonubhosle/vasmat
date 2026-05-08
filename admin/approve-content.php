@@ -54,7 +54,7 @@ include 'includes/header.php';
         $isActive = $selected_status === $tab['status'];
         $params = http_build_query(array_merge($_GET, ['status' => $tab['status']]));
     ?>
-    <a href="?<?= $params ?>" class="flex items-center gap-2.5 px-5 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all <?= $isActive ? 'bg-slate-900 text-white shadow-xl shadow-slate-900/20' : 'bg-white text-slate-500 border border-slate-200 hover:border-slate-300 hover:text-slate-800' ?>">
+    <a href="?<?= $params ?>" class="flex items-center gap-2.5 px-5 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all <?= $isActive ? 'bg-slate-900 text-white shadow-xl shadow-slate-900/20' : 'bg-white border border-slate-200 hover:border-slate-300 hover:text-slate-800' ?>">
         <?php if($tab['color'] === 'amber'): ?><i class="fas fa-clock"></i><?php elseif($tab['color'] === 'emerald'): ?><i class="fas fa-circle-check"></i><?php else: ?><i class="fas fa-circle-xmark"></i><?php endif; ?>
         <?= $tab['label'] ?>
         <span class="px-2 py-0.5 rounded-lg text-[9px] <?= $isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500' ?>"><?= $tab['count'] ?></span>

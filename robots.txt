@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /api/
+Disallow: /faculty/
+Disallow: /superadmin/
+
+Sitemap: http://localhost/vasmat/sitemap.xml

@@ -246,11 +246,11 @@ $announcements_result = $conn->query("SELECT * FROM announcements ORDER BY creat
                 $links = [
                     ['title' => 'Calendar',    'icon' => 'fas fa-calendar-alt',   'link' => 'calendar.php',    'color' => '#f59e0b', 'light' => '#fffbeb'],
                     ['title' => 'Scholarship', 'icon' => 'fas fa-graduation-cap', 'link' => 'scholarship.php', 'color' => '#8b5cf6', 'light' => '#f5f3ff'],
-                    ['title' => 'Help',        'icon' => 'fas fa-life-ring',      'link' => 'help.php',        'color' => '#06b6d4', 'light' => '#ecfeff'],
-                    ['title' => 'E-Library',   'icon' => 'fas fa-book-open',      'link' => 'library.php',     'color' => '#10b981', 'light' => '#ecfdf5'],
-                    ['title' => 'Faculty',     'icon' => 'fas fa-chalkboard-user','link' => 'get_faculty.php', 'color' => '#3b82f6', 'light' => '#eff6ff'],
-                    ['title' => 'Support',     'icon' => 'fas fa-headset',        'link' => 'support.php',     'color' => '#ec4899', 'light' => '#fdf2f8'],
-                    ['title' => 'Results',     'icon' => 'fas fa-chart-line',     'link' => 'results.php',     'color' => '#14b8a6', 'light' => '#f0fdfa'],
+                    ['title' => 'Research',    'icon' => 'fas fa-microscope',     'link' => 'research.php',    'color' => '#10b981', 'light' => '#ecfdf5'],
+                    ['title' => 'E-Library',   'icon' => 'fas fa-book-open',      'link' => 'library.php',     'color' => '#06b6d4', 'light' => '#ecfeff'],
+                    ['title' => 'Placement',   'icon' => 'fas fa-briefcase',      'link' => 'placement.php',   'color' => '#3b82f6', 'light' => '#eff6ff'],
+                    ['title' => 'Alumni',      'icon' => 'fas fa-user-friends',   'link' => 'alumni.php',      'color' => '#ec4899', 'light' => '#fdf2f8'],
+                    ['title' => 'Committees',  'icon' => 'fas fa-users-cog',      'link' => 'committees.php',  'color' => '#14b8a6', 'light' => '#f0fdfa'],
                     ['title' => 'Admission',   'icon' => 'fas fa-user-graduate',  'link' => 'admission.php',   'color' => '#f43f5e', 'light' => '#fff1f2'],
                 ];
                 
@@ -276,6 +276,84 @@ $announcements_result = $conn->query("SELECT * FROM announcements ORDER BY creat
             </div>
         </div>
 
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     NAAC & INSTITUTIONAL QUALITY SECTION
+     ═══════════════════════════════════════════════ -->
+<section class="py-16 sm:py-28 bg-white relative overflow-hidden">
+    <!-- Decorative background elements -->
+    <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-amber-500/5 blur-[120px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
+    <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/5 blur-[100px] rounded-full -translate-x-1/2 translate-y-1/2"></div>
+    
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="flex flex-col lg:flex-row items-start lg:items-end justify-between mb-16 sm:mb-24 gap-8">
+            <div class="max-w-3xl">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-100 text-amber-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+                    <i class="fas fa-award"></i> Quality Benchmarks
+                </div>
+                <h2 class="text-4xl sm:text-7xl font-black text-slate-900 tracking-tighter leading-[0.85] uppercase">
+                    Institutional <br/>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600">Excellence Portal</span>
+                </h2>
+            </div>
+            <div class="lg:max-w-sm">
+                <p class="text-slate-500 font-medium leading-relaxed border-l-4 border-amber-500/20 pl-6 py-2">
+                    Committed to maintaining the highest standards of higher education through continuous quality monitoring and NAAC accreditation protocols.
+                </p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- NAAC Portal -->
+            <div class="group bg-slate-50/50 rounded-[3rem] p-8 border border-slate-100 hover:bg-white hover:shadow-2xl hover:shadow-amber-500/10 hover:border-amber-200 transition-all duration-500">
+                <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 mb-10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                    <i class="fas fa-medal text-2xl text-amber-500"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-3">NAAC Portal</h3>
+                <p class="text-sm text-slate-500 leading-relaxed mb-10">Access AQAR, SSR, and DVV documents for institutional accreditation cycles.</p>
+                <a href="naac.php" class="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-amber-600 hover:gap-4 transition-all duration-300">
+                    Quality Hub <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Committees -->
+            <div class="group bg-slate-50/50 rounded-[3rem] p-8 border border-slate-100 hover:bg-white hover:shadow-2xl hover:shadow-blue-500/10 hover:border-blue-200 transition-all duration-500">
+                <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 mb-10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                    <i class="fas fa-users-cog text-2xl text-blue-500"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-3">Statutory Cells</h3>
+                <p class="text-sm text-slate-500 leading-relaxed mb-10">Transparency via Anti-Ragging, Grievance, and Internal Complaint committees.</p>
+                <a href="committees.php" class="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-blue-600 hover:gap-4 transition-all duration-300">
+                    View Structure <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Disclosures -->
+            <div class="group bg-slate-50/50 rounded-[3rem] p-8 border border-slate-100 hover:bg-white hover:shadow-2xl hover:shadow-purple-500/10 hover:border-purple-200 transition-all duration-500">
+                <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 mb-10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                    <i class="fas fa-file-contract text-2xl text-purple-500"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-3">Mandatory Docs</h3>
+                <p class="text-sm text-slate-500 leading-relaxed mb-10">Regulatory approvals, audit statements, and institutional policies for public review.</p>
+                <a href="disclosures.php" class="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-purple-600 hover:gap-4 transition-all duration-300">
+                    Public Files <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Feedback -->
+            <div class="group bg-slate-50/50 rounded-[3rem] p-8 border border-slate-100 hover:bg-white hover:shadow-2xl hover:shadow-emerald-500/10 hover:border-emerald-200 transition-all duration-500">
+                <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 mb-10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                    <i class="fas fa-comment-dots text-2xl text-emerald-500"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-3">Stakeholder Info</h3>
+                <p class="text-sm text-slate-500 leading-relaxed mb-10">Feedback system for students, parents, and alumni to ensure continuous growth.</p>
+                <a href="feedback.php" class="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-emerald-600 hover:gap-4 transition-all duration-300">
+                    Share Insights <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
     </div>
 </section>
 
