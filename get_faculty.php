@@ -58,21 +58,15 @@ if (isset($_GET['fetch'])) {
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
 
-        /* Smooth Modal Animation */
-        #detailsModal.flex {
-            animation: fadeIn 0.4s ease forwards;
+        /* Smooth centered Modal Animation */
+        .modal-active {
+            opacity: 1 !important;
+            pointer-events: auto !important;
         }
-        #detailsModal .modal-container {
-            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideUp {
-            from { transform: translateY(40px) scale(0.95); opacity: 0; }
-            to { transform: translateY(0) scale(1); opacity: 1; }
+        .modal-active .modal-container {
+            opacity: 1 !important;
+            transform: translate(0, 0) scale(1) !important;
+            transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1) !important;
         }
     </style>
 </head>
@@ -122,8 +116,8 @@ if (isset($_GET['fetch'])) {
     </div>
 
     <!-- Details Modal -->
-    <div id="detailsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[200] hidden items-center justify-center p-6">
-        <div class="modal-container bg-white w-full max-w-2xl rounded-[3rem] overflow-hidden shadow-2xl max-h-[90vh] flex flex-col">
+    <div id="detailsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[200] flex items-center justify-center p-6 opacity-0 pointer-events-none transition-all duration-500 ease-out">
+        <div class="modal-container bg-white w-full max-w-2xl rounded-[3rem] overflow-hidden shadow-2xl max-h-[90vh] flex flex-col transform -translate-y-24 -translate-x-24 scale-90 opacity-0 transition-all duration-700 ease-out">
             <!-- Modal Header -->
             <div class="p-8 border-b border-slate-50 flex items-center justify-between">
                 <div class="flex items-center gap-4">
@@ -203,7 +197,7 @@ if (isset($_GET['fetch'])) {
                                 <td class="px-8 py-6">
                                     <div class="flex items-center gap-5">
                                         <div class="w-16 h-16 rounded-[1.5rem] overflow-hidden border-4 border-white shadow-lg shrink-0 group-hover:scale-110 transition-transform">
-                                            <img src="upload/photos/${f.photo}" 
+                                            <img src="upload/faculty/${f.photo}" 
                                                  onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(f.name)}&background=f59e0b&color=fff&size=200'"
                                                  class="w-full h-full object-cover">
                                         </div>
@@ -255,7 +249,7 @@ if (isset($_GET['fetch'])) {
         content.innerHTML = `
             <div class="flex flex-col md:flex-row items-center gap-10">
                 <div class="w-44 h-44 rounded-[2.5rem] overflow-hidden border-8 border-slate-50 shadow-2xl shrink-0">
-                    <img src="upload/photos/${f.photo}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(f.name)}&background=f59e0b&color=fff&size=200'" class="w-full h-full object-cover">
+                    <img src="upload/faculty/${f.photo}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(f.name)}&background=f59e0b&color=fff&size=200'" class="w-full h-full object-cover">
                 </div>
                 <div class="text-center md:text-left">
                     <h2 class="text-3xl font-black text-slate-900 tracking-tight leading-none mb-3">${f.name}</h2>
@@ -331,19 +325,24 @@ if (isset($_GET['fetch'])) {
             resumeContainer.innerHTML = '';
         }
 
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+        modal.classList.add('modal-active');
     }
 
     function closeModal() {
         const modal = document.getElementById('detailsModal');
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
+        modal.classList.remove('modal-active');
     }
 
     $(document).ready(function() {
         loadFaculty();
     });
+
+    // Close on outside click
+    window.onclick = function(event) {
+        if (event.target.id === 'detailsModal') {
+            closeModal();
+        }
+    }
 
     // Close modal on escape
     document.addEventListener('keydown', (e) => {

@@ -12,11 +12,14 @@ if (isset($_GET['toggle_status']) && isset($_GET['uid'])) {
     $stmt = $conn->prepare("UPDATE users SET status = ? WHERE id = ? AND role = 'faculty'");
     $stmt->bind_param("si", $new_status, $uid);
     if ($stmt->execute()) {
-        $success = "Access updated to <strong>" . $new_status . "</strong>.";
+        $_SESSION['success'] = "Access updated to <strong>" . $new_status . "</strong>.";
         logActivity($conn, $_SESSION['user_id'], 'Toggle Status', 'Changed faculty status to ' . $new_status . ' for user ID: ' . $uid);
     } else {
-        $error = "Failed to update status.";
+        $_SESSION['error'] = "Failed to update status.";
     }
+    $stmt->close();
+    header("Location: manage-faculty.php");
+    exit;
 }
 
 // Search / Filter
@@ -69,17 +72,7 @@ include 'includes/header.php';
     </div>
 </div>
 
-<!-- Alerts -->
-<?php if ($success): ?>
-<div class="mb-6 p-4 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-2xl text-xs font-bold flex items-center gap-3">
-    <i class="fas fa-circle-check"></i> <?= $success ?>
-</div>
-<?php endif; ?>
-<?php if ($error): ?>
-<div class="mb-6 p-4 bg-rose-50 border border-rose-100 text-rose-700 rounded-2xl text-xs font-bold flex items-center gap-3">
-    <i class="fas fa-circle-exclamation"></i> <?= $error ?>
-</div>
-<?php endif; ?>
+<!-- Toast Alerts managed by global header -->
 
 <!-- Filter Bar -->
 <div class="bg-white border border-slate-100 rounded-3xl p-5 mb-8 shadow-sm">
@@ -243,8 +236,8 @@ include 'includes/header.php';
 
 
 <!-- Details Modal -->
-<div id="detailsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden items-center justify-center p-6">
-    <div class="bg-white rounded-[2.5rem] w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-300">
+<div id="detailsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6 opacity-0 pointer-events-none transition-all duration-500 ease-out">
+    <div id="modalContent" class="bg-white rounded-[2.5rem] w-full max-w-md shadow-2xl overflow-hidden transform -translate-y-24 -translate-x-24 scale-90 opacity-0 transition-all duration-700 ease-out">
         <div class="p-10">
             <div class="flex justify-between items-center mb-8">
                 <div id="modalAvatar" class="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-xl font-black shadow-xl"></div>
@@ -289,6 +282,18 @@ include 'includes/header.php';
         </div>
     </div>
 </div>
+
+<style>
+    .modal-active {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+    .modal-active #modalContent {
+        opacity: 1 !important;
+        transform: translate(0, 0) scale(1) !important;
+        transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    }
+</style>
 
 <script>
 function toggleDropdown(name) {
@@ -350,14 +355,12 @@ function viewDetails(f) {
     }
 
     const modal = document.getElementById('detailsModal');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
+    modal.classList.add('modal-active');
 }
 
 function closeModal() {
     const modal = document.getElementById('detailsModal');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
+    modal.classList.remove('modal-active');
 }
 document.getElementById('detailsModal').addEventListener('click', function(e) {
     if(e.target === this) closeModal();

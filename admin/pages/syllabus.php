@@ -4,8 +4,6 @@ checkRole(['admin', 'superadmin']);
 $page_title = "Curriculum Management";
 include __DIR__ . '/../includes/header.php';
 
-$success = "";
-$error = "";
 $uploadDir = __DIR__ . '/../../upload/syllabus/';
 
 // Simple Logic
@@ -15,14 +13,28 @@ if (isset($_POST['add_syllabus'])) {
     if ($upload['success']) {
         $stmt = $conn->prepare("INSERT INTO syllabus (subject_name, academic_year, syllabus_file) VALUES (?, ?, ?)");
         $stmt->bind_param("sss", $subject, $year, $upload['filename']);
-        if ($stmt->execute()) $success = "Syllabus uploaded!"; else $error = "DB Error";
+        if ($stmt->execute()) {
+            $_SESSION['success'] = "Syllabus uploaded!";
+        } else {
+            $_SESSION['error'] = "DB Error: " . $conn->error;
+        }
+        $stmt->close();
+    } else {
+        $_SESSION['error'] = "Upload failed: " . $upload['error'];
     }
+    header("Location: syllabus.php");
+    exit;
 }
 
 if (isset($_GET['delete'])) {
     $id = intval($_GET['delete']);
-    $conn->query("DELETE FROM syllabus WHERE id=$id");
-    $success = "Deleted!";
+    if ($conn->query("DELETE FROM syllabus WHERE id=$id")) {
+        $_SESSION['success'] = "Deleted successfully!";
+    } else {
+        $_SESSION['error'] = "Delete failed.";
+    }
+    header("Location: syllabus.php");
+    exit;
 }
 
 $syllabus = $conn->query("SELECT * FROM syllabus ORDER BY id DESC");
@@ -33,7 +45,7 @@ $syllabus = $conn->query("SELECT * FROM syllabus ORDER BY id DESC");
         <span class="text-[10px] font-black uppercase tracking-[0.4em] text-primary-600 mb-2 block">Curriculum Control</span>
         <h2 class="text-4xl font-black text-slate-900 tracking-tight">Academic <span class="text-primary-500">Syllabus</span></h2>
     </div>
-    <button onclick="document.getElementById('add_modal').classList.remove('hidden')" class="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-600/10 flex items-center gap-3 active:scale-95">
+    <button onclick="openModal()" class="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-600/10 flex items-center gap-3 active:scale-95">
         <i class="fas fa-file-export"></i> Upload Syllabus
     </button>
 </div>
@@ -64,8 +76,8 @@ $syllabus = $conn->query("SELECT * FROM syllabus ORDER BY id DESC");
 </div>
 
 <!-- Add Modal -->
-<div id="add_modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-6">
-    <div class="bg-white rounded-[3rem] w-full max-w-lg shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-300">
+<div id="add_modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6 opacity-0 pointer-events-none transition-all duration-500 ease-out">
+    <div id="modalContent" class="bg-white rounded-[3rem] w-full max-w-lg shadow-2xl overflow-hidden transform -translate-y-24 -translate-x-24 scale-90 opacity-0 transition-all duration-700 ease-out">
         <form method="POST" enctype="multipart/form-data" class="p-10">
             <h3 class="text-2xl font-black text-slate-900 mb-8 tracking-tight">Add Syllabus</h3>
             <div class="space-y-6">
@@ -84,10 +96,34 @@ $syllabus = $conn->query("SELECT * FROM syllabus ORDER BY id DESC");
             </div>
             <div class="mt-10 flex gap-4">
                 <button type="submit" name="add_syllabus" class="flex-1 bg-indigo-600 text-white rounded-2xl py-4 font-black text-xs uppercase tracking-widest hover:bg-indigo-700 transition-all">Upload File</button>
-                <button type="button" onclick="document.getElementById('add_modal').classList.add('hidden')" class="px-8 bg-slate-100 text-slate-600 rounded-2xl py-4 font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all">Cancel</button>
+                <button type="button" onclick="closeModal()" class="px-8 bg-slate-100 text-slate-600 rounded-2xl py-4 font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all">Cancel</button>
             </div>
         </form>
     </div>
 </div>
+
+<style>
+    .modal-active {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+    .modal-active #modalContent {
+        opacity: 1 !important;
+        transform: translate(0, 0) scale(1) !important;
+        transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    }
+</style>
+
+<script>
+function openModal() {
+    document.getElementById('add_modal').classList.add('modal-active');
+}
+function closeModal() {
+    document.getElementById('add_modal').classList.remove('modal-active');
+}
+window.onclick = function(e) {
+    if(e.target.id === 'add_modal') closeModal();
+}
+</script>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>

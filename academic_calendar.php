@@ -1,5 +1,4 @@
 <?php include "includes/header.php"; ?>
-<?php include "admin/includes/db.php"; ?>
 
 <div class="bg-white min-h-screen pb-20">
     <!-- Hero -->
@@ -20,13 +19,26 @@
 
     <!-- Calendar View -->
     <section class="py-24 max-w-5xl mx-auto px-6">
-        <div class="bg-white rounded-[3.5rem] shadow-2xl shadow-slate-900/5 border border-slate-100 overflow-hidden">
-            <div class="p-12 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
-                <h3 class="text-2xl font-black text-slate-900 uppercase tracking-tight">Academic Year 2023-24</h3>
-                <a href="uploads/academic_calendar_23_24.pdf" target="_blank" class="px-6 py-3 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 transition-all">Download PDF</a>
+        <?php
+        $latest_cal = $conn->query("SELECT * FROM academic_calendars WHERE is_active = 1 ORDER BY created_at DESC LIMIT 1")->fetch_assoc();
+        if ($latest_cal):
+        ?>
+        <div class="bg-white rounded-[3.5rem] shadow-2xl shadow-slate-900/5 border border-slate-100 overflow-hidden mb-12">
+            <div class="p-12 border-b border-slate-50 flex flex-col md:flex-row justify-between items-center bg-slate-50/50 gap-6">
+                <div>
+                    <span class="text-[9px] font-black text-primary-600 uppercase tracking-[0.3em] mb-1 block">Current Schedule</span>
+                    <h3 class="text-2xl font-black text-slate-900 uppercase tracking-tight"><?= e($latest_cal['title']) ?> (<?= e($latest_cal['academic_year']) ?>)</h3>
+                </div>
+                <a href="<?= e($latest_cal['file_path']) ?>" target="_blank" class="px-8 py-4 bg-slate-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl shadow-slate-900/10 flex items-center gap-3">
+                    <i class="fas fa-download"></i> Download PDF
+                </a>
             </div>
             
+            <!-- Optional: Key Highlights (Keeping the static ones for now as they look good) -->
             <div class="divide-y divide-slate-50">
+                <div class="p-8 bg-blue-50/30 text-center">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">General Highlights</p>
+                </div>
                 <?php 
                 $events = [
                     ['date' => 'June 15, 2023', 'event' => 'Commencement of Academic Session', 'type' => 'Academic'],
@@ -63,6 +75,43 @@
                 <?php endforeach; ?>
             </div>
         </div>
+        <?php else: ?>
+        <div class="bg-white rounded-[3.5rem] p-24 text-center border border-slate-100 shadow-xl">
+            <div class="w-20 h-20 bg-slate-50 rounded-3xl flex items-center justify-center mx-auto mb-6 text-slate-200">
+                <i class="fas fa-calendar-xmark text-4xl"></i>
+            </div>
+            <h3 class="text-xl font-black text-slate-900 uppercase tracking-tight mb-2">No Calendar Available</h3>
+            <p class="text-slate-400 text-sm font-medium">The academic calendar for the current year has not been uploaded yet.</p>
+        </div>
+        <?php endif; ?>
+
+        <!-- Archives / Previous Years -->
+        <?php
+        $archives = $conn->query("SELECT * FROM academic_calendars WHERE is_active = 1 AND id != '" . ($latest_cal['id'] ?? 0) . "' ORDER BY academic_year DESC")->fetch_all(MYSQLI_ASSOC);
+        if ($archives):
+        ?>
+        <div class="mt-20">
+            <h4 class="text-xs font-black text-slate-400 uppercase tracking-[0.4em] mb-8 text-center">Previous Academic Years</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <?php foreach ($archives as $arch): ?>
+                <div class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-slate-50 text-slate-400 rounded-2xl flex items-center justify-center text-lg group-hover:bg-rose-50 group-hover:text-rose-500 transition-colors">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-black text-slate-900"><?= e($arch['academic_year']) ?></p>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Archive</p>
+                        </div>
+                    </div>
+                    <a href="<?= e($arch['file_path']) ?>" target="_blank" class="w-10 h-10 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center hover:bg-slate-900 hover:text-white transition-all">
+                        <i class="fas fa-download text-xs"></i>
+                    </a>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endif; ?>
     </section>
 </div>
 

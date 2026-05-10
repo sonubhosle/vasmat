@@ -270,11 +270,60 @@
 
  
 <?php require 'welcome.php'; ?>
-<script src="assets/js/navScript.js"></script>
-<script src="assets/js/welcome.js"></script>
-<script src="assets/js/dropdown.js"></script>
+    <!-- Toast Notifications Infrastructure -->
+    <div id="toast-container" class="toast-container"></div>
 
+    <script>
+    function showToast(message, type = 'info') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast-item toast-${type}`;
+        
+        const icons = {
+            success: 'fa-check-circle',
+            error: 'fa-exclamation-circle',
+            info: 'fa-info-circle'
+        };
 
+        toast.innerHTML = `
+            <div class="toast-icon">
+                <i class="fas ${icons[type] || icons.info}"></i>
+            </div>
+            <div class="flex-1">
+                <p class="text-xs font-black text-slate-900 uppercase tracking-widest mb-0.5">${type}</p>
+                <p class="text-[11px] font-bold text-slate-500 leading-snug">${message}</p>
+            </div>
+        `;
 
+        container.appendChild(toast);
+        
+        // Force reflow
+        toast.offsetHeight;
+        toast.classList.add('show');
+
+        // Auto remove
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 600);
+        }, 4000);
+    }
+
+    // Global Session Toasts
+    document.addEventListener('DOMContentLoaded', () => {
+        <?php if (isset($_SESSION['success'])): ?>
+            showToast("<?= $_SESSION['success'] ?>", 'success');
+            <?php unset($_SESSION['success']); ?>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['error'])): ?>
+            showToast("<?= $_SESSION['error'] ?>", 'error');
+            <?php unset($_SESSION['error']); ?>
+        <?php endif; ?>
+    });
+    </script>
+
+    <script src="assets/js/navScript.js"></script>
+    <script src="assets/js/welcome.js"></script>
+    <script src="assets/js/dropdown.js"></script>
 </body>
 </html>

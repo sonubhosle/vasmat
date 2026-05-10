@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../includes/auth_helper.php';
-checkRole('superadmin');
+require_once __DIR__ . '/includes/header.php';
 
 // Fetch stats
 $admin_count = $conn->query("SELECT COUNT(*) FROM users WHERE role = 'admin'")->fetch_row()[0];
@@ -13,159 +12,186 @@ $logs = $conn->query("
     FROM activity_logs al 
     LEFT JOIN users u ON al.user_id = u.id 
     ORDER BY al.created_at DESC 
-    LIMIT 15
+    LIMIT 10
 ")->fetch_all(MYSQLI_ASSOC);
-
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Admin Dashboard | <?= SITE_NAME ?></title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Outfit', sans-serif; }</style>
-</head>
-<body class="bg-slate-900 min-h-screen text-slate-300">
-    <div class="flex">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-slate-950 min-h-screen p-6 flex flex-col fixed h-full border-r border-slate-800">
-            <div class="flex items-center gap-3 mb-12">
-                <div class="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-amber-500/20">M</div>
-                <div>
-                    <h1 class="text-white font-black text-sm uppercase tracking-tight">MIT College</h1>
-                    <p class="text-[10px] font-bold text-amber-500/60 uppercase tracking-widest">Super Admin</p>
-                </div>
+
+<!-- Header Section -->
+<div class="mb-12">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+            <span class="text-[10px] font-black uppercase tracking-[0.4em] text-amber-600 mb-2 block">System Intelligence</span>
+            <h2 class="text-4xl font-black text-slate-900 tracking-tight">Root <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-amber-700">Overview</span></h2>
+            <p class="text-slate-500 mt-2 text-sm font-medium">Welcome back, Master Administrator.</p>
+        </div>
+        
+        <div class="flex items-center gap-4 bg-white p-2 pr-6 rounded-2xl shadow-sm border border-slate-100">
+            <div class="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-amber-600 shadow-inner">
+                <i class="fas fa-microchip text-lg"></i>
             </div>
+            <div>
+                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">System Time</p>
+                <p class="text-xs font-bold text-slate-800 leading-none"><?= date('H:i:s • d M, Y') ?></p>
+            </div>
+        </div>
+    </div>
+</div>
 
-            <nav class="flex-1 space-y-2">
-                <a href="dashboard.php" class="flex items-center gap-3 px-4 py-3 bg-amber-500 text-white rounded-xl font-bold text-sm transition-all shadow-lg shadow-amber-500/20">
-                    <i class="fas fa-shield-alt"></i> System Overview
-                </a>
-                <a href="manage-admins.php" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-900 rounded-xl font-bold text-sm transition-all">
-                    <i class="fas fa-user-shield"></i> Manage Admins
-                </a>
-                <a href="faculty-approvals.php" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-900 rounded-xl font-bold text-sm transition-all">
-                    <i class="fas fa-users-cog"></i> Faculty Approvals
-                </a>
-                <a href="system-logs.php" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-900 rounded-xl font-bold text-sm transition-all">
-                    <i class="fas fa-terminal"></i> Activity Logs
-                </a>
-                <a href="database-backup.php" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-900 rounded-xl font-bold text-sm transition-all">
-                    <i class="fas fa-database"></i> Database Backup
-                </a>
-            </nav>
+<!-- Stats Bento Grid -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+    <div class="stat-card group flex items-center gap-5">
+        <div class="w-14 h-14 flex-shrink-0 bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-all duration-300">
+            <i class="fas fa-user-shield text-xl"></i>
+        </div>
+        <div class="min-w-0">
+            <p class="text-3xl font-black text-slate-900 leading-none mb-1"><?= $admin_count ?></p>
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest truncate">Admins</p>
+        </div>
+    </div>
 
-            <div class="mt-auto">
-                <a href="../auth/superadmin-logout.php" class="flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-400/10 rounded-xl font-bold text-sm transition-all">
-                    <i class="fas fa-sign-out-alt"></i> Logout
+    <div class="stat-card group flex items-center gap-5">
+        <div class="w-14 h-14 flex-shrink-0 bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-all duration-300">
+            <i class="fas fa-users-gear text-xl"></i>
+        </div>
+        <div class="min-w-0">
+            <p class="text-3xl font-black text-slate-900 leading-none mb-1"><?= $faculty_count ?></p>
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest truncate">Faculties</p>
+        </div>
+    </div>
+
+    <div class="stat-card group flex items-center gap-5">
+        <div class="w-14 h-14 flex-shrink-0 bg-gradient-to-br from-amber-400 to-orange-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:scale-110 transition-all duration-300">
+            <i class="fas fa-terminal text-xl"></i>
+        </div>
+        <div class="min-w-0">
+            <p class="text-3xl font-black text-amber-600 leading-none mb-1"><?= $log_count ?></p>
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest truncate">System Logs</p>
+        </div>
+    </div>
+
+    <div class="stat-card group flex items-center gap-5">
+        <div class="w-14 h-14 flex-shrink-0 bg-gradient-to-br from-rose-500 to-red-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-rose-500/20 group-hover:scale-110 transition-all duration-300">
+            <i class="fas fa-bolt text-xl"></i>
+        </div>
+        <div class="min-w-0">
+            <p class="text-3xl font-black text-slate-900 leading-none mb-1">99.9%</p>
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest truncate">Uptime</p>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Activity Table -->
+    <div class="lg:col-span-2">
+        <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden h-full">
+            <div class="p-8 border-b border-slate-50 flex justify-between items-center bg-slate-50/30">
+                <div>
+                    <h3 class="text-xl font-black text-slate-900 tracking-tight">Access Terminal</h3>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Live Activity Feed</p>
+                </div>
+                <a href="system-logs.php" class="group flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all duration-300 shadow-sm">
+                    Full Audit <i class="fas fa-arrow-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
                 </a>
             </div>
-        </aside>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-slate-50/50">
+                            <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Master/User</th>
+                            <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">System Action</th>
+                            <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-50">
+                        <?php if (empty($logs)): ?>
+                            <tr>
+                                <td colspan="3" class="px-8 py-24 text-center">
+                                    <i class="fas fa-ghost text-4xl text-slate-100 mb-4 block"></i>
+                                    <p class="text-slate-400 font-bold text-xs uppercase tracking-widest">No activity detected</p>
+                                </td>
+                            </tr>
+                        <?php else: ?>
+                            <?php foreach ($logs as $log): ?>
+                            <tr class="hover:bg-slate-50/50 transition-all group">
+                                <td class="px-8 py-6">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-11 h-11 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 font-black text-xs border border-slate-100">
+                                            <?= strtoupper(substr($log['user_name'] ?? 'S', 0, 1)) ?>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-slate-900"><?= e($log['user_name'] ?? 'System') ?></p>
+                                            <p class="text-[9px] font-black text-amber-600 uppercase tracking-widest"><?= e($log['user_role'] ?? 'System') ?></p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-bold text-slate-700"><?= e($log['action']) ?></span>
+                                        <span class="text-[10px] text-slate-400 line-clamp-1 italic"><?= e($log['description']) ?></span>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6 text-right font-mono text-[10px] text-slate-400">
+                                    <?= date('H:i:s • d/m/y', strtotime($log['created_at'])) ?>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-        <!-- Main Content -->
-        <main class="flex-1 ml-64 p-10 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-slate-800 via-slate-900 to-slate-950">
-            <header class="flex justify-between items-center mb-10">
-                <div>
-                    <h2 class="text-3xl font-black text-white tracking-tight">System Control Center</h2>
-                    <p class="text-slate-500 font-medium mt-1">Full override access & activity monitoring.</p>
+    <!-- Right Sidebar Info -->
+    <div class="space-y-8">
+        <!-- Infrastructure Card -->
+        <div class="bg-secondary p-8 rounded-[2.5rem] text-white shadow-2xl shadow-slate-900/10 border border-slate-800 relative overflow-hidden group">
+            <div class="absolute -right-12 -bottom-12 opacity-5 group-hover:scale-110 transition-transform duration-500">
+                <i class="fas fa-fingerprint text-[15rem]"></i>
+            </div>
+            
+            <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-10 h-10 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/20">
+                        <i class="fas fa-shield-check text-amber-400"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black text-amber-400 uppercase tracking-[0.2em]">Master Key Status</p>
+                        <h4 class="text-xs font-bold text-white/70 tracking-tight">Encryption Active</h4>
+                    </div>
                 </div>
-                <div class="flex gap-4">
-                    <div class="bg-slate-800/50 backdrop-blur-md p-2 pr-6 rounded-2xl border border-slate-700 shadow-xl flex items-center gap-3">
-                        <div class="w-10 h-10 bg-amber-500/20 text-amber-500 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-crown"></i>
-                        </div>
-                        <div>
-                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Master User</p>
-                            <p class="text-xs font-bold text-white"><?= e($_SESSION['user_name']) ?></p>
+
+                <div class="space-y-4">
+                    <div class="p-4 bg-white/5 rounded-2xl border border-white/5 backdrop-blur-sm">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-white/90">Mainframe Core</span>
+                            <span class="flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+                                <span class="text-[9px] font-black text-emerald-400 uppercase">Synchronized</span>
+                            </span>
                         </div>
                     </div>
                 </div>
-            </header>
-
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-                <div class="bg-slate-800/40 backdrop-blur-md p-8 rounded-[2.5rem] border border-slate-700/50">
-                    <p class="text-slate-500 font-black text-[10px] uppercase tracking-widest mb-2">Admins</p>
-                    <p class="text-3xl font-black text-white"><?= $admin_count ?></p>
-                </div>
-                <div class="bg-slate-800/40 backdrop-blur-md p-8 rounded-[2.5rem] border border-slate-700/50">
-                    <p class="text-slate-500 font-black text-[10px] uppercase tracking-widest mb-2">Faculty Users</p>
-                    <p class="text-3xl font-black text-white"><?= $faculty_count ?></p>
-                </div>
-                <div class="bg-slate-800/40 backdrop-blur-md p-8 rounded-[2.5rem] border border-slate-700/50">
-                    <p class="text-slate-500 font-black text-[10px] uppercase tracking-widest mb-2">Total Logs</p>
-                    <p class="text-3xl font-black text-amber-500"><?= $log_count ?></p>
-                </div>
-                <div class="bg-gradient-to-br from-red-500 to-rose-600 p-8 rounded-[2.5rem] text-white shadow-xl shadow-red-500/20">
-                    <p class="text-red-100 font-black text-[10px] uppercase tracking-widest mb-2">Server Load</p>
-                    <p class="text-xl font-black">Minimal</p>
-                </div>
             </div>
+        </div>
 
-            <!-- System Logs -->
-            <div class="bg-slate-800/30 backdrop-blur-md rounded-[2.5rem] border border-slate-700/50 overflow-hidden shadow-2xl">
-                <div class="p-8 border-b border-slate-700/50 flex justify-between items-center bg-slate-800/50">
-                    <h3 class="text-lg font-black text-white uppercase tracking-tight flex items-center gap-3">
-                        <i class="fas fa-terminal text-amber-500"></i> Recent Activity Logs
-                    </h3>
-                    <button class="text-xs font-bold text-slate-400 hover:text-white transition-all uppercase tracking-widest border border-slate-700 px-4 py-2 rounded-xl">Clear All Logs</button>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead>
-                            <tr class="bg-slate-900/50">
-                                <th class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Timestamp</th>
-                                <th class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">User</th>
-                                <th class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Role</th>
-                                <th class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Action</th>
-                                <th class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Description</th>
-                                <th class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">IP Address</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-800/50">
-                            <?php if (empty($logs)): ?>
-                                <tr>
-                                    <td colspan="6" class="px-8 py-10 text-center text-slate-600 font-medium">No activity recorded yet.</td>
-                                </tr>
-                            <?php else: ?>
-                                <?php foreach ($logs as $log): ?>
-                                <tr class="hover:bg-slate-800/40 transition-all">
-                                    <td class="px-8 py-5">
-                                        <span class="text-xs font-bold text-slate-400"><?= date('Y-m-d H:i:s', strtotime($log['created_at'])) ?></span>
-                                    </td>
-                                    <td class="px-8 py-5">
-                                        <span class="text-sm font-bold text-slate-200"><?= e($log['user_name'] ?? 'System') ?></span>
-                                    </td>
-                                    <td class="px-8 py-5">
-                                        <?php
-                                        $role_colors = [
-                                            'superadmin' => 'text-amber-500',
-                                            'admin' => 'text-blue-400',
-                                            'faculty' => 'text-green-400'
-                                        ];
-                                        ?>
-                                        <span class="text-[10px] font-black uppercase tracking-widest <?= $role_colors[$log['user_role']] ?? 'text-slate-500' ?>"><?= e($log['user_role'] ?? 'N/A') ?></span>
-                                    </td>
-                                    <td class="px-8 py-5">
-                                        <span class="px-3 py-1 bg-slate-700/50 text-[10px] font-black text-slate-300 rounded-full uppercase tracking-widest border border-slate-600/50"><?= e($log['action']) ?></span>
-                                    </td>
-                                    <td class="px-8 py-5">
-                                        <span class="text-xs font-medium text-slate-400"><?= e($log['description']) ?></span>
-                                    </td>
-                                    <td class="px-8 py-5">
-                                        <code class="text-[10px] bg-slate-900 px-2 py-1 rounded text-amber-500/70"><?= e($log['ip_address']) ?></code>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
+        <!-- Quick Controls -->
+        <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
+            <h3 class="text-lg font-black text-slate-900 tracking-tight mb-8">Quick Terminal</h3>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <a href="manage-admins.php" class="p-5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-amber-200 transition-all group">
+                    <i class="fas fa-user-plus text-slate-300 group-hover:text-amber-500 mb-3 block text-xl"></i>
+                    <p class="text-[9px] font-black text-slate-400 group-hover:text-slate-600 uppercase tracking-widest">New Admin</p>
+                </a>
+                <a href="system-logs.php" class="p-5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-blue-200 transition-all group">
+                    <i class="fas fa-file-invoice text-slate-300 group-hover:text-blue-500 mb-3 block text-xl"></i>
+                    <p class="text-[9px] font-black text-slate-400 group-hover:text-slate-600 uppercase tracking-widest">Audit Logs</p>
+                </a>
             </div>
-        </main>
+        </div>
     </div>
-</body>
-</html>
+</div>
+
+<?php require_once __DIR__ . '/includes/footer.php'; ?>

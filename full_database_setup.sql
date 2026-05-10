@@ -139,10 +139,6 @@ CREATE TABLE IF NOT EXISTS `activity_logs` (
 -- INITIAL DATA
 -- --------------------------------------------------------
 
--- Insert the primary Super Admin (Email: superadmin@college.edu | Password: password123)
--- This is the logic for a clean, fresh setup.
-INSERT IGNORE INTO `users` (`name`, `email`, `password`, `role`, `status`) 
-VALUES ('Super Admin', 'superadmin@college.edu', '$2y$10$D.yq76.4k/V/j.K9p1BfRe5uJ7I.X/K8f2f/3t4XW5eFfGfHfIfJf', 'superadmin', 'active');
 
 -- 10. NAAC Documents Table
 CREATE TABLE IF NOT EXISTS `naac_docs` (

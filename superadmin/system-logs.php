@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../includes/auth_helper.php';
-checkRole('superadmin');
+require_once __DIR__ . '/includes/header.php';
 
 $success = '';
 
@@ -12,92 +11,132 @@ if (isset($_POST['clear_logs'])) {
     }
 }
 
-// Fetch all logs
+// Pagination Logic
+$limit = 15;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$page = max(1, $page);
+$offset = ($page - 1) * $limit;
+
+// Fetch total count
+$total_result = $conn->query("SELECT COUNT(*) FROM activity_logs");
+$total_rows = $total_result->fetch_row()[0];
+$total_pages = ceil($total_rows / $limit);
+
+// Fetch paginated logs
 $logs = $conn->query("
     SELECT al.*, u.name as user_name, u.role as user_role 
     FROM activity_logs al 
     LEFT JOIN users u ON al.user_id = u.id 
     ORDER BY al.created_at DESC
+    LIMIT $limit OFFSET $offset
 ")->fetch_all(MYSQLI_ASSOC);
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Logs | <?= SITE_NAME ?></title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Outfit', sans-serif; }</style>
-</head>
-<body class="bg-slate-900 min-h-screen text-slate-300">
-    <div class="flex">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-slate-950 min-h-screen p-6 flex flex-col fixed h-full border-r border-slate-800">
-            <h1 class="text-white font-black text-sm uppercase tracking-tight mb-12">System Control</h1>
-            <nav class="flex-1 space-y-2">
-                <a href="dashboard.php" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-900 rounded-xl font-bold text-sm">Dashboard</a>
-                <a href="manage-admins.php" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-900 rounded-xl font-bold text-sm">Admins</a>
-                <a href="faculty-approvals.php" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-900 rounded-xl font-bold text-sm">Faculty Approvals</a>
-                <a href="system-logs.php" class="flex items-center gap-3 px-4 py-3 bg-amber-500 text-white rounded-xl font-bold text-sm transition-all shadow-lg shadow-amber-500/20">System Logs</a>
-                <a href="database-backup.php" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-900 rounded-xl font-bold text-sm transition-all">Database Backup</a>
-            </nav>
-        </aside>
 
-        <main class="flex-1 ml-64 p-10">
-            <header class="flex justify-between items-center mb-10">
-                <div>
-                    <h2 class="text-3xl font-black text-white tracking-tight">System Logs</h2>
-                    <p class="text-slate-500 font-medium mt-1">Monitor all administrative and faculty activities.</p>
-                </div>
-                <form action="" method="POST" onsubmit="return confirm('Are you sure you want to clear all logs? This cannot be undone.');">
-                    <button type="submit" name="clear_logs" class="px-6 py-3 bg-red-600/10 text-red-500 border border-red-600/20 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all">
-                        Clear All Logs
-                    </button>
-                </form>
-            </header>
-
-            <?php if ($success): ?><div class="bg-emerald-500/20 text-emerald-400 p-4 rounded-xl mb-6 border border-emerald-500/30 font-bold"><?= $success ?></div><?php endif; ?>
-
-            <div class="bg-slate-800/30 backdrop-blur-md rounded-[2.5rem] border border-slate-700/50 overflow-hidden shadow-2xl">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead>
-                            <tr class="bg-slate-900/50">
-                                <th class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Timestamp</th>
-                                <th class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">User</th>
-                                <th class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Action</th>
-                                <th class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Description</th>
-                                <th class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">IP Address</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-800/50">
-                            <?php if (empty($logs)): ?>
-                                <tr><td colspan="5" class="px-8 py-10 text-center text-slate-600 font-medium">No logs available.</td></tr>
-                            <?php else: ?>
-                                <?php foreach ($logs as $log): ?>
-                                <tr class="hover:bg-slate-800/40 transition-all">
-                                    <td class="px-8 py-5 text-xs text-slate-400"><?= $log['created_at'] ?></td>
-                                    <td class="px-8 py-5">
-                                        <div class="flex flex-col">
-                                            <span class="text-sm font-bold text-slate-200"><?= e($log['user_name'] ?? 'System') ?></span>
-                                            <span class="text-[10px] uppercase tracking-tighter text-slate-500 font-black"><?= e($log['user_role'] ?? 'N/A') ?></span>
-                                        </div>
-                                    </td>
-                                    <td class="px-8 py-5">
-                                        <span class="px-3 py-1 bg-slate-900 rounded-full text-[10px] font-black uppercase text-amber-500 tracking-widest"><?= e($log['action']) ?></span>
-                                    </td>
-                                    <td class="px-8 py-5 text-sm"><?= e($log['description']) ?></td>
-                                    <td class="px-8 py-5"><code class="text-[10px] text-slate-500"><?= e($log['ip_address']) ?></code></td>
-                                </tr>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </main>
+<div class="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div>
+        <span class="text-[10px] font-black uppercase tracking-[0.4em] text-amber-600 mb-2 block">System Forensics</span>
+        <h2 class="text-4xl font-black text-slate-900 tracking-tight">Activity <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-fuchsia-600">Audit Logs</span></h2>
+        <p class="text-slate-500 mt-2 text-sm font-medium">Trace every administrative action and security event within the ecosystem.</p>
     </div>
-</body>
-</html>
+    <form action="" method="POST" onsubmit="return confirm('CRITICAL: Clear all audit data? This action is irreversible.');">
+        <button type="submit" name="clear_logs" class="px-6 py-3 bg-white border border-slate-200 text-rose-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-500 hover:text-white hover:border-rose-500 transition-all shadow-sm">
+            <i class="fas fa-trash-can mr-2"></i> Purge All Logs
+        </button>
+    </form>
+</div>
+
+<?php if ($success): ?>
+<div class="mb-8 p-4 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center gap-4 animate-fade-in">
+    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600">
+        <i class="fas fa-broom"></i>
+    </div>
+    <p class="text-sm font-bold text-emerald-800"><?= $success ?></p>
+</div>
+<?php endif; ?>
+
+<div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden mb-8">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left">
+            <thead>
+                <tr class="bg-slate-50/50">
+                    <th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Temporal Node</th>
+                    <th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Principal Identity</th>
+                    <th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Protocol Action</th>
+                    <th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Terminal Source</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-50">
+                <?php if (empty($logs)): ?>
+                <tr>
+                    <td colspan="4" class="px-8 py-24 text-center">
+                        <i class="fas fa-terminal text-4xl text-slate-200 mb-4 block"></i>
+                        <p class="text-slate-400 font-bold text-xs uppercase tracking-widest">Buffer Empty: No activities recorded</p>
+                    </td>
+                </tr>
+                <?php else: ?>
+                    <?php foreach ($logs as $log): ?>
+                    <tr class="hover:bg-slate-50/50 transition-all group">
+                        <td class="px-8 py-6">
+                            <p class="text-xs font-bold text-slate-600"><?= date('H:i:s', strtotime($log['created_at'])) ?></p>
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest"><?= date('d M, Y', strtotime($log['created_at'])) ?></p>
+                        </td>
+                        <td class="px-8 py-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-11 h-11 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 font-black text-xs border border-slate-100 shadow-inner">
+                                    <?= strtoupper(substr($log['user_name'] ?? 'S', 0, 1)) ?>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-900"><?= e($log['user_name'] ?? 'System') ?></p>
+                                    <p class="text-[9px] font-black text-primary-600 uppercase tracking-widest"><?= e($log['user_role'] ?? 'Kernel') ?></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-8 py-6">
+                            <div class="flex flex-col">
+                                <span class="text-sm font-bold text-slate-800"><?= e($log['action']) ?></span>
+                                <span class="text-[10px] text-slate-400 italic mt-0.5"><?= e($log['description']) ?></span>
+                            </div>
+                        </td>
+                        <td class="px-8 py-6 text-right">
+                            <code class="text-[10px] bg-slate-50 px-2 py-1 rounded text-amber-600 font-mono border border-slate-100"><?= e($log['ip_address']) ?></code>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination Controls -->
+    <?php if ($total_pages > 1): ?>
+    <div class="px-8 py-6 bg-slate-50/30 border-t border-slate-50 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+            Showing <span class="text-slate-900"><?= $offset + 1 ?>-<?= min($offset + $limit, $total_rows) ?></span> of <span class="text-slate-900"><?= $total_rows ?></span> logs
+        </p>
+        <div class="flex items-center gap-2">
+            <?php if ($page > 1): ?>
+                <a href="?page=<?= $page - 1 ?>" class="w-10 h-10 flex items-center justify-center bg-white border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all shadow-sm">
+                    <i class="fas fa-chevron-left text-xs"></i>
+                </a>
+            <?php endif; ?>
+
+            <?php
+            $start_loop = max(1, $page - 2);
+            $end_loop = min($total_pages, $page + 2);
+            for ($i = $start_loop; $i <= $end_loop; $i++): ?>
+                <a href="?page=<?= $i ?>" class="w-10 h-10 flex items-center justify-center <?= $i == $page ? 'bg-amber-500 text-white border-amber-500 shadow-lg shadow-amber-500/20' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50' ?> rounded-xl text-xs font-black transition-all">
+                    <?= $i ?>
+                </a>
+            <?php endfor; ?>
+
+            <?php if ($page < $total_pages): ?>
+                <a href="?page=<?= $page + 1 ?>" class="w-10 h-10 flex items-center justify-center bg-white border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all shadow-sm">
+                    <i class="fas fa-chevron-right text-xs"></i>
+                </a>
+            <?php endif; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+</div>
+
+<?php require_once __DIR__ . '/includes/footer.php'; ?>

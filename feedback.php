@@ -111,7 +111,7 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
     
     const rating = document.getElementById('ratingInput').value;
     if(rating == 0) {
-        alert('Please select a rating before submitting.');
+        showToast('Please select a rating before submitting.', 'error');
         return;
     }
 
@@ -127,16 +127,16 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
     .then(response => response.json())
     .then(data => {
         if(data.status === 'success') {
-            alert(data.message);
+            showToast(data.message, 'success');
             this.reset();
             setRating(0);
         } else {
-            alert(data.message);
+            showToast(data.message, 'error');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('An error occurred. Please try again.');
+        showToast('An error occurred. Please try again.', 'error');
     })
     .finally(() => {
         submitBtn.disabled = false;

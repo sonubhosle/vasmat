@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../includes/auth_helper.php';
-checkRole('superadmin');
+require_once __DIR__ . '/includes/header.php';
 
 $success = '';
 $error = '';
@@ -22,69 +21,80 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
 
 $admins = $conn->query("SELECT * FROM users WHERE role = 'admin' ORDER BY created_at DESC")->fetch_all(MYSQLI_ASSOC);
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Admins | <?= SITE_NAME ?></title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Outfit', sans-serif; }</style>
-</head>
-<body class="bg-slate-900 min-h-screen text-slate-300">
-    <div class="flex">
-        <!-- Sidebar - Same as Super Admin Dashboard -->
-        <aside class="w-64 bg-slate-950 min-h-screen p-6 flex flex-col fixed h-full border-r border-slate-800">
-            <h1 class="text-white font-black text-sm uppercase tracking-tight mb-12">System Control</h1>
-            <nav class="flex-1 space-y-2">
-                <a href="dashboard.php" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-900 rounded-xl font-bold text-sm transition-all">Overview</a>
-                <a href="manage-admins.php" class="flex items-center gap-3 px-4 py-3 bg-amber-500 text-white rounded-xl font-bold text-sm">Admins</a>
-                <a href="faculty-approvals.php" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-900 rounded-xl font-bold text-sm transition-all">Faculty Approvals</a>
-            </nav>
-        </aside>
 
-        <main class="flex-1 ml-64 p-10">
-            <header class="mb-10">
-                <h2 class="text-3xl font-black text-white tracking-tight">Admin Management</h2>
-                <p class="text-slate-500 font-medium">Approve or Revoke administrative privileges.</p>
-            </header>
-
-            <?php if ($success): ?><div class="bg-emerald-500/20 text-emerald-400 p-4 rounded-xl mb-6 border border-emerald-500/30 font-bold"><?= $success ?></div><?php endif; ?>
-
-            <div class="bg-slate-800/30 backdrop-blur-md rounded-[2.5rem] border border-slate-700/50 overflow-hidden shadow-2xl">
-                <table class="w-full text-left">
-                    <thead>
-                        <tr class="bg-slate-900/50">
-                            <th class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Name</th>
-                            <th class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Email</th>
-                            <th class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Status</th>
-                            <th class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-800/50">
-                        <?php foreach ($admins as $a): ?>
-                        <tr class="hover:bg-slate-800/40 transition-all">
-                            <td class="px-8 py-5 font-bold text-slate-200"><?= e($a['name']) ?></td>
-                            <td class="px-8 py-5 text-sm"><?= e($a['email']) ?></td>
-                            <td class="px-8 py-5">
-                                <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest <?= $a['status'] === 'active' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400' ?>">
-                                    <?= $a['status'] ?>
-                                </span>
-                            </td>
-                            <td class="px-8 py-5 text-right">
-                                <?php if ($a['status'] === 'pending'): ?>
-                                    <a href="?action=approve&id=<?= $a['id'] ?>" class="px-4 py-2 bg-emerald-600 text-white rounded-xl text-[10px] font-black uppercase hover:bg-emerald-700">Approve</a>
-                                <?php endif; ?>
-                                <a href="?action=reject&id=<?= $a['id'] ?>" class="px-4 py-2 bg-red-600 text-white rounded-xl text-[10px] font-black uppercase hover:bg-red-700 ml-2">Reject</a>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        </main>
+<div class="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div>
+        <span class="text-[10px] font-black uppercase tracking-[0.4em] text-amber-600 mb-2 block">System Security</span>
+        <h2 class="text-4xl font-black text-slate-900 tracking-tight">Manage <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Admins</span></h2>
+        <p class="text-slate-500 mt-2 text-sm font-medium">Authorize or revoke institutional administrative privileges.</p>
     </div>
-</body>
-</html>
+</div>
+
+<?php if ($success): ?>
+<div class="mb-8 p-4 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center gap-4 animate-fade-in">
+    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+        <i class="fas fa-check-circle"></i>
+    </div>
+    <p class="text-sm font-bold text-emerald-800"><?= $success ?></p>
+</div>
+<?php endif; ?>
+
+<div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left">
+            <thead>
+                <tr class="bg-slate-50/50">
+                    <th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Administrator</th>
+                    <th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Contact Identity</th>
+                    <th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Access Status</th>
+                    <th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Root Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-50">
+                <?php if (empty($admins)): ?>
+                <tr>
+                    <td colspan="4" class="px-8 py-24 text-center">
+                        <p class="text-slate-400 font-bold text-xs uppercase tracking-widest">No administrative accounts found</p>
+                    </td>
+                </tr>
+                <?php else: ?>
+                    <?php foreach ($admins as $a): ?>
+                    <tr class="hover:bg-slate-50/50 transition-all group">
+                        <td class="px-8 py-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-11 h-11 bg-slate-50 rounded-xl flex items-center justify-center text-blue-600 font-black text-xs border border-slate-100 shadow-inner">
+                                    <?= strtoupper(substr($a['name'], 0, 1)) ?>
+                                </div>
+                                <p class="text-sm font-bold text-slate-900"><?= e($a['name']) ?></p>
+                            </div>
+                        </td>
+                        <td class="px-8 py-6">
+                            <p class="text-sm font-medium text-slate-600"><?= e($a['email']) ?></p>
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-tighter mt-1">Registered: <?= date('d M Y', strtotime($a['created_at'])) ?></p>
+                        </td>
+                        <td class="px-8 py-6">
+                            <?php if ($a['status'] === 'active'): ?>
+                                <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[9px] font-black rounded-lg uppercase border border-emerald-100">Authorized</span>
+                            <?php elseif ($a['status'] === 'pending'): ?>
+                                <span class="px-3 py-1 bg-amber-50 text-amber-600 text-[9px] font-black rounded-lg uppercase border border-amber-100">Pending Audit</span>
+                            <?php else: ?>
+                                <span class="px-3 py-1 bg-rose-50 text-rose-600 text-[9px] font-black rounded-lg uppercase border border-rose-100"><?= e($a['status']) ?></span>
+                            <?php endif; ?>
+                        </td>
+                        <td class="px-8 py-6 text-right">
+                            <div class="flex justify-end gap-3">
+                                <?php if ($a['status'] === 'pending'): ?>
+                                    <a href="?action=approve&id=<?= $a['id'] ?>" class="px-5 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-sm">Authorize</a>
+                                <?php endif; ?>
+                                <a href="?action=reject&id=<?= $a['id'] ?>" class="px-5 py-2 bg-white border border-slate-200 text-slate-400 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-600 hover:text-white hover:border-rose-600 transition-all shadow-sm">Revoke</a>
+                            </div>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<?php require_once __DIR__ . '/includes/footer.php'; ?>

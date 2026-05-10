@@ -119,12 +119,80 @@ $current_page = basename($_SERVER['PHP_SELF']);
             .sidebar-hidden { transform: translateX(-100%); }
             .sidebar-visible { transform: translateX(0); }
         }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            pointer-events: none;
+        }
+
+        .toast-item {
+            pointer-events: auto;
+            min-width: 300px;
+            max-width: 450px;
+            background: white;
+            padding: 1.25rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transform: translateX(120%);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+        }
+
+        .toast-item.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .toast-success .toast-icon { background: #ecfdf5; color: #10b981; }
+        .toast-error .toast-icon { background: #fef2f2; color: #ef4444; }
+        .toast-info .toast-icon { background: #eff6ff; color: #3b82f6; }
+
+        /* Notification Dropdown Animation */
+        #notification-dropdown {
+            display: block !important;
+            visibility: hidden;
+            opacity: 0;
+            transform: translateY(10px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+        }
+        #notification-dropdown.dropdown-active {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
     </style>
 </head>
 <body class="min-h-screen text-slate-900 overflow-x-hidden selection:bg-primary-100 selection:text-primary-700">
 
     <!-- Mobile Overlay -->
     <div id="sidebar-overlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[40] opacity-0 pointer-events-none transition-opacity duration-300 md:hidden"></div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
 
     <!-- Sidebar Wrapper -->
     <aside id="admin-sidebar" class="fixed top-0 left-0 h-screen w-[280px] bg-secondary z-[50] sidebar-transition sidebar-hidden md:translate-x-0 border-r border-slate-800/10 ">
@@ -201,6 +269,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             </span>
                             <span>Gallery</span>
                         </a>
+                        <a href="/vasmat/admin/pages/academic_calendar.php" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all group <?= $current_page == 'academic_calendar.php' ? 'nav-link-active text-white' : 'text-slate-400 hover:text-white hover:bg-white/5' ?>">
+                            <span class="w-6 h-6 rounded-xl flex items-center justify-center flex-shrink-0 bg-indigo-500/20 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-all">
+                                <i class="fas fa-calendar-alt text-xs"></i>
+                            </span>
+                            <span>Academic Calendar</span>
+                        </a>
                     </nav>
                 </div>
             </div>
@@ -237,7 +311,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     </button>
                     
                     <!-- Dropdown -->
-                    <div id="notification-dropdown" class="absolute top-full right-0 mt-4 w-80 bg-white border border-slate-100 rounded-[2rem] shadow-2xl z-50 hidden overflow-hidden animate-in fade-in slide-in-from-top-4 duration-300">
+                    <div id="notification-dropdown" class="absolute top-full right-0 mt-4 w-80 bg-white border border-slate-100 rounded-[2rem] shadow-2xl z-50 overflow-hidden">
                         <div class="p-6 border-b border-slate-50 flex items-center justify-between">
                             <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest">Notifications</h3>
                             <span id="unread-count-badge" class="px-2 py-0.5 bg-rose-50 text-rose-500 text-[9px] font-black rounded-lg">0 New</span>
@@ -270,4 +344,75 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
         <!-- Main Content Area -->
         <main class="flex-1 p-6">
+
+<script>
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = `toast-item toast-${type}`;
+    
+    const icons = {
+        success: 'fa-circle-check',
+        error: 'fa-circle-exclamation',
+        info: 'fa-circle-info'
+    };
+
+    toast.innerHTML = `
+        <div class="toast-icon">
+            <i class="fas ${icons[type]}"></i>
+        </div>
+        <div class="flex-1">
+            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-0.5">${type}</p>
+            <p class="text-xs font-bold text-slate-700">${message}</p>
+        </div>
+        <button onclick="this.parentElement.remove()" class="text-slate-300 hover:text-slate-500 transition-colors">
+            <i class="fas fa-times text-[10px]"></i>
+        </button>
+    `;
+
+    container.appendChild(toast);
+    
+    // Animate in
+    setTimeout(() => toast.classList.add('show'), 100);
+    
+    // Auto remove
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 600);
+    }, 4000);
+}
+
+// Global Session Toasts
+document.addEventListener('DOMContentLoaded', () => {
+    <?php if (isset($_SESSION['success'])): ?>
+        showToast("<?= $_SESSION['success'] ?>", 'success');
+        <?php unset($_SESSION['success']); ?>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['error'])): ?>
+        showToast("<?= $_SESSION['error'] ?>", 'error');
+        <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
+
+    // Notification Dropdown Toggle
+    const notifBtn = document.getElementById('notification-btn');
+    const notifDropdown = document.getElementById('notification-dropdown');
+
+    if (notifBtn && notifDropdown) {
+        notifBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            notifDropdown.classList.toggle('dropdown-active');
+            notifBtn.classList.toggle('text-primary-600');
+            notifBtn.classList.toggle('bg-primary-50');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!notifDropdown.contains(e.target) && !notifBtn.contains(e.target)) {
+                notifDropdown.classList.remove('dropdown-active');
+                notifBtn.classList.remove('text-primary-600', 'bg-primary-50');
+            }
+        });
+    }
+});
+</script>
 

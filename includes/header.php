@@ -27,6 +27,56 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="/vasmat/assets/js/navScript.js?v=2"></script>
 
+    <!-- Toast Notifications -->
+    <style>
+        .toast-container {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            pointer-events: none;
+        }
+
+        .toast-item {
+            pointer-events: auto;
+            min-width: 300px;
+            max-width: 450px;
+            background: white;
+            padding: 1.25rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transform: translateX(120%);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+        }
+
+        .toast-item.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .toast-success .toast-icon { background: #ecfdf5; color: #10b981; }
+        .toast-error .toast-icon { background: #fef2f2; color: #ef4444; }
+        .toast-info .toast-icon { background: #eff6ff; color: #3b82f6; }
+    </style>
 </head>
 <body class="bg-slate-100 text-slate-800 leading-normal tracking-normal">
 

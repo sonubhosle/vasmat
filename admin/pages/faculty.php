@@ -3,8 +3,6 @@ require_once __DIR__ . '/../../includes/auth_helper.php';
 checkRole(['admin', 'superadmin']);
 include __DIR__ . '/../includes/header.php';
 
-$success = "";
-$error = "";
 $uploadDir = __DIR__ . '/../../upload/faculty/';
 
 // Faculty mapping
@@ -19,19 +17,39 @@ $facultyTypes = [
 if(isset($_POST['add_faculty'])){
     $name = $_POST['name']; $designation = $_POST['designation']; $education = $_POST['education']; $faculty_type = $_POST['faculty_type'];
     $photoName = "";
+    $hasError = false;
     if(!empty($_FILES['photo']['name'])){
         $upload = secure_upload($_FILES['photo'], ['jpg', 'jpeg', 'png'], $uploadDir);
-        if ($upload['success']) $photoName = $upload['filename'];
+        if ($upload['success']) {
+            $photoName = $upload['filename'];
+        } else {
+            $_SESSION['error'] = "Upload failed: " . $upload['error'];
+            $hasError = true;
+        }
     }
-    $stmt = $conn->prepare("INSERT INTO faculty (name, designation, education, faculty_type, photo) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssss", $name, $designation, $education, $faculty_type, $photoName);
-    if($stmt->execute()) $success = "Faculty added!"; else $error = "Error";
+    if (!$hasError) {
+        $stmt = $conn->prepare("INSERT INTO faculty (name, designation, education, faculty_type, photo) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $name, $designation, $education, $faculty_type, $photoName);
+        if($stmt->execute()) {
+            $_SESSION['success'] = "Faculty added!";
+        } else {
+            $_SESSION['error'] = "DB Error: " . $conn->error;
+        }
+        $stmt->close();
+    }
+    header("Location: faculty.php");
+    exit;
 }
 
 if(isset($_GET['delete'])){
     $id = intval($_GET['delete']);
-    $conn->query("DELETE FROM faculty WHERE id=$id");
-    $success = "Deleted!";
+    if ($conn->query("DELETE FROM faculty WHERE id=$id")) {
+        $_SESSION['success'] = "Deleted!";
+    } else {
+        $_SESSION['error'] = "Delete failed.";
+    }
+    header("Location: faculty.php");
+    exit;
 }
 
 $faculty = $conn->query("SELECT * FROM faculty ORDER BY id DESC");
@@ -43,7 +61,7 @@ $totalFaculty = $conn->query("SELECT COUNT(*) as count FROM faculty")->fetch_ass
         <span class="text-[10px] font-black uppercase tracking-[0.4em] text-primary-600 mb-2 block">HR Registry</span>
         <h2 class="text-4xl font-black text-slate-900 tracking-tight">Faculty <span class="text-primary-500">Profiles</span></h2>
     </div>
-    <button onclick="document.getElementById('add_modal').classList.remove('hidden')" class="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10 flex items-center gap-3">
+    <button onclick="openModal()" class="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10 flex items-center gap-3">
         <i class="fas fa-plus"></i> New Faculty Member
     </button>
 </div>
@@ -102,8 +120,8 @@ $totalFaculty = $conn->query("SELECT COUNT(*) as count FROM faculty")->fetch_ass
 </div>
 
 <!-- Add Modal -->
-<div id="add_modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-6">
-    <div class="bg-white rounded-[3rem] w-full max-w-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-300">
+<div id="add_modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6 opacity-0 pointer-events-none transition-all duration-500 ease-out">
+    <div id="modalContent" class="bg-white rounded-[3rem] w-full max-w-xl shadow-2xl overflow-hidden transform -translate-y-24 -translate-x-24 scale-90 opacity-0 transition-all duration-700 ease-out">
         <form method="POST" enctype="multipart/form-data" class="p-10">
             <h3 class="text-2xl font-black text-slate-900 mb-8 tracking-tight">Add New Faculty</h3>
             <div class="space-y-6">
@@ -136,10 +154,34 @@ $totalFaculty = $conn->query("SELECT COUNT(*) as count FROM faculty")->fetch_ass
             </div>
             <div class="mt-10 flex gap-4">
                 <button type="submit" name="add_faculty" class="flex-1 bg-slate-900 text-white rounded-2xl py-4 font-black text-xs uppercase tracking-widest hover:bg-slate-800 transition-all">Save Profile</button>
-                <button type="button" onclick="document.getElementById('add_modal').classList.add('hidden')" class="px-8 bg-slate-100 text-slate-600 rounded-2xl py-4 font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all">Cancel</button>
+                <button type="button" onclick="closeModal()" class="px-8 bg-slate-100 text-slate-600 rounded-2xl py-4 font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all">Cancel</button>
             </div>
         </form>
     </div>
 </div>
+
+<style>
+    .modal-active {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+    .modal-active #modalContent {
+        opacity: 1 !important;
+        transform: translate(0, 0) scale(1) !important;
+        transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    }
+</style>
+
+<script>
+function openModal() {
+    document.getElementById('add_modal').classList.add('modal-active');
+}
+function closeModal() {
+    document.getElementById('add_modal').classList.remove('modal-active');
+}
+window.onclick = function(e) {
+    if(e.target.id === 'add_modal') closeModal();
+}
+</script>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>

@@ -3,9 +3,6 @@ require_once __DIR__ . '/../../includes/auth_helper.php';
 checkRole(['admin', 'superadmin']);
 include '../includes/header.php';
 
-$success = "";
-$error = "";
-
 // Set upload directory for events
 $uploadBaseDir = __DIR__ . '/../../upload/';
 $eventsUploadDir = $uploadBaseDir . 'events/';
@@ -33,7 +30,14 @@ if (isset($_POST['add_event'])) {
     $imagesJson = json_encode($imagesArr);
     $stmt = $conn->prepare("INSERT INTO events (event_name, event_date, event_images) VALUES (?, ?, ?)");
     $stmt->bind_param("sss", $name, $date, $imagesJson);
-    if ($stmt->execute()) $success = "Event added successfully!"; else $error = "DB Error";
+    if ($stmt->execute()) {
+        $_SESSION['success'] = "Event added successfully!";
+    } else {
+        $_SESSION['error'] = "DB Error: " . $conn->error;
+    }
+    $stmt->close();
+    header("Location: admin_events.php");
+    exit;
 }
 
 if (isset($_POST['edit_event'])) {
@@ -64,14 +68,28 @@ if (isset($_POST['edit_event'])) {
         $stmt->bind_param("ssi", $name, $date, $id);
     }
     
-    if ($stmt->execute()) $success = "Event updated successfully!"; else $error = "Update failed";
+    if ($stmt->execute()) {
+        $_SESSION['success'] = "Event updated successfully!";
+    } else {
+        $_SESSION['error'] = "Update failed: " . $conn->error;
+    }
+    $stmt->close();
+    header("Location: admin_events.php");
+    exit;
 }
 
 if (isset($_GET['delete_event'])) {
     $id = intval($_GET['delete_event']);
     $stmt = $conn->prepare("DELETE FROM events WHERE id=?");
     $stmt->bind_param("i", $id);
-    if ($stmt->execute()) $success = "Event deleted!"; else $error = "Delete failed";
+    if ($stmt->execute()) {
+        $_SESSION['success'] = "Event deleted!";
+    } else {
+        $_SESSION['error'] = "Delete failed: " . $conn->error;
+    }
+    $stmt->close();
+    header("Location: admin_events.php");
+    exit;
 }
 
 $events = $conn->query("SELECT * FROM events ORDER BY event_date DESC, id DESC");
@@ -83,7 +101,7 @@ $totalEvents = $conn->query("SELECT COUNT(*) as count FROM events")->fetch_assoc
         <span class="text-[10px] font-black uppercase tracking-[0.4em] text-primary-600 mb-2 block animate-in fade-in slide-in-from-left-4 duration-500">Event Management</span>
         <h2 class="text-4xl font-black text-slate-900 tracking-tight animate-in fade-in slide-in-from-left-4 duration-700 delay-100">College <span class="text-primary-500">Events</span></h2>
     </div>
-    <button onclick="document.getElementById('add_modal').classList.remove('hidden')" class="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10 flex items-center gap-3 active:scale-95">
+    <button onclick="openAddModal()" class="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10 flex items-center gap-3 active:scale-95">
         <i class="fas fa-plus"></i> Add New Event
     </button>
 </div>
@@ -183,67 +201,146 @@ $totalEvents = $conn->query("SELECT COUNT(*) as count FROM events")->fetch_assoc
 </div>
 
 <!-- Add Modal -->
-<div id="add_modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-6">
-    <div class="bg-white rounded-[3rem] w-full max-w-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-300">
-        <form method="POST" enctype="multipart/form-data" class="p-10">
-            <h3 class="text-2xl font-black text-slate-900 mb-8 tracking-tight">Add New Event</h3>
-            <div class="space-y-6">
-                <div>
-                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block px-1">Event Name</label>
-                    <input type="text" name="event_name" required class="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 text-sm font-bold text-slate-700 focus:ring-2 focus:ring-primary-500 transition-all" placeholder="Enter name...">
+<div id="add_modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6 opacity-0 pointer-events-none transition-all duration-500 ease-out">
+    <div id="add_modal_content" class="bg-white rounded-[3rem] w-full max-w-lg shadow-2xl overflow-hidden transform -translate-y-24 -translate-x-24 scale-90 opacity-0 transition-all duration-700 ease-out">
+        <form method="POST" enctype="multipart/form-data" class="p-6">
+            <h3 class="text-xl font-black text-slate-900 mb-6 tracking-tight">Add New Event</h3>
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5 block px-1">Event Name</label>
+                        <input type="text" name="event_name" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3.5 text-sm font-bold text-slate-700 focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500 outline-none transition-all duration-300" placeholder="Enter name...">
+                    </div>
+                    <div>
+                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5 block px-1">Event Date</label>
+                        <input type="date" name="event_date" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3.5 text-sm font-bold text-slate-700 focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500 outline-none transition-all duration-300">
+                    </div>
                 </div>
-                <div>
-                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block px-1">Event Date</label>
-                    <input type="date" name="event_date" required class="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 text-sm font-bold text-slate-700 focus:ring-2 focus:ring-primary-500 transition-all">
-                </div>
-                <div>
-                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block px-1">Event Images (Max 5)</label>
-                    <input type="file" name="event_images[]" multiple accept="image/jpeg, image/png, image/gif, image/webp" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100">
+                <div class="relative group">
+                    <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5 block px-1">Event Images (Max 5)</label>
+                    <input type="file" name="event_images[]" id="eventImagesInput" multiple accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="handleFileSelect(this, 'fileStatus', 'dropZone')">
+                    <div id="dropZone" class="w-full py-4 px-6 bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-4 group-hover:border-primary-400 group-hover:bg-primary-50/30 transition-all duration-500">
+                        <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-slate-300 group-hover:text-primary-500 group-hover:scale-110 transition-all duration-500 shrink-0">
+                            <i class="fas fa-images text-lg"></i>
+                        </div>
+                        <div class="text-left overflow-hidden">
+                            <p id="fileStatus" class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1 truncate">Click or Drag Images</p>
+                            <p class="text-[8px] font-bold text-slate-300 uppercase tracking-tighter">JPG, PNG, WebP (Max 5)</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="mt-10 flex gap-4">
-                <button type="submit" name="add_event" class="flex-1 bg-slate-900 text-white rounded-2xl py-4 font-black text-xs uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/20">Create Event</button>
-                <button type="button" onclick="document.getElementById('add_modal').classList.add('hidden')" class="px-8 bg-slate-100 text-slate-600 rounded-2xl py-4 font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all">Cancel</button>
+            <div class="mt-8 flex gap-4">
+                <button type="submit" name="add_event" class="flex-1 bg-slate-900 text-white rounded-2xl py-4 font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/20">Create Event</button>
+                <button type="button" onclick="closeAddModal()" class="px-8 bg-slate-100 text-slate-600 rounded-2xl py-4 font-black text-[10px] uppercase tracking-widest hover:bg-slate-200 transition-all">Cancel</button>
             </div>
         </form>
     </div>
 </div>
 
 <!-- Edit Modal -->
-<div id="edit_modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-6">
-    <div class="bg-white rounded-[3rem] w-full max-w-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-300">
-        <form method="POST" enctype="multipart/form-data" class="p-10">
+<div id="edit_modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6 opacity-0 pointer-events-none transition-all duration-500 ease-out">
+    <div id="edit_modal_content" class="bg-white rounded-[3rem] w-full max-w-lg shadow-2xl overflow-hidden transform -translate-y-24 -translate-x-24 scale-90 opacity-0 transition-all duration-700 ease-out">
+        <form method="POST" enctype="multipart/form-data" class="p-6">
             <input type="hidden" name="event_id" id="edit_event_id">
-            <h3 class="text-2xl font-black text-slate-900 mb-8 tracking-tight">Edit Event</h3>
-            <div class="space-y-6">
-                <div>
-                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block px-1">Event Name</label>
-                    <input type="text" name="event_name" id="edit_event_name" required class="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 text-sm font-bold text-slate-700 focus:ring-2 focus:ring-primary-500 transition-all" placeholder="Enter name...">
+            <h3 class="text-xl font-black text-slate-900 mb-6 tracking-tight">Edit Event</h3>
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5 block px-1">Event Name</label>
+                        <input type="text" name="event_name" id="edit_event_name" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3.5 text-sm font-bold text-slate-700 focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500 outline-none transition-all duration-300" placeholder="Enter name...">
+                    </div>
+                    <div>
+                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5 block px-1">Event Date</label>
+                        <input type="date" name="event_date" id="edit_event_date" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3.5 text-sm font-bold text-slate-700 focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500 outline-none transition-all duration-300">
+                    </div>
                 </div>
-                <div>
-                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block px-1">Event Date</label>
-                    <input type="date" name="event_date" id="edit_event_date" required class="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 text-sm font-bold text-slate-700 focus:ring-2 focus:ring-primary-500 transition-all">
-                </div>
-                <div>
-                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block px-1">Event Images (Max 5, replaces existing)</label>
-                    <input type="file" name="event_images[]" multiple accept="image/jpeg, image/png, image/gif, image/webp" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100">
+                <div class="relative group">
+                    <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5 block px-1">Update Images (Max 5)</label>
+                    <input type="file" name="event_images[]" id="editEventImagesInput" multiple accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="handleFileSelect(this, 'editFileStatus', 'editDropZone')">
+                    <div id="editDropZone" class="w-full py-4 px-6 bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl flex items-center gap-4 group-hover:border-primary-400 group-hover:bg-primary-50/30 transition-all duration-500">
+                        <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-slate-300 group-hover:text-primary-500 group-hover:scale-110 transition-all duration-500 shrink-0">
+                            <i class="fas fa-images text-lg"></i>
+                        </div>
+                        <div class="text-left overflow-hidden">
+                            <p id="editFileStatus" class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1 truncate">Replace Event Gallery</p>
+                            <p class="text-[8px] font-bold text-slate-300 uppercase tracking-tighter">New images will replace existing</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="mt-10 flex gap-4">
-                <button type="submit" name="edit_event" class="flex-1 bg-slate-900 text-white rounded-2xl py-4 font-black text-xs uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/20">Update Event</button>
-                <button type="button" onclick="document.getElementById('edit_modal').classList.add('hidden')" class="px-8 bg-slate-100 text-slate-600 rounded-2xl py-4 font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all">Cancel</button>
+            <div class="mt-8 flex gap-4">
+                <button type="submit" name="edit_event" class="flex-1 bg-slate-900 text-white rounded-2xl py-4 font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/20">Update Event</button>
+                <button type="button" onclick="closeEditModal()" class="px-8 bg-slate-100 text-slate-600 rounded-2xl py-4 font-black text-[10px] uppercase tracking-widest hover:bg-slate-200 transition-all">Cancel</button>
             </div>
         </form>
     </div>
 </div>
 
+<style>
+    .modal-active {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+    .modal-active > div {
+        opacity: 1 !important;
+        transform: translate(0, 0) scale(1) !important;
+        transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    }
+    /* Custom Input Focus Ring */
+    input:focus, textarea:focus {
+        border-color: #6366f1 !important;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1) !important;
+    }
+</style>
+
 <script>
+// File Select Logic for Multiple Images
+function handleFileSelect(input, statusId, dropZoneId) {
+    const status = document.getElementById(statusId);
+    const dropZone = document.getElementById(dropZoneId);
+    if (input.files && input.files.length > 0) {
+        const count = input.files.length;
+        status.textContent = `${count} Image${count > 1 ? 's' : ''} Selected`;
+        status.classList.remove('text-slate-400');
+        status.classList.add('text-primary-600');
+        dropZone.classList.add('border-primary-400', 'bg-primary-50/50');
+    }
+}
+
+function openAddModal() {
+    const modal = document.getElementById('add_modal');
+    modal.classList.add('modal-active');
+}
+function closeAddModal() {
+    const modal = document.getElementById('add_modal');
+    modal.classList.remove('modal-active');
+}
 function openEditModal(id, name, date) {
     document.getElementById('edit_event_id').value = id;
     document.getElementById('edit_event_name').value = name;
     document.getElementById('edit_event_date').value = date;
-    document.getElementById('edit_modal').classList.remove('hidden');
+    const modal = document.getElementById('edit_modal');
+    modal.classList.add('modal-active');
 }
+function closeEditModal() {
+    const modal = document.getElementById('edit_modal');
+    modal.classList.remove('modal-active');
+}
+
+// Close on outside click
+window.onclick = function(event) {
+    if (event.target.id === 'add_modal') closeAddModal();
+    if (event.target.id === 'edit_modal') closeEditModal();
+}
+
+// ESC to close
+document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape') {
+        closeAddModal();
+        closeEditModal();
+    }
+});
 </script>
 
 <?php include '../includes/footer.php'; ?>

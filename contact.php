@@ -143,18 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
 }
 ?>
 
-<!-- Success/Error Popup Modal -->
-<div id="messagePopup" class="fixed inset-0 z-[9999]  items-center justify-center bg-black/50 backdrop-blur-sm transition-all duration-300 hidden">
-    <div class="bg-white rounded-xl p-8 max-w-md w-[90%] mx-4 transform transition-all duration-500 scale-95 opacity-0">
-        <div id="popupIcon" class="text-6xl text-center mb-4"></div>
-        <h3 id="popupTitle" class="text-2xl font-black text-slate-900 text-center mb-2"></h3>
-        <p id="popupMessage" class="text-slate-600 text-center mb-6"></p>
-        <button onclick="closePopup()" 
-                class="w-full py-3 bg-gradient-to-br from-amber-400 to-amber-600 text-white font-black rounded-xl text-lg tracking-tight uppercase hover:scale-[1.02] transition-transform">
-            Close
-        </button>
-    </div>
-</div>
+<!-- Toast Notifications managed by global footer -->
 
 <section id="contact" class="py-10 px-6 bg-slate-50 relative overflow-hidden">
     <div class="">
@@ -522,84 +511,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// POPUP FUNCTIONS
-function showSendingPopup() {
-    const popup = document.getElementById('messagePopup');
-    const popupIcon = document.getElementById('popupIcon');
-    const popupTitle = document.getElementById('popupTitle');
-    const popupMessage = document.getElementById('popupMessage');
-    
-    popupIcon.innerHTML = '<i class="fas fa-paper-plane sending-pulse"></i>';
-    popupIcon.className = 'text-6xl text-center mb-4 text-amber-500';
-    popupTitle.textContent = 'Sending Message...';
-    popupMessage.textContent = 'Please wait while we send your message.';
-    
-    popup.classList.remove('hidden');
-    setTimeout(() => {
-        popup.querySelector('div').classList.remove('scale-95', 'opacity-0');
-    }, 10);
-}
-
-function showResultPopup(title, message, isSuccess) {
-    const popup = document.getElementById('messagePopup');
-    const popupIcon = document.getElementById('popupIcon');
-    const popupTitle = document.getElementById('popupTitle');
-    const popupMessage = document.getElementById('popupMessage');
-    
-    if (isSuccess) {
-        popupIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
-        popupIcon.className = 'text-6xl text-center mb-4 text-green-500 icon-bounce';
-        popupTitle.className = 'text-2xl font-black text-green-600 text-center mb-2';
-    } else {
-        popupIcon.innerHTML = '<i class="fas fa-exclamation-circle"></i>';
-        popupIcon.className = 'text-6xl text-center mb-4 text-red-500 icon-bounce';
-        popupTitle.className = 'text-2xl font-black text-red-600 text-center mb-2';
-    }
-    
-    popupTitle.textContent = title;
-    popupMessage.textContent = message;
-    
-    popup.classList.remove('hidden');
-    setTimeout(() => {
-        popup.querySelector('div').classList.remove('scale-95', 'opacity-0');
-    }, 10);
-}
-
-function closePopup() {
-    const popup = document.getElementById('messagePopup');
-    popup.querySelector('div').classList.add('scale-95', 'opacity-0');
-    setTimeout(() => {
-        popup.classList.add('hidden');
-        
-        // Reset form if success was shown
-        const successIcon = document.getElementById('popupIcon');
-        if (successIcon.innerHTML.includes('fa-check-circle')) {
-            document.getElementById('contactForm').reset();
-            document.getElementById('selectedValue').textContent = 'Select a subject';
-            document.getElementById('selectedValue').style.color = '#94a3b8';
-            document.getElementById('selectedSubject').value = '';
-            document.querySelector('.dropdown-trigger').style.borderColor = '#e2e8f0';
-            document.querySelector('.dropdown-trigger').style.backgroundColor = '#f8fafc';
-            document.querySelectorAll('.dropdown-option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-        }
-    }, 400);
-}
-
-// Close popup when clicking outside
-document.getElementById('messagePopup').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closePopup();
-    }
-});
-
-// Close popup with Escape key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && !document.getElementById('messagePopup').classList.contains('hidden')) {
-        closePopup();
-    }
-});
+// Popup Functions removed in favor of showToast
 
 // AJAX FORM SUBMISSION
 document.getElementById('contactForm').addEventListener('submit', async function(e) {
@@ -608,13 +520,10 @@ document.getElementById('contactForm').addEventListener('submit', async function
     // Validate dropdown selection
     const selectedValue = document.getElementById('selectedSubject').value;
     if (!selectedValue) {
-        showResultPopup('Error', 'Please select an inquiry subject', false);
+        showToast('Please select an inquiry subject', 'error');
         document.querySelector('.dropdown-trigger').style.borderColor = '#ef4444';
         return;
     }
-    
-    // Show sending popup
-    showSendingPopup();
     
     // Disable submit button
     const submitBtn = document.getElementById('submitBtn');
@@ -623,79 +532,51 @@ document.getElementById('contactForm').addEventListener('submit', async function
     submitBtn.innerHTML = '<span class="relative z-10">Sending...</span><i class="fas fa-spinner fa-spin text-xl relative z-10"></i>';
     
     try {
-        // Get form data
         const formData = new FormData(this);
         formData.append('ajax', 'true');
         
-        // Send AJAX request
         const response = await fetch(window.location.href, {
             method: 'POST',
             body: formData
         });
         
-        // Check if response is OK
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         
-        // Try to parse JSON response
         const text = await response.text();
         let data;
-        
         try {
             data = JSON.parse(text);
         } catch (parseError) {
-            console.error('JSON Parse Error:', parseError, 'Response:', text);
-            
-            // If JSON parsing fails but we got some response, assume partial success
-            if (text.includes('success') || text.includes('Message')) {
-                // Message might have been sent despite JSON error
-                setTimeout(() => {
-                    closePopup();
-                    setTimeout(() => {
-                        showResultPopup('Success!', '✅ Your message has been received! We\'ll contact you soon.', true);
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = originalBtnHTML;
-                    }, 500);
-                }, 1000);
+            if (text.includes('success')) {
+                showToast("Message received! We'll get back to you soon.", 'success');
+                this.reset();
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHTML;
                 return;
             }
             throw new Error('Invalid server response');
         }
         
-        // Close sending popup and show result
-        setTimeout(() => {
-            closePopup();
-            setTimeout(() => {
-                if (data.success) {
-                    showResultPopup('Success!', data.message, true);
-                } else {
-                    showResultPopup('Error', data.message, false);
-                }
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalBtnHTML;
-            }, 500);
-        }, 1000);
+        if (data.success) {
+            showToast(data.message, 'success');
+            this.reset();
+            // Reset custom dropdown
+            document.getElementById('selectedValue').textContent = 'Select a subject';
+            document.getElementById('selectedValue').style.color = '#94a3b8';
+            document.getElementById('selectedSubject').value = '';
+            document.querySelector('.dropdown-trigger').style.borderColor = '#e2e8f0';
+            document.querySelector('.dropdown-trigger').style.backgroundColor = '#f8fafc';
+            document.querySelectorAll('.dropdown-option').forEach(opt => opt.classList.remove('selected'));
+        } else {
+            showToast(data.message, 'error');
+        }
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnHTML;
         
     } catch (error) {
-        console.error('Submission Error:', error);
-        
-        // Close sending popup
-        setTimeout(() => {
-            closePopup();
-            setTimeout(() => {
-                // Check error type
-                if (error.message.includes('NetworkError') || error.message.includes('Failed to fetch')) {
-                    showResultPopup('Error', '❌ Network error. Please check your connection.', false);
-                } else if (error.message.includes('JSON') || error.message.includes('parse')) {
-                    showResultPopup('Partial Success', '✅ Your message was submitted but there was a server response issue. We\'ll contact you if received.', false);
-                } else {
-                    showResultPopup('Error', '❌ Something went wrong. Please try again.', false);
-                }
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalBtnHTML;
-            }, 500);
-        }, 1000);
+        showToast('Something went wrong. Please try again.', 'error');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnHTML;
     }
 });
 </script>
