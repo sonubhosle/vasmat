@@ -1,7 +1,4 @@
 <?php include "includes/header.php"; ?>
-
-
-<?php include "includes/header.php"; ?>
 <?php include "admin/includes/db.php"; ?>
 
 <div class="bg-slate-50 min-h-screen pb-20">

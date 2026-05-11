@@ -5,7 +5,7 @@ include 'admin/includes/db.php';
 $announcements_result = $conn->query("SELECT * FROM announcements ORDER BY created_at DESC");
 ?>
 
-<section class="py-10 sm:py-16 px-4 sm:px-6  relative overflow-hidden bg-slate-100">
+<section class="py-10 px-4   relative overflow-hidden bg-slate-100">
     <!-- Dynamic Background Elements -->
  
     <div class="max-w-7xl mx-auto relative z-10">
@@ -282,24 +282,22 @@ $announcements_result = $conn->query("SELECT * FROM announcements ORDER BY creat
 <!-- ═══════════════════════════════════════════════
      NAAC & INSTITUTIONAL QUALITY SECTION
      ═══════════════════════════════════════════════ -->
-<section class="py-16 sm:py-28 bg-white relative overflow-hidden">
+<section class="py-16  bg-white relative overflow-hidden">
     <!-- Decorative background elements -->
     <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-amber-500/5 blur-[120px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
     <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/5 blur-[100px] rounded-full -translate-x-1/2 translate-y-1/2"></div>
     
-    <div class="max-w-7xl mx-auto px-6 relative z-10">
-        <div class="flex flex-col lg:flex-row items-start lg:items-end justify-between mb-16 sm:mb-24 gap-8">
+    <div class="w-full px-6  relative z-10">
+        <div class="flex flex-col  items-start    sm:mb-24">
             <div class="max-w-3xl">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-100 text-amber-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
                     <i class="fas fa-award"></i> Quality Benchmarks
                 </div>
-                <h2 class="text-4xl sm:text-7xl font-black text-slate-900 tracking-tighter leading-[0.85] uppercase">
-                    Institutional <br/>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600">Excellence Portal</span>
-                </h2>
+            <h2 class="text-3xl font-black text-slate-900 ">Institutional <br> <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600">Excellence Portal</span></h2>
+
             </div>
-            <div class="lg:max-w-sm">
-                <p class="text-slate-500 font-medium leading-relaxed border-l-4 border-amber-500/20 pl-6 py-2">
+            <div class="lg:max-w-2xl">
+                <p class="text-slate-500 font-medium leading-relaxed  py-2">
                     Committed to maintaining the highest standards of higher education through continuous quality monitoring and NAAC accreditation protocols.
                 </p>
             </div>
@@ -308,13 +306,15 @@ $announcements_result = $conn->query("SELECT * FROM announcements ORDER BY creat
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- NAAC Portal -->
             <div class="group bg-slate-50/50 rounded-[3rem] p-8 border border-slate-100 hover:bg-white hover:shadow-2xl hover:shadow-amber-500/10 hover:border-amber-200 transition-all duration-500">
-                <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 mb-10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                 <div class="flex gap-4 ">
+                    <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 mb-10  transition-all duration-500">
                     <i class="fas fa-medal text-2xl text-amber-500"></i>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-3">NAAC Portal</h3>
-                <p class="text-sm text-slate-500 leading-relaxed mb-10">Access AQAR, SSR, and DVV documents for institutional accreditation cycles.</p>
-                <a href="naac.php" class="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-amber-600 hover:gap-4 transition-all duration-300">
-                    Quality Hub <i class="fas fa-arrow-right"></i>
+                <h3 class="text-xl font-bold text-slate-900 mb-3">NAAC Documents</h3>
+                 </div>
+                <p class="text-sm text-slate-500 leading-relaxed mb-10">Access IQAC, and SSR documents for institutional accreditation cycles.</p>
+                <a href="naac.php" class="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-wider   text-amber-600 hover:gap-4 transition-all duration-300">
+                    View Documents <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
 
