@@ -241,7 +241,7 @@
                                         <a href="iqac.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">IQAC Portal</a>
                                         <a href="naac.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">SSR & AQAR Reports</a>
                                         <a href="academic_calendar.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Academic Calendar</a>
-                                        <a href="best_practices.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Best Practices</a>
+                                        <!-- Best Practices removed -->
                                         <a href="feedback.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Stakeholder Feedback</a>
                                     </div>
                                 </div>
@@ -554,9 +554,7 @@
                                 <a href="academic_calendar.php" class="flex items-center gap-2 px-3 text-[12px] font-semibold text-slate-600 hover:text-amber-600 transition duration-300">
                                     <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span> Academic Calendar
                                 </a>
-                                <a href="best_practices.php" class="flex items-center gap-2 px-3 text-[12px] font-semibold text-slate-600 hover:text-amber-600 transition duration-300">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span> Best Practices
-                                </a>
+                                <!-- Best Practices removed -->
                             </div>
                         </div>
                     </div>

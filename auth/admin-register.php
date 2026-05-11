@@ -307,7 +307,6 @@ $csrf_token = generateCSRF();
           Request Access
         </button>
       </form>
-      <?php endif; ?>
 
       <!-- Login link -->
       <p class="mt-6 text-center text-xs text-gray-400">
