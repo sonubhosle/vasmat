@@ -57,11 +57,14 @@ $totalFaculty = $conn->query("SELECT COUNT(*) as count FROM faculty")->fetch_ass
 ?>
 
 <div class="mb-12 flex flex-col md:flex-row md:items-center justify-between gap-6">
-    <div>
-        <span class="text-[10px] font-black uppercase tracking-[0.4em] text-primary-600 mb-2 block">HR Registry</span>
-        <h2 class="text-4xl font-black text-slate-900 tracking-tight">Faculty <span class="text-primary-500">Profiles</span></h2>
+    <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-100 text-amber-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+            <i class="fas fa-info-circle"></i> HR Registry
+        </div>
+        <h2 class="text-3xl font-black text-slate-900 ">Faculty <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600">Profiles</span></h2>
+        <p class="text-slate-400 text-sm font-medium mt-4">Manage institutional staffing, designations, and professional biographies.</p>
     </div>
-    <button onclick="openModal()" class="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10 flex items-center gap-3">
+    <button onclick="openModal()" class="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-amber-500 transition-all shadow-xl shadow-slate-900/10 flex items-center gap-3">
         <i class="fas fa-plus"></i> New Faculty Member
     </button>
 </div>

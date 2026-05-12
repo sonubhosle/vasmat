@@ -92,9 +92,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<div class="mb-10">
-    <h2 class="text-4xl font-black text-slate-900 tracking-tight">Account <span class="text-amber-500">Settings</span></h2>
-    <p class="text-slate-500 font-medium mt-2 text-sm">Update your professional profile and security credentials.</p>
+<div class="max-w-3xl mb-10">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-100 text-amber-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+        <i class="fas fa-info-circle"></i> Account Management
+    </div>
+    <h2 class="text-3xl font-black text-slate-900 ">Account <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600">Settings</span></h2>
+    <p class="text-slate-500 font-medium mt-4 text-sm">Update your professional profile and security credentials.</p>
 </div>
 
 <?php if ($success): ?>

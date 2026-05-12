@@ -22,12 +22,12 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
 $admins = $conn->query("SELECT * FROM users WHERE role = 'admin' ORDER BY created_at DESC")->fetch_all(MYSQLI_ASSOC);
 ?>
 
-<div class="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-    <div>
-        <span class="text-[10px] font-black uppercase tracking-[0.4em] text-amber-600 mb-2 block">System Security</span>
-        <h2 class="text-4xl font-black text-slate-900 tracking-tight">Manage <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Admins</span></h2>
-        <p class="text-slate-500 mt-2 text-sm font-medium">Authorize or revoke institutional administrative privileges.</p>
+<div class="max-w-3xl mb-10">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-100 text-amber-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+        <i class="fas fa-info-circle"></i> System Security
     </div>
+    <h2 class="text-3xl font-black text-slate-900 ">Manage <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600">Admins</span></h2>
+    <p class="text-slate-500 mt-4 text-sm font-medium">Authorize or revoke institutional administrative privileges.</p>
 </div>
 
 <?php if ($success): ?>

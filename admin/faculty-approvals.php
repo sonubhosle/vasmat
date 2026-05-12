@@ -80,8 +80,13 @@ $pending_faculty = $conn->query("SELECT * FROM users WHERE role = 'faculty' AND 
         <!-- Main Content -->
         <main class="flex-1 ml-64 p-10">
             <header class="mb-10">
-                <h2 class="text-3xl font-black text-slate-900 tracking-tight">Faculty Approvals</h2>
-                <p class="text-slate-500 font-medium mt-1">Review and approve new faculty registration requests.</p>
+                <div class="max-w-3xl mb-5">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-100 text-amber-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+                        <i class="fas fa-info-circle"></i> Identity Verification
+                    </div>
+                    <h2 class="text-3xl font-black text-slate-900 ">Faculty <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600">Approvals</span></h2>
+                    <p class="text-slate-500 font-medium mt-4">Review and approve new faculty registration requests.</p>
+                </div>
             </header>
 
             <?php if ($success): ?>

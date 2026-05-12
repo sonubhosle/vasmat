@@ -46,10 +46,13 @@ if (isset($_GET['delete'])) {
 ?>
 
 <main class="p-8">
-    <div class="flex justify-between items-center mb-10">
-        <div>
-            <h2 class="text-3xl font-black text-slate-900 uppercase tracking-tight">NAAC Document Management</h2>
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Manage institutional reports and statutory filings</p>
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+        <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-100 text-amber-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+                <i class="fas fa-info-circle"></i> Statutory Repository
+            </div>
+            <h2 class="text-3xl font-black text-slate-900 ">NAAC Document <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600">Management</span></h2>
+            <p class="text-slate-400 text-sm font-medium mt-4">Manage institutional reports and statutory filings</p>
         </div>
         <button onclick="openModal()" class="px-8 py-4 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded-2xl shadow-xl hover:bg-amber-500 transition-all flex items-center gap-3">
             <i class="fas fa-plus"></i> Upload New Doc

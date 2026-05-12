@@ -62,10 +62,13 @@ $uploads = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 ?>
 
-<header class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
-    <div>
-        <h2 class="text-4xl font-black text-slate-900 tracking-tight">My <span class="text-amber-500">Archive</span></h2>
-        <p class="text-slate-500 font-medium mt-2 text-sm">Manage your published materials and track their status.</p>
+<header class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+    <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-100 text-amber-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+            <i class="fas fa-info-circle"></i> Personal Repository
+        </div>
+        <h2 class="text-3xl font-black text-slate-900 ">My <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600">Archive</span></h2>
+        <p class="text-slate-500 font-medium mt-4 text-sm">Manage your published materials and track their status.</p>
     </div>
     <a href="upload.php" class="px-8 py-4 bg-slate-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl flex items-center gap-3">
         <i class="fas fa-plus"></i> New Submission

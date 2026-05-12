@@ -320,11 +320,14 @@ $announcements_result = $conn->query("SELECT * FROM announcements ORDER BY creat
 
             <!-- Committees -->
             <div class="group bg-slate-50/50 rounded-[3rem] p-8 border border-slate-100 hover:bg-white hover:shadow-2xl hover:shadow-blue-500/10 hover:border-blue-200 transition-all duration-500">
-                <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 mb-10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                <div class="flex gap-4 ">
+<div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 mb-10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
                     <i class="fas fa-users-cog text-2xl text-blue-500"></i>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-3">Statutory Cells</h3>
-                <p class="text-sm text-slate-500 leading-relaxed mb-10">Transparency via Anti-Ragging, Grievance, and Internal Complaint committees.</p>
+                <h3 class="text-xl font-bold text-slate-900 mb-3">Statutory <br> Cells</h3>
+                </div>
+            
+                <p class="text-sm text-slate-500 leading-relaxed mb-10">Transparency via Anti-Ragging and Grievance</p>
                 <a href="committees.php" class="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-blue-600 hover:gap-4 transition-all duration-300">
                     View Structure <i class="fas fa-arrow-right"></i>
                 </a>
@@ -332,11 +335,13 @@ $announcements_result = $conn->query("SELECT * FROM announcements ORDER BY creat
 
             <!-- Disclosures -->
             <div class="group bg-slate-50/50 rounded-[3rem] p-8 border border-slate-100 hover:bg-white hover:shadow-2xl hover:shadow-purple-500/10 hover:border-purple-200 transition-all duration-500">
-                <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 mb-10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                 <div class="flex gap-4 ">
+            <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 mb-10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
                     <i class="fas fa-file-contract text-2xl text-purple-500"></i>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-3">Mandatory Docs</h3>
-                <p class="text-sm text-slate-500 leading-relaxed mb-10">Regulatory approvals, audit statements, and institutional policies for public review.</p>
+                <h3 class="text-xl font-bold text-slate-900 mb-3">Mandatory <br> Docs</h3>
+                </div>
+                <p class="text-sm text-slate-500 leading-relaxed mb-10">Regulatory approvals, audit statements.</p>
                 <a href="disclosures.php" class="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-purple-600 hover:gap-4 transition-all duration-300">
                     Public Files <i class="fas fa-arrow-right"></i>
                 </a>
@@ -344,11 +349,13 @@ $announcements_result = $conn->query("SELECT * FROM announcements ORDER BY creat
 
             <!-- Feedback -->
             <div class="group bg-slate-50/50 rounded-[3rem] p-8 border border-slate-100 hover:bg-white hover:shadow-2xl hover:shadow-emerald-500/10 hover:border-emerald-200 transition-all duration-500">
-                <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 mb-10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                <div class="flex gap-4 ">
+            <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 mb-10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
                     <i class="fas fa-comment-dots text-2xl text-emerald-500"></i>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-3">Stakeholder Info</h3>
-                <p class="text-sm text-slate-500 leading-relaxed mb-10">Feedback system for students, parents, and alumni to ensure continuous growth.</p>
+                <h3 class="text-xl font-bold text-slate-900 mb-3">Share <br> Feedback</h3>
+                </div>
+                <p class="text-sm text-slate-500 leading-relaxed mb-10">Feedback system for students, parents, and alumni.</p>
                 <a href="feedback.php" class="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-emerald-600 hover:gap-4 transition-all duration-300">
                     Share Insights <i class="fas fa-arrow-right"></i>
                 </a>

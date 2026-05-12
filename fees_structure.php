@@ -9,20 +9,17 @@ $SIDEBAR_LINKS = [
 ];
 ?>
 
-<div class="w-fll px-4 sm:px-6 lg:px-8 py-20">
+<div class="w-fll px-4 sm:px-6 lg:px-8 py-10">
     <div class="flex flex-col lg:flex-row gap-12">
      
-                <div class=" w-full space-y-24">
-                    <div class="mb-12">
-                        <div class="flex items-center gap-4 mb-4">
-                            <span
-                                class="text-[10px] font-black uppercase tracking-[0.3em] text-amber-400">Curriculum</span>
-                        </div>
-                        <h2 class="text-2xl font-black text-slate-900 mb-6">
-                            Fees <span class="italic font-serif">Structure</span>
-                        </h2>
-
+                <div class="w-full space-y-10">
+                 <div class="max-w-3xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-100 text-amber-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+                    <i class="fas fa-rupee"></i> Curriculum
                     </div>
+                   <h2 class="text-3xl font-black text-slate-900 ">Fees  <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600">Structure</span></h2>
+                   </div>
+
                     <div class=" border-2 border-slate-200 ">
                         <table class="w-full text-left border-collapse">
                             <thead>

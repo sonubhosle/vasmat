@@ -203,10 +203,6 @@
                                             class=" flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[13px] font-semibold text-slate-500    rounded-xl transition ease-in duration-300">
                                             Fees Structure
                                         </a>
-                                        <a href="courses.php"
-                                            class=" flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[13px] font-semibold text-slate-500    rounded-xl transition ease-in duration-300">
-                                            Our Courses
-                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -221,8 +217,6 @@
                                     <div class="p-2 min-w-[220px] flex flex-col">
                                         <a href="about.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">About College</a>
                                         <a href="organogram.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Institutional Organogram</a>
-                                        <a href="research.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Research & Publications</a>
-                                        <a href="disclosures.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Mandatory Disclosures</a>
                                         <a href="committees.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Statutory Committees</a>
                                         <a href="code_of_conduct.php" class="flex items-center px-4 py-2 hover:bg-amber-50 hover:text-amber-600 text-[13px] font-semibold text-slate-500 rounded-xl transition duration-300">Code of Conduct</a>
                                     </div>

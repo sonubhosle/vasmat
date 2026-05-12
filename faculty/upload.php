@@ -58,9 +58,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
-    <div>
-        <h2 class="text-4xl font-black text-slate-900 tracking-tight">Material <span class="text-amber-500">Upload</span></h2>
-        <p class="text-slate-500 font-medium mt-2 text-sm">Publish syllabus, notes, or academic notices to the portal.</p>
+    <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-100 text-amber-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+            <i class="fas fa-info-circle"></i> Resource Hub
+        </div>
+        <h2 class="text-3xl font-black text-slate-900 ">Material <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600">Upload</span></h2>
+        <p class="text-slate-500 font-medium mt-4 text-sm">Publish syllabus, notes, or academic notices to the portal.</p>
     </div>
     <a href="my-uploads.php" class="px-6 py-3 bg-white border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-600 hover:bg-slate-900 hover:text-white transition-all flex items-center gap-2 shadow-sm">
         <i class="fas fa-history"></i> Upload History

@@ -14,14 +14,14 @@ $SIDEBAR_LINKS = [
      
                 <div class=" lg:w-[70%] space-y-10">
                     <div class="">
-                        <div class="flex items-center gap-4 mb-2">
-                            <span
-                                class="text-[12px] font-black  text-amber-400">Curriculum</span>
-                        </div>
-                        <h2 class="text-2xl font-black text-slate-900 mb-4">
-                            Offered <span class="italic font-serif">Courses</span>
-                        </h2>
+                     
+            <div class="max-w-3xl">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-100 text-amber-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+                    <i class="fas fa-book-open"></i> Curriculum
+                </div>
+            <h2 class="text-3xl font-black text-slate-900 ">Offered  <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600">Courses</span></h2>
 
+            </div>
                     </div>
                     <div class=" border-2 border-slate-200 ">
                         <table class="w-full text-left border-collapse">

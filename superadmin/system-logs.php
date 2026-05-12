@@ -33,10 +33,12 @@ $logs = $conn->query("
 ?>
 
 <div class="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-    <div>
-        <span class="text-[10px] font-black uppercase tracking-[0.4em] text-amber-600 mb-2 block">System Forensics</span>
-        <h2 class="text-4xl font-black text-slate-900 tracking-tight">Activity <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-fuchsia-600">Audit Logs</span></h2>
-        <p class="text-slate-500 mt-2 text-sm font-medium">Trace every administrative action and security event within the ecosystem.</p>
+    <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-100 text-amber-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+            <i class="fas fa-info-circle"></i> System Forensics
+        </div>
+        <h2 class="text-3xl font-black text-slate-900 ">Activity <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600">Audit Logs</span></h2>
+        <p class="text-slate-500 mt-4 text-sm font-medium">Trace every administrative action and security event within the ecosystem.</p>
     </div>
     <form action="" method="POST" onsubmit="return confirm('CRITICAL: Clear all audit data? This action is irreversible.');">
         <button type="submit" name="clear_logs" class="px-6 py-3 bg-white border border-slate-200 text-rose-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-500 hover:text-white hover:border-rose-500 transition-all shadow-sm">

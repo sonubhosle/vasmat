@@ -26,9 +26,11 @@ $recent_uploads = $conn->query("
 <!-- Dashboard Welcome Header -->
 <div class="mb-10">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-            <span class="text-[10px] font-black uppercase tracking-[0.4em] text-primary-600 mb-2 block">Instructor Overview</span>
-            <h2 class="text-4xl font-black text-slate-900 tracking-tight">Faculty <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-orange-600">Console</span></h2>
+        <div class="max-w-3xl mb-5">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-100 text-amber-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+                <i class="fas fa-info-circle"></i> Instructor Overview
+            </div>
+            <h2 class="text-3xl font-black text-slate-900 ">Faculty <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600">Console</span></h2>
             <p class="text-slate-500 mt-2 text-sm font-medium">Manage your educational resources and track student engagement.</p>
         </div>
         
