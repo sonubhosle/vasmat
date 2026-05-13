@@ -8,14 +8,14 @@
         <!-- ═══════════════════════════════════════
              MAIN FOOTER CONTENT
              ═══════════════════════════════════════ -->
-        <div class="max-w-7xl mx-auto px-6 pt-16 pb-10">
+        <div class=" px-6 pt-16 pb-10">
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 mb-14">
                 
                 <!-- ── Brand & About Column ── -->
                 <div class="lg:col-span-4 space-y-6">
                     <a href="index.php" class="flex items-center gap-4 group">
-                        <div class="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-amber-500/20 group-hover:rotate-3 transition-transform duration-500 shrink-0">
+                        <div class="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-3xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-amber-500/20 group-hover:rotate-3 transition-transform duration-500 shrink-0">
                             M
                         </div>
                         <div>

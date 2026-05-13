@@ -8,8 +8,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = trim($_POST['title'] ?? '');
     $description = trim($_POST['description'] ?? '');
     $type = $_POST['type'] ?? 'notes'; // Default to notes
+    $department = $_POST['department'] ?? '';
 
-    if (empty($title) || empty($description) || empty($type) || !isset($_FILES['file'])) {
+    if (empty($title) || empty($description) || empty($type) || empty($department) || !isset($_FILES['file'])) {
         $error = "Please fill in all fields and select a file.";
     } else {
         $file = $_FILES['file'];
@@ -33,8 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             if (move_uploaded_file($file['tmp_name'], $target_path)) {
                 $db_path = "upload/faculty/" . $filename;
-                $stmt = $conn->prepare("INSERT INTO faculty_content (faculty_id, title, description, file_path, type, status) VALUES (?, ?, ?, ?, ?, 'pending')");
-                $stmt->bind_param("issss", $faculty_id, $title, $description, $db_path, $type);
+                $stmt = $conn->prepare("INSERT INTO faculty_content (faculty_id, title, description, file_path, type, department, status) VALUES (?, ?, ?, ?, ?, ?, 'pending')");
+                $stmt->bind_param("isssss", $faculty_id, $title, $description, $db_path, $type, $department);
                 
                 if ($stmt->execute()) {
                     $success = "Content uploaded successfully and is pending approval.";
@@ -108,6 +109,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input type="hidden" name="type" id="content-type" value="notes">
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-3 md:col-span-2">
+                                <label class="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] px-1">Select Department</label>
+                                <div class="relative custom-dropdown-container">
+                                    <button type="button" onclick="toggleDeptDropdown()" id="dept-toggle"
+                                            class="w-full pl-12 pr-6 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500 transition-all text-sm font-semibold outline-none flex items-center justify-between group">
+                                        <span id="dept-display-text" class="text-slate-400">Select target department...</span>
+                                        <i class="fas fa-chevron-down text-slate-300 group-hover:text-amber-500 transition-all" id="dept-chevron"></i>
+                                    </button>
+                                    <i class="fas fa-building absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                                    <input type="hidden" name="department" id="dept-input" required>
+                                    
+                                    <div id="dept-dropdown" class="absolute top-[calc(100%+8px)] left-0 right-0 bg-white border border-slate-100 rounded-2xl shadow-2xl z-[100] overflow-hidden opacity-0 invisible translate-y-2 transition-all duration-300">
+                                        <div class="p-2 space-y-1">
+                                            <button type="button" onclick="selectDepartment('BCA Dept')" 
+                                                    class="w-full text-left px-4 py-3.5 rounded-xl hover:bg-amber-50 hover:text-amber-600 transition-all cursor-pointer text-sm font-bold text-slate-600 flex items-center gap-3 group/opt">
+                                                <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-[10px] group-hover/opt:bg-amber-500 group-hover/opt:text-white transition-all">B</div>
+                                                BCA Dept
+                                            </button>
+                                            <button type="button" onclick="selectDepartment('B.Sc(CS) Dept')" 
+                                                    class="w-full text-left px-4 py-3.5 rounded-xl hover:bg-amber-50 hover:text-amber-600 transition-all cursor-pointer text-sm font-bold text-slate-600 flex items-center gap-3 group/opt">
+                                                <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-[10px] group-hover/opt:bg-amber-500 group-hover/opt:text-white transition-all">S</div>
+                                                B.Sc(CS) Dept
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="space-y-3 md:col-span-2">
                                 <label class="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] px-1">Material Title</label>
                                 <div class="relative">
@@ -192,5 +221,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 label.classList.add('text-amber-600');
             }
         }
+
+        // Custom Dropdown Logic
+        function toggleDeptDropdown() {
+            const dropdown = document.getElementById('dept-dropdown');
+            const chevron = document.getElementById('dept-chevron');
+            const isOpen = !dropdown.classList.contains('invisible');
+            
+            if (isOpen) {
+                dropdown.classList.add('opacity-0', 'invisible', 'translate-y-2');
+                chevron.classList.remove('rotate-180');
+            } else {
+                dropdown.classList.remove('opacity-0', 'invisible', 'translate-y-2');
+                chevron.classList.add('rotate-180');
+            }
+        }
+
+        function selectDepartment(dept) {
+            document.getElementById('dept-input').value = dept;
+            document.getElementById('dept-display-text').innerText = dept;
+            document.getElementById('dept-display-text').classList.remove('text-slate-400');
+            document.getElementById('dept-display-text').classList.add('text-slate-900');
+            toggleDeptDropdown();
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.custom-dropdown-container')) {
+                const dropdown = document.getElementById('dept-dropdown');
+                const chevron = document.getElementById('dept-chevron');
+                dropdown.classList.add('opacity-0', 'invisible', 'translate-y-2');
+                chevron.classList.remove('rotate-180');
+            }
+        });
     </script>
 <?php include 'includes/footer.php'; ?>

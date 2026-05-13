@@ -7,12 +7,13 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
 $class_val = isset($_GET['class']) ? $_GET['class'] : '';
 $subject_val = isset($_GET['subject']) ? $_GET['subject'] : '';
 $semester_val = isset($_GET['semester']) ? $_GET['semester'] : '';
+$dept_val = isset($_GET['dept']) ? $_GET['dept'] : '';
 
 // Build query with filters using UNION to include faculty uploads
-$sql_notes = "SELECT id, subject_name, description, file_path, class, semester, created_by, created_at, 'legacy' as source 
+$sql_notes = "SELECT id, subject_name, description, file_path, class, semester, created_by, created_at, 'legacy' as source, '' as department 
               FROM notes WHERE status = 'approved'";
 
-$sql_faculty = "SELECT fc.id, fc.title as subject_name, fc.description, fc.file_path, 'General' as class, 'N/A' as semester, f.name as created_by, fc.created_at, 'faculty' as source 
+$sql_faculty = "SELECT fc.id, fc.title as subject_name, fc.description, fc.file_path, 'General' as class, 'N/A' as semester, f.name as created_by, fc.created_at, 'faculty' as source, fc.department 
                 FROM faculty_content fc 
                 JOIN faculty f ON fc.faculty_id = f.id 
                 WHERE fc.type = 'notes' AND fc.status = 'approved'";
@@ -32,6 +33,12 @@ if (!empty($search)) {
 if (!empty($class_val)) {
     $final_sql .= " AND class = ?";
     $params[] = $class_val;
+    $types .= "s";
+}
+
+if (!empty($dept_val)) {
+    $final_sql .= " AND department = ?";
+    $params[] = $dept_val;
     $types .= "s";
 }
 
@@ -269,7 +276,28 @@ $semesters = $conn->query("SELECT DISTINCT semester FROM notes WHERE semester IS
                     </div>
 
                     <!-- Filters Row -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <!-- Department Filter -->
+                        <div class="custom-dropdown">
+                            <div class="dropdown-btn" onclick="toggleDropdown('deptDropdown')">
+                                <span class="flex items-center gap-2 truncate">
+                                    <i class="fas fa-building text-slate-400 text-sm"></i>
+                                    <span id="deptLabel" class="truncate font-semibold text-slate-700">
+                                        <?= isset($_GET['dept']) && $_GET['dept'] ? htmlspecialchars($_GET['dept']) : 'Department' ?>
+                                    </span>
+                                </span>
+                                <i class="fas fa-chevron-down text-slate-400 text-[10px]"></i>
+                            </div>
+                            <input type="hidden" name="dept" id="deptInput" value="<?= isset($_GET['dept']) ? htmlspecialchars($_GET['dept']) : '' ?>">
+                            <div id="deptDropdown" class="dropdown-menu">
+                                <div class="dropdown-options" id="deptOptions">
+                                    <div class="dropdown-option font-bold text-amber-500" onclick="selectOption('dept', '', 'All Departments')">All Departments</div>
+                                    <div class="dropdown-option" onclick="selectOption('dept', 'BCA Dept', 'BCA Dept')">BCA Dept</div>
+                                    <div class="dropdown-option" onclick="selectOption('dept', 'B.Sc(CS) Dept', 'B.Sc(CS) Dept')">B.Sc(CS) Dept</div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Class Filter -->
                         <div class="custom-dropdown">
                             <div class="dropdown-btn" onclick="toggleDropdown('classDropdown')">
@@ -598,6 +626,14 @@ $semesters = $conn->query("SELECT DISTINCT semester FROM notes WHERE semester IS
         // Initialize dropdowns with current values
         document.addEventListener('DOMContentLoaded', function() {
             // Set selected state for dropdowns
+            <?php if (isset($_GET['dept']) && $_GET['dept']): ?>
+            document.querySelectorAll('#deptOptions .dropdown-option').forEach(option => {
+                if (option.textContent.trim() === '<?= htmlspecialchars($_GET['dept']) ?>') {
+                    option.classList.add('selected');
+                }
+            });
+            <?php endif; ?>
+            
             <?php if (isset($_GET['class']) && $_GET['class']): ?>
             document.querySelectorAll('#classOptions .dropdown-option').forEach(option => {
                 if (option.textContent.trim() === '<?= htmlspecialchars($_GET['class']) ?>') {

@@ -172,11 +172,11 @@
                             <div class="absolute top-full left-1/2 -translate-x-1/2 pt-5 pointer-events-none group-hover:pointer-events-auto z-50">
                                 <div class="bg-white border border-slate-100 shadow-2xl rounded-2xl overflow-hidden transition-all duration-500 ease-in-out max-h-0 opacity-0 group-hover:max-h-[400px] group-hover:opacity-100">
                                     <div class="p-2 min-w-[210px] flex flex-col">
-                                        <a href="offered_courses.php"
+                                        <a href="bca_dept.php"
                                             class=" flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[13px] font-semibold text-slate-500   rounded-xl transition ease-in duration-300">
                                             BCA Dept
                                         </a>
-                                        <a href="fees_structure.php"
+                                        <a href="bcs_dept.php"
                                             class=" flex items-center px-2 py-2 hover:bg-amber-50 hover:text-amber-400 text-[13px] font-semibold text-slate-500  rounded-xl transition ease-in duration-300">
                                             B.Sc (CS) Dept
                                         </a>
@@ -406,11 +406,11 @@
 
                         <div id="mobDepts" data-open="false" class="overflow-hidden transition-all duration-500" style="max-height: 0px; opacity: 0;">
                             <div class="grid gap-2 pt-2">
-                                <a href="offered_courses.php"
+                                <a href="bca_dept.php"
                                     class="flex items-center gap-2 px-3  text-[12px] font-semibold text-slate-600    hover:text-amber-600 transition ease-in duration-300">
                                     <span id="dot-mobCourses" class="w-1.5 h-1.5 rounded-full bg-slate-200"></span> BCA Dept
                                 </a>
-                                <a href="fees_structure.php"
+                                <a href="bcs_dept.php"
                                     class="flex items-center gap-2 px-3  text-[12px] font-semibold text-slate-600   hover:text-amber-600 transition ease-in duration-300">
                                   <span id="dot-mobCourses" class="w-1.5 h-1.5 rounded-full bg-slate-200"></span> B.Sc (CS) Dept
                                 </a>

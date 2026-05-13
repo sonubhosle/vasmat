@@ -263,7 +263,7 @@ tailwind.config = {
           Go to Login
         </a>
       </div>
-      <?php endif; ?>
+      <?php else: ?>
 
       <?php if ($error): ?>
       <script>
